@@ -1,0 +1,21 @@
+plugins {
+    id 'org.unbroken-dome.test-sets' version '2.1.1'
+    id 'com.diffplug.gradle.spotless' version '3.23.0'
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.web3j:core:4.2.0'
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}
