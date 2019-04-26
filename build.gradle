@@ -1,21 +1,88 @@
 plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.31'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.3.31'
     id 'org.unbroken-dome.test-sets' version '2.1.1'
     id 'com.diffplug.gradle.spotless' version '3.23.0'
 }
 
 apply plugin: 'java'
+apply plugin: 'kotlin'
 apply plugin: 'idea'
+
+ext {
+    loadPropsFromFile = { String path ->
+        Properties props = new Properties()
+        File propsFile = file(path)
+        if (propsFile.exists()) {
+            propsFile.withReader { reader ->
+                props.load(reader)
+            }
+        }
+        props
+    }
+    versions = loadPropsFromFile("$rootDir/versions.properties")
+}
 
 repositories {
     mavenCentral()
 }
 
+testSets { integrationTest { dirName = 'integration-test' } }
+integrationTest.mustRunAfter test
+
+test {
+    useJUnitPlatform()
+    systemProperties = [
+            'junit.jupiter.extensions.autodetection.enabled': 'true',
+            'junit.jupiter.testinstance.lifecycle.default'  : 'per_class',
+            'java.util.logging.manager'                     : 'org.apache.logging.log4j.jul.LogManager'
+    ]
+}
+
 dependencies {
-    implementation 'org.web3j:core:4.2.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    implementation 'org.jetbrains.kotlin:kotlin-noarg'
+    implementation 'org.jetbrains.kotlin:kotlin-native-utils'
+
+    implementation "io.github.microutils:kotlin-logging:${versions.kLogging}"
+    implementation("com.github.shyiko:ktlint:${versions.ktlint}") {
+        exclude group: 'org.jetbrains.kotlin'
+        exclude group: 'org.slf4j'
+    }
+
+    implementation "org.web3j:core:${versions.web3j}"
+    testImplementation(group: 'org.web3j', name: 'core', version: versions.web3j, classifier: 'tests')
+
+    runtimeOnly "ch.qos.logback:logback-core:${versions.logback}"
+    runtimeOnly "ch.qos.logback:logback-classic:${versions.logback}"
+
+    testImplementation "junit:junit:${versions.junit4}"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockito}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${versions.junit5}"
+    testImplementation "org.assertj:assertj-core:${versions.assertj}"
+
+    testRuntime "org.junit.jupiter:junit-jupiter-engine:${versions.junit5}"
+    testRuntime "org.junit.vintage:junit-vintage-engine:${versions.junit5}"
+
+    integrationTestImplementation "org.testcontainers:testcontainers:${versions.testcontainers}"
+    integrationTestImplementation "org.testcontainers:junit-jupiter:${versions.testcontainers}"
 }
 
 spotless {
     java {
         googleJavaFormat()
+    }
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
