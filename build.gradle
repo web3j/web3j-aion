@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'maven-publish'
+    id 'org.web3j' version '4.1.3'
     id 'org.jetbrains.kotlin.jvm' version '1.3.31'
     id 'org.unbroken-dome.test-sets' version '2.1.1'
     id 'com.diffplug.gradle.spotless' version '3.23.0'
@@ -10,8 +11,8 @@ plugins {
 
 ext {
     loadPropsFromFile = { String path ->
-        Properties props = new Properties()
-        File propsFile = file(path)
+        def props = new Properties()
+        def propsFile = file(path)
         if (propsFile.exists()) {
             propsFile.withReader { reader ->
                 props.load(reader)
@@ -24,6 +25,9 @@ ext {
 
 repositories {
     mavenCentral()
+    flatDir {
+        dirs "$projectDir/lib"
+    }
 }
 
 testSets {
@@ -33,12 +37,15 @@ testSets {
 }
 
 dependencies {
+    implementation name: 'org-aion-avm-userlib'
+
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     implementation 'org.jetbrains.kotlin:kotlin-noarg'
     implementation 'org.jetbrains.kotlin:kotlin-native-utils'
 
     implementation "io.github.microutils:kotlin-logging:${versions.kLogging}"
+
     implementation("com.github.shyiko:ktlint:${versions.ktlint}") {
         exclude group: 'org.jetbrains.kotlin'
         exclude group: 'org.slf4j'
@@ -47,15 +54,14 @@ dependencies {
     implementation "org.web3j:core:${versions.web3j}"
     testImplementation(group: 'org.web3j', name: 'core', version: versions.web3j, classifier: 'tests')
 
-    runtimeOnly "com.github.schnitker.logmanager:logmgr-logback:${versions.logmanager}"
-
     testImplementation "org.junit.jupiter:junit-jupiter-api:${versions.junit5}"
     testImplementation "org.assertj:assertj-core:${versions.assertj}"
     testImplementation "junit:junit:${versions.junit4}"
-
     testImplementation("io.mockk:mockk:${versions.mockk}") {
         exclude group: 'org.jetbrains.kotlin'
     }
+
+    runtimeOnly "com.github.schnitker.logmanager:logmgr-logback:${versions.logmanager}"
 
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${versions.junit5}"
     testRuntimeOnly "org.junit.vintage:junit-vintage-engine:${versions.junit5}"
@@ -97,16 +103,25 @@ compileKotlin {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    dependsOn 'generateContractWrappers'
 }
 
 compileTestKotlin {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    dependsOn 'generateTestContractWrappers'
 }
 
 compileIntegrationTestKotlin {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    dependsOn 'generateIntegrationTestContractWrappers'
+}
+
+sourceSets {
+    main.kotlin.srcDirs += "${web3j.generatedFilesBaseDir}/main/java"
+    test.kotlin.srcDirs += "${web3j.generatedFilesBaseDir}/test/java"
+    integrationTest.kotlin.srcDirs += "${web3j.generatedFilesBaseDir}/integrationTest/java"
 }
