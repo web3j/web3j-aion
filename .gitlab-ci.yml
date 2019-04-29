@@ -9,6 +9,6 @@ variables:
   DOCKER_DRIVER: overlay2
 
 test:
-  image: gradle:5.0
+  image: gradle:5.4
   stage: test
   script: ./gradlew integrationTest
