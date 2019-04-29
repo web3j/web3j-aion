@@ -1,6 +1,7 @@
 package org.web3j.protocol.aion
 
 import mu.KLogging
+import org.web3j.protocol.ObjectMapperFactory
 import org.web3j.protocol.Web3jService
 import org.web3j.protocol.core.DefaultBlockParameter
 import org.web3j.protocol.core.DefaultBlockParameterName
@@ -19,6 +20,11 @@ import java.util.concurrent.ScheduledExecutorService
 
 @Suppress("ClassName")
 internal class JsonRpc2_0Aion : JsonRpc2_0Web3j, Aion {
+
+    init {
+        ObjectMapperFactory.getObjectMapper()
+            .addMixIn(Request::class.java, AionRequestMixIn::class.java)
+    }
 
     constructor(web3jService: Web3jService) : super(web3jService)
 
