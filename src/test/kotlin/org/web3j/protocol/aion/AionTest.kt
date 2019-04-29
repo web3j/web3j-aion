@@ -5,7 +5,9 @@ import org.web3j.protocol.RequestTester
 import org.web3j.protocol.core.DefaultBlockParameterName.PENDING
 import org.web3j.protocol.core.methods.request.Transaction
 import org.web3j.protocol.http.HttpService
-import java.math.BigInteger.*
+import java.math.BigInteger.ONE
+import java.math.BigInteger.TEN
+import java.math.BigInteger.ZERO
 
 class AionTest : RequestTester() {
 
@@ -65,5 +67,4 @@ class AionTest : RequestTester() {
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"from\":\"0xa0b2e70f995df21e7988d645f1fdbaa94324f82b1d162b9b45cdbef7b5b51bd2\",\"to\":\"0xa0c6ed9486e9137802d0acdcd9a0499241872f648b51a5ab49a534a0d440f62c\",\"gas\":\"0x1\",\"gasPrice\":\"0x1\",\"value\":\"0xa\",\"data\":\"0xf0a147ad\n            a069071db28d1f8676766a82272e433e\n            46bd80773e69bbbe92dccf2306e042b1\n            000000000000000104295b07fb4fa600\n            00000000000000000000000000000040\n            00000000000000000000000000000000\",\"nonce\":\"0x0\"}],\"id\":<generatedValue>}")
     }
-
 }

@@ -70,8 +70,15 @@ dependencies {
 }
 
 spotless {
-    java {
-        googleJavaFormat()
+    kotlin {
+        // This path needs to be relative to each project
+        target fileTree('.') {
+            include '**/*.kt'
+            exclude '**/.gradle/**'
+        }
+        ktlint(versions.ktlint)
+        trimTrailingWhitespace()
+        endWithNewline()
     }
 }
 

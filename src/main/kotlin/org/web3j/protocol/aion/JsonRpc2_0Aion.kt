@@ -7,10 +7,14 @@ import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.JsonRpc2_0Web3j
 import org.web3j.protocol.core.Request
 import org.web3j.protocol.core.methods.request.Transaction
-import org.web3j.protocol.core.methods.response.*
+import org.web3j.protocol.core.methods.response.EthCall
+import org.web3j.protocol.core.methods.response.EthGetBalance
+import org.web3j.protocol.core.methods.response.EthGetCode
+import org.web3j.protocol.core.methods.response.EthGetStorageAt
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount
 import org.web3j.utils.Numeric
 import java.math.BigInteger
-import java.util.*
+import java.util.Arrays
 import java.util.concurrent.ScheduledExecutorService
 
 @Suppress("ClassName")
@@ -19,10 +23,10 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Web3j, Aion {
     constructor(web3jService: Web3jService) : super(web3jService)
 
     constructor(
-            web3jService: Web3jService,
-            pollingInterval: Long,
-            scheduledExecutorService: ScheduledExecutorService)
-            : super(web3jService, pollingInterval, scheduledExecutorService)
+        web3jService: Web3jService,
+        pollingInterval: Long,
+        scheduledExecutorService: ScheduledExecutorService
+    ) : super(web3jService, pollingInterval, scheduledExecutorService)
 
     // Unsupported Endpoints
 /*
@@ -130,87 +134,99 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Web3j, Aion {
      * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
      */
     override fun ethGetBalance(
-            address: String,
-            defaultBlockParameter: DefaultBlockParameter)
-            : Request<*, EthGetBalance> {
+        address: String,
+        defaultBlockParameter: DefaultBlockParameter
+    ):
+        Request<*, EthGetBalance> {
 
         return Request<Any, EthGetBalance>(
-                "eth_getBalance",
-                removePendingStatusParameter(defaultBlockParameter, address),
-                web3jService,
-                EthGetBalance::class.java)
+            "eth_getBalance",
+            removePendingStatusParameter(defaultBlockParameter, address),
+            web3jService,
+            EthGetBalance::class.java
+        )
     }
 
     /**
      * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
      */
     override fun ethGetCode(
-            address: String,
-            defaultBlockParameter: DefaultBlockParameter)
-            : Request<*, EthGetCode> {
+        address: String,
+        defaultBlockParameter: DefaultBlockParameter
+    ):
+        Request<*, EthGetCode> {
 
         return Request<Any, EthGetCode>(
-                "eth_getCode",
-                removePendingStatusParameter(defaultBlockParameter, address),
-                web3jService,
-                EthGetCode::class.java)
+            "eth_getCode",
+            removePendingStatusParameter(defaultBlockParameter, address),
+            web3jService,
+            EthGetCode::class.java
+        )
     }
 
     /**
      * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
      */
     override fun ethGetTransactionCount(
-            address: String,
-            defaultBlockParameter: DefaultBlockParameter)
-            : Request<*, EthGetTransactionCount> {
+        address: String,
+        defaultBlockParameter: DefaultBlockParameter
+    ):
+        Request<*, EthGetTransactionCount> {
 
         return Request<Any, EthGetTransactionCount>(
-                "eth_getTransactionCount",
-                removePendingStatusParameter(defaultBlockParameter, address),
-                web3jService,
-                EthGetTransactionCount::class.java)
+            "eth_getTransactionCount",
+            removePendingStatusParameter(defaultBlockParameter, address),
+            web3jService,
+            EthGetTransactionCount::class.java
+        )
     }
 
     /**
      * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
      */
     override fun ethGetStorageAt(
-            address: String,
-            position: BigInteger,
-            defaultBlockParameter: DefaultBlockParameter)
-            : Request<*, EthGetStorageAt> {
+        address: String,
+        position: BigInteger,
+        defaultBlockParameter: DefaultBlockParameter
+    ):
+        Request<*, EthGetStorageAt> {
 
         return Request<Any, EthGetStorageAt>(
-                "eth_getStorageAt",
-                removePendingStatusParameter(defaultBlockParameter, address, Numeric.encodeQuantity(position)),
-                web3jService,
-                EthGetStorageAt::class.java)
+            "eth_getStorageAt",
+            removePendingStatusParameter(defaultBlockParameter, address, Numeric.encodeQuantity(position)),
+            web3jService,
+            EthGetStorageAt::class.java
+        )
     }
 
     /**
      * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
      */
     override fun ethCall(
-            transaction: Transaction,
-            defaultBlockParameter: DefaultBlockParameter)
-            : Request<*, EthCall> {
+        transaction: Transaction,
+        defaultBlockParameter: DefaultBlockParameter
+    ):
+        Request<*, EthCall> {
 
         return Request<Any, EthCall>(
-                "eth_call",
-                removePendingStatusParameter(defaultBlockParameter, transaction),
-                web3jService,
-                org.web3j.protocol.core.methods.response.EthCall::class.java)
+            "eth_call",
+            removePendingStatusParameter(defaultBlockParameter, transaction),
+            web3jService,
+            org.web3j.protocol.core.methods.response.EthCall::class.java
+        )
     }
 
     private fun removePendingStatusParameter(
-            defaultBlockParameter: DefaultBlockParameter,
-            vararg arguments: Any)
-            : List<*> {
+        defaultBlockParameter: DefaultBlockParameter,
+        vararg arguments: Any
+    ):
+        List<*> {
 
         val result = Arrays.asList(*arguments)
 
         if (!DefaultBlockParameterName.PENDING.value
-                        .equals(defaultBlockParameter.value, ignoreCase = true)) {
+                .equals(defaultBlockParameter.value, ignoreCase = true)
+        ) {
 
             result.add(defaultBlockParameter.value)
         }
