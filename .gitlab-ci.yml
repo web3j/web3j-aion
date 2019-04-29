@@ -8,7 +8,9 @@ variables:
   # Improve performance with overlayfs.
   DOCKER_DRIVER: overlay2
 
-test:
+build:
   image: gradle:5.4
-  stage: test
-  script: ./gradlew integrationTest
+  stage: build
+  script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - ./gradlew clean integrationTest --stacktrace
