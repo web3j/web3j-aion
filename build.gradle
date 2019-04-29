@@ -1,14 +1,12 @@
 plugins {
+    id 'java'
+    id 'idea'
+    id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm' version '1.3.31'
-    id 'org.jetbrains.kotlin.plugin.spring' version '1.3.31'
     id 'org.unbroken-dome.test-sets' version '2.1.1'
     id 'com.diffplug.gradle.spotless' version '3.23.0'
     id 'com.adarshr.test-logger' version '1.6.0'
 }
-
-apply plugin: 'java'
-apply plugin: 'kotlin'
-apply plugin: 'idea'
 
 ext {
     loadPropsFromFile = { String path ->
@@ -28,19 +26,11 @@ repositories {
     mavenCentral()
 }
 
-testSets { integrationTest { dirName = 'integration-test' } }
-integrationTest.mustRunAfter test
-
-test {
-    useJUnitPlatform()
-    systemProperties = [
-            'junit.jupiter.extensions.autodetection.enabled': 'true',
-            'junit.jupiter.testinstance.lifecycle.default'  : 'per_class',
-            'java.util.logging.manager'                     : 'org.apache.logging.log4j.jul.LogManager'
-    ]
+testSets {
+    integrationTest {
+        dirName = 'integration-test'
+    }
 }
-
-testlogger { showStandardStreams true }
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
@@ -57,8 +47,7 @@ dependencies {
     implementation "org.web3j:core:${versions.web3j}"
     testImplementation(group: 'org.web3j', name: 'core', version: versions.web3j, classifier: 'tests')
 
-    runtimeOnly "ch.qos.logback:logback-core:${versions.logback}"
-    runtimeOnly "ch.qos.logback:logback-classic:${versions.logback}"
+    runtimeOnly "com.github.schnitker.logmanager:logmgr-logback:${versions.logmanager}"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:${versions.junit5}"
     testImplementation "org.assertj:assertj-core:${versions.assertj}"
@@ -87,6 +76,22 @@ spotless {
         endWithNewline()
     }
 }
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+    reports.html.enabled = false
+    reports.junitXml.enabled = false
+    systemProperties = [
+            'junit.jupiter.extensions.autodetection.enabled': 'true',
+            'junit.jupiter.testinstance.lifecycle.default'  : 'per_class'
+    ]
+}
+
+testlogger {
+    showStandardStreams true
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
 
 compileKotlin {
     kotlinOptions {
