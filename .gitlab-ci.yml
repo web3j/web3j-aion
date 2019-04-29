@@ -9,7 +9,7 @@ variables:
   DOCKER_DRIVER: overlay2
 
 build:
-  image: gradle:5.4
+  image: openjdk:8-jdk
   stage: build
   script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
