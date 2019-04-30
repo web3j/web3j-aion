@@ -10,7 +10,9 @@ import org.web3j.protocol.core.DefaultBlockParameterName.PENDING
 import org.web3j.protocol.http.HttpService
 import org.web3j.testcontract.TestContract
 import org.web3j.tx.ClientTransactionManager
+import org.web3j.tx.TransactionManager
 import org.web3j.tx.gas.DefaultGasProvider
+import java.math.BigInteger
 
 @Testcontainers
 class AionIT {
@@ -27,31 +29,36 @@ class AionIT {
 
     @Test
     fun testGetBalance() {
-        val address = "0xa0b2e70f995df21e7988d645f1fdbaa94324f82b1d162b9b45cdbef7b5b51bd2"
-        val balance = aion.ethGetBalance(address, PENDING).send()
+        val balance = aion.ethGetBalance(ADDRESS, PENDING).send()
 
         assertThat(balance.error).isNull()
-        assertThat(balance.balance).isZero()
+        assertThat(balance.balance).isEqualTo(BigInteger("465934586660000000000000000"))
     }
 
     @Test
-    internal fun testContract() {
-        TestContract.deploy(aion, ClientTransactionManager(aion, ""), DefaultGasProvider(), "").send()
+    internal fun testContractDeploy() {
+        TestContract.deploy(aion, manager, DefaultGasProvider(), "").send()
     }
 
     companion object {
+
+        private const val ADDRESS = "0x0000000000000000000000000000000000000000000000000000000000000000"
+
         private lateinit var aion: Aion
+        private lateinit var manager: TransactionManager
 
         @BeforeAll
         @JvmStatic
         fun initClient() {
             val url = "http://${AION.containerIpAddress}:${AION.getMappedPort(8545)}/"
             aion = Aion.build(HttpService(url))
+            manager = ClientTransactionManager(aion, ADDRESS)
         }
 
         @Container
         @JvmStatic
         private val AION = KGenericContainer("aionnetwork/aion:0.3.3")
+            .withCommand("/aion/aion.sh --network custom")
             .withExposedPorts(8545)
     }
 
