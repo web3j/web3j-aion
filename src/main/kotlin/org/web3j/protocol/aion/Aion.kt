@@ -1,12 +1,12 @@
 package org.web3j.protocol.aion
 
-import org.web3j.protocol.Web3j
 import org.web3j.protocol.Web3jService
+import org.web3j.protocol.admin.Admin
 import org.web3j.protocol.core.Request
 import org.web3j.protocol.core.methods.response.EthSign
 import org.web3j.protocol.core.methods.response.Web3Sha3
 
-interface Aion : Web3j {
+interface Aion : Admin {
 
     @Deprecated("The eth_sign method should not be used to sign Aion transactions.")
     override fun ethSign(address: String, sha3HashOfDataToSign: String?): Request<*, EthSign>

@@ -3,9 +3,9 @@ package org.web3j.protocol.aion
 import mu.KLogging
 import org.web3j.protocol.ObjectMapperFactory
 import org.web3j.protocol.Web3jService
+import org.web3j.protocol.admin.JsonRpc2_0Admin
 import org.web3j.protocol.core.DefaultBlockParameter
 import org.web3j.protocol.core.DefaultBlockParameterName
-import org.web3j.protocol.core.JsonRpc2_0Web3j
 import org.web3j.protocol.core.Request
 import org.web3j.protocol.core.methods.request.Transaction
 import org.web3j.protocol.core.methods.response.EthCall
@@ -19,7 +19,7 @@ import java.util.Arrays
 import java.util.concurrent.ScheduledExecutorService
 
 @Suppress("ClassName")
-internal class JsonRpc2_0Aion : JsonRpc2_0Web3j, Aion {
+internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
 
     init {
         ObjectMapperFactory.getObjectMapper()
