@@ -9,6 +9,11 @@ plugins {
     id 'com.adarshr.test-logger' version '1.6.0'
 }
 
+group = 'org.web3j'
+version = '1.0.0-SNAPSHOT'
+
+//apply from: 'maven.gradle'
+
 ext {
     loadPropsFromFile = { String path ->
         def props = new Properties()
@@ -45,9 +50,9 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     implementation 'org.jetbrains.kotlin:kotlin-noarg'
     implementation 'org.jetbrains.kotlin:kotlin-native-utils'
-    
+
     implementation "io.github.microutils:kotlin-logging:${versions.kLogging}"
-    implementation "org.bouncycastle:bcpkix-jdk15on:${versions.bouncycastle}",
+    implementation "org.bouncycastle:bcpkix-jdk15on:${versions.bouncycastle}"
 
     implementation("com.github.shyiko:ktlint:${versions.ktlint}") {
         exclude group: 'org.jetbrains.kotlin'
@@ -55,8 +60,10 @@ dependencies {
     }
 
     implementation "org.web3j:core:${versions.web3j}"
+
     testImplementation(group: 'org.web3j', name: 'core', version: versions.web3j, classifier: 'tests')
 
+    testImplementation "net.i2p.crypto:eddsa:${versions.eddsa}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${versions.junit5}"
     testImplementation "org.assertj:assertj-core:${versions.assertj}"
     testImplementation "junit:junit:${versions.junit4}"
