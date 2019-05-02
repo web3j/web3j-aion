@@ -9,4 +9,3 @@ fun Address.toAion(): avm.Address {
 fun avm.Address.toEthereum(): Address {
     return Address(toString())
 }
-
