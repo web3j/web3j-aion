@@ -43,8 +43,10 @@ testSets {
 
 dependencies {
     implementation name: 'org-aion-avm-api'
-    implementation name: 'org-aion-avm-userlib'
+    implementation name: 'org-aion-avm-core'
+    implementation name: 'org-aion-avm-rt'
     implementation name: 'org-aion-avm-tooling'
+    implementation name: 'org-aion-avm-userlib'
 
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
