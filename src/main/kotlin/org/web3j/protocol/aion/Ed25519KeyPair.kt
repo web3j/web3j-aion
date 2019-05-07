@@ -1,5 +1,7 @@
 package org.web3j.protocol.aion
 
+import org.bouncycastle.asn1.x9.X9ECParameters
+import org.bouncycastle.crypto.ec.CustomNamedCurves
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters
 import org.bouncycastle.crypto.signers.Ed25519Signer
 import org.web3j.crypto.ECDSASignature
@@ -26,11 +28,12 @@ class Ed25519KeyPair(privateKey: BigInteger, publicKey: BigInteger) : ECKeyPair(
             update(transactionHash, 0, transactionHash.size)
             generateSignature()
         }.run {
-            ECDSASignature(BigInteger(this), BigInteger.ZERO)
+            ECDSASignature(BigInteger(this), BigInteger(CURVE_PARAMETERS.seed))
         }
     }
 
     companion object {
+        val CURVE_PARAMETERS: X9ECParameters = CustomNamedCurves.getByName("ed25519")
 
         fun create(privateKey: BigInteger): Ed25519KeyPair {
             return Ed25519KeyPair(privateKey, publicKeyFromPrivate(privateKey))
