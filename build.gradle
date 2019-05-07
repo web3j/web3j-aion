@@ -67,7 +67,7 @@ dependencies {
 
     testImplementation "net.i2p.crypto:eddsa:${versions.eddsa}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${versions.junit5}"
-    testImplementation "org.assertj:assertj-core:${versions.assertj}"
+    testImplementation "com.willowtreeapps.assertk:assertk-jvm:${versions.assertk}"
     testImplementation "junit:junit:${versions.junit4}"
     testImplementation("io.mockk:mockk:${versions.mockk}") {
         exclude group: 'org.jetbrains.kotlin'

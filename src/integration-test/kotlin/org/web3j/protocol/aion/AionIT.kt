@@ -1,6 +1,9 @@
 package org.web3j.protocol.aion
 
-import org.assertj.core.api.Assertions.assertThat
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNull
+import assertk.assertions.isZero
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -27,19 +30,20 @@ class AionIT {
     @Test
     fun testGetUncleCountByBlockHash() {
         val hash = "0x34e9d4af6d2bace6a54b6039843e55bdc1d4ff425cd8e8c8f3fa96ca89f58a53"
-        val countByBlockHash = aion.ethGetUncleCountByBlockHash(hash).send()
 
-        assertThat(countByBlockHash.result).isNull()
-        assertThat(countByBlockHash.error.code).isEqualTo(-32601)
-        assertThat(countByBlockHash.error.message).isEqualTo("Method not found")
+        aion.ethGetUncleCountByBlockHash(hash).send().apply {
+            assertThat(result).isNull()
+            assertThat(error.code).isEqualTo(-32601)
+            assertThat(error.message).isEqualTo("Method not found")
+        }
     }
 
     @Test
     fun testGetBalance() {
-        val balance = aion.ethGetBalance(ADDRESS, PENDING).send()
-
-        assertThat(balance.error).isNull()
-        assertThat(balance.balance).isZero()
+        aion.ethGetBalance(ADDRESS, PENDING).send().apply {
+            assertThat(error).isNull()
+            assertThat(balance).isZero()
+        }
     }
 
     @Test
