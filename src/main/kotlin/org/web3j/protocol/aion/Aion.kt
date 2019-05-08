@@ -35,6 +35,8 @@ import org.web3j.protocol.core.methods.response.ShhVersion
 import org.web3j.protocol.core.methods.response.Web3Sha3
 import java.math.BigInteger
 
+class AionProtocolException(message: String, cause: Throwable? = null) : RuntimeException(message, cause)
+
 interface Aion : Admin {
 
     @Deprecated("Spec-defined functions that deal with Uncles are not part of the Aion protocol.")
