@@ -2,6 +2,7 @@ package org.web3j.protocol.aion
 
 import org.web3j.protocol.core.Request
 import org.web3j.protocol.core.Response
+import org.web3j.protocol.core.RpcErrors
 import java.util.concurrent.CompletableFuture
 
 internal class UnsupportedRequest<S, T : Response<*>>(
@@ -22,4 +23,4 @@ internal class UnsupportedRequest<S, T : Response<*>>(
     }
 }
 
-private object MethodNotFound : Response.Error(-32601, "Method not found")
+private object MethodNotFound : Response.Error(RpcErrors.INVALID_REQUEST, "Method not found")
