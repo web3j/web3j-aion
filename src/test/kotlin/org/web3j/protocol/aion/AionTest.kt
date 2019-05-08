@@ -19,6 +19,7 @@ import java.math.BigInteger.ONE
 import java.math.BigInteger.TEN
 import java.math.BigInteger.ZERO
 
+@Suppress("DEPRECATION")
 class AionTest : RequestTester() {
 
     private lateinit var aion: Aion
