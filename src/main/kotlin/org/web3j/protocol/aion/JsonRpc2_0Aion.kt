@@ -245,9 +245,6 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
         )
     }
 
-    /**
-     * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
-     */
     override fun ethGetBalance(
         address: String,
         defaultBlockParameter: DefaultBlockParameter
@@ -256,9 +253,6 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
         return super.ethGetBalance(address, defaultBlockParameter)
     }
 
-    /**
-     * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
-     */
     override fun ethGetCode(
         address: String,
         defaultBlockParameter: DefaultBlockParameter
@@ -267,9 +261,6 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
         return super.ethGetCode(address, defaultBlockParameter)
     }
 
-    /**
-     * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
-     */
     override fun ethGetTransactionCount(
         address: String,
         defaultBlockParameter: DefaultBlockParameter
@@ -278,9 +269,6 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
         return super.ethGetTransactionCount(address, defaultBlockParameter)
     }
 
-    /**
-     * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
-     */
     override fun ethGetStorageAt(
         address: String,
         position: BigInteger,
@@ -290,9 +278,6 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
         return super.ethGetStorageAt(address, position, defaultBlockParameter)
     }
 
-    /**
-     * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
-     */
     override fun ethCall(
         transaction: Transaction,
         defaultBlockParameter: DefaultBlockParameter
