@@ -1,29 +1,58 @@
 package org.web3j.protocol.aion
 
 import mu.KLogging
+import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.web3j.protocol.ObjectMapperFactory
 import org.web3j.protocol.Web3jService
 import org.web3j.protocol.admin.JsonRpc2_0Admin
 import org.web3j.protocol.core.DefaultBlockParameter
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.Request
+import org.web3j.protocol.core.methods.request.ShhFilter
 import org.web3j.protocol.core.methods.request.Transaction
+import org.web3j.protocol.core.methods.response.DbGetHex
+import org.web3j.protocol.core.methods.response.DbGetString
+import org.web3j.protocol.core.methods.response.DbPutHex
+import org.web3j.protocol.core.methods.response.DbPutString
+import org.web3j.protocol.core.methods.response.EthBlock
 import org.web3j.protocol.core.methods.response.EthCall
+import org.web3j.protocol.core.methods.response.EthCompileLLL
+import org.web3j.protocol.core.methods.response.EthCompileSerpent
 import org.web3j.protocol.core.methods.response.EthGetBalance
 import org.web3j.protocol.core.methods.response.EthGetCode
 import org.web3j.protocol.core.methods.response.EthGetStorageAt
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount
+import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockHash
+import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber
+import org.web3j.protocol.core.methods.response.EthGetWork
+import org.web3j.protocol.core.methods.response.EthSubmitWork
+import org.web3j.protocol.core.methods.response.ShhAddToGroup
+import org.web3j.protocol.core.methods.response.ShhHasIdentity
+import org.web3j.protocol.core.methods.response.ShhMessages
+import org.web3j.protocol.core.methods.response.ShhNewFilter
+import org.web3j.protocol.core.methods.response.ShhNewGroup
+import org.web3j.protocol.core.methods.response.ShhNewIdentity
+import org.web3j.protocol.core.methods.response.ShhPost
+import org.web3j.protocol.core.methods.response.ShhUninstallFilter
+import org.web3j.protocol.core.methods.response.ShhVersion
 import org.web3j.utils.Numeric
 import java.math.BigInteger
-import java.util.Arrays
+import java.security.Security
 import java.util.concurrent.ScheduledExecutorService
 
+/**
+ * Aion JSON-RPC implementation following the
+ * [Aion docs](https://github.com/aionnetwork/aion/wiki/JSON-RPC-API-Docs).
+ */
 @Suppress("ClassName")
 internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
 
     init {
-        ObjectMapperFactory.getObjectMapper()
-            .addMixIn(Request::class.java, AionRequestMixIn::class.java)
+        Security.addProvider(BouncyCastleProvider())
+//        Security.addProvider(EdDSASecurityProvider())
+
+        val mapper = ObjectMapperFactory.getObjectMapper()
+        mapper.addMixIn(Request::class.java, AionRequestMixIn::class.java)
     }
 
     constructor(web3jService: Web3jService) : super(web3jService)
@@ -34,107 +63,187 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
         scheduledExecutorService: ScheduledExecutorService
     ) : super(web3jService, pollingInterval, scheduledExecutorService)
 
-    // Unsupported Endpoints
-/*
     override fun ethGetUncleCountByBlockHash(blockHash: String)
-            : Request<*, EthGetUncleCountByBlockHash> {
-        throw UnsupportedOperationException("Spec-defined functions that deal with Uncles are not part of the Aion protocol.")
+        : Request<*, EthGetUncleCountByBlockHash> {
+        return UnsupportedRequest(
+            "eth_getUncleCountByBlockHash",
+            listOf(blockHash),
+            EthGetUncleCountByBlockHash::class.java
+        )
     }
 
     override fun ethGetUncleCountByBlockNumber(defaultBlockParameter: DefaultBlockParameter)
-            : Request<*, EthGetUncleCountByBlockNumber> {
-        throw UnsupportedOperationException("Spec-defined functions that deal with Uncles are not part of the Aion protocol.")
+        : Request<*, EthGetUncleCountByBlockNumber> {
+        return UnsupportedRequest(
+            "eth_getUncleCountByBlockNumber",
+            listOf(defaultBlockParameter.value),
+            EthGetUncleCountByBlockNumber::class.java
+        )
     }
 
     override fun ethGetUncleByBlockHashAndIndex(blockHash: String, transactionIndex: BigInteger)
-            : Request<*, EthBlock> {
-        throw UnsupportedOperationException("Spec-defined functions that deal with Uncles are not part of the Aion protocol.")
+        : Request<*, EthBlock> {
+        return UnsupportedRequest(
+            "eth_getUncleByBlockHashAndIndex",
+            listOf(blockHash, Numeric.encodeQuantity(transactionIndex)),
+            EthBlock::class.java
+        )
     }
 
     override fun ethGetUncleByBlockNumberAndIndex(
-            defaultBlockParameter: DefaultBlockParameter,
-            uncleIndex: BigInteger): Request<*, EthBlock> {
-        throw UnsupportedOperationException("Spec-defined functions that deal with Uncles are not part of the Aion protocol.")
+        defaultBlockParameter: DefaultBlockParameter,
+        uncleIndex: BigInteger
+    ): Request<*, EthBlock> {
+        return UnsupportedRequest(
+            "eth_getUncleByBlockNumberAndIndex",
+            listOf(defaultBlockParameter.value, Numeric.encodeQuantity(uncleIndex)),
+            EthBlock::class.java
+        )
     }
 
     override fun ethCompileLLL(sourceCode: String): Request<*, EthCompileLLL> {
-        throw UnsupportedOperationException("The LLL compiler is not supported. "
-                + "Currently, the only language supported on Aion is Solidity-on-Aion-FVM.")
+        return UnsupportedRequest(
+            "eth_compileLLL",
+            listOf(sourceCode),
+            EthCompileLLL::class.java
+        )
     }
 
     override fun ethCompileSerpent(sourceCode: String): Request<*, EthCompileSerpent> {
-        throw UnsupportedOperationException("The Serpent compiler is not supported. "
-                + "Currently, the only language supported on Aion is Solidity-on-Aion-FVM.")
+        return UnsupportedRequest(
+            "eth_compileSerpent",
+            listOf(sourceCode),
+            EthCompileSerpent::class.java
+        )
     }
 
     override fun ethGetWork(): Request<*, EthGetWork> {
-        throw UnsupportedOperationException("Implemented as part of the stratum API submodule.")
+        return UnsupportedRequest(
+            "eth_getWork",
+            listOf<Any>(),
+            EthGetWork::class.java
+        )
     }
 
     override fun ethSubmitWork(nonce: String, headerPowHash: String, mixDigest: String): Request<*, EthSubmitWork> {
-        throw UnsupportedOperationException("Implemented as part of the stratum API submodule.")
+        return UnsupportedRequest(
+            "eth_submitWork",
+            listOf(nonce, headerPowHash, mixDigest),
+            EthSubmitWork::class.java
+        )
     }
 
     override fun shhPost(shhPost: org.web3j.protocol.core.methods.request.ShhPost): Request<*, ShhPost> {
-        throw UnsupportedOperationException("Aion currently does not support the Whisper protocol.")
+        return UnsupportedRequest(
+            "shh_post",
+            listOf(shhPost),
+            ShhPost::class.java
+        )
     }
 
     override fun shhVersion(): Request<*, ShhVersion> {
-        throw UnsupportedOperationException("Aion currently does not support the Whisper protocol.")
+        return UnsupportedRequest(
+            "shh_version",
+            listOf<Any>(),
+            ShhVersion::class.java
+        )
     }
 
     override fun shhNewIdentity(): Request<*, ShhNewIdentity> {
-        throw UnsupportedOperationException("Aion currently does not support the Whisper protocol.")
+        return UnsupportedRequest(
+            "shh_newIdentity",
+            listOf<Any>(),
+            ShhNewIdentity::class.java
+        )
     }
 
     override fun shhHasIdentity(identityAddress: String): Request<*, ShhHasIdentity> {
-        throw UnsupportedOperationException("Aion currently does not support the Whisper protocol.")
+        return UnsupportedRequest(
+            "shh_hasIdentity",
+            listOf(identityAddress),
+            ShhHasIdentity::class.java
+        )
     }
 
     override fun shhNewGroup(): Request<*, ShhNewGroup> {
-        throw UnsupportedOperationException("Aion currently does not support the Whisper protocol.")
+        return UnsupportedRequest(
+            "shh_newGroup",
+            listOf<Any>(),
+            ShhNewGroup::class.java
+        )
     }
 
     override fun shhAddToGroup(identityAddress: String): Request<*, ShhAddToGroup> {
-        throw UnsupportedOperationException("Aion currently does not support the Whisper protocol.")
+        return UnsupportedRequest(
+            "shh_addToGroup",
+            listOf(identityAddress),
+            ShhAddToGroup::class.java
+        )
     }
 
     override fun shhNewFilter(shhFilter: ShhFilter): Request<*, ShhNewFilter> {
-        throw UnsupportedOperationException("Aion currently does not support the Whisper protocol.")
+        return UnsupportedRequest(
+            "shh_newFilter",
+            listOf(shhFilter),
+            ShhNewFilter::class.java
+        )
     }
 
     override fun shhUninstallFilter(filterId: BigInteger): Request<*, ShhUninstallFilter> {
-        throw UnsupportedOperationException("Aion currently does not support the Whisper protocol.")
+        return UnsupportedRequest(
+            "shh_uninstallFilter",
+            listOf(Numeric.toHexStringWithPrefixSafe(filterId)),
+            ShhUninstallFilter::class.java
+        )
     }
 
     override fun shhGetFilterChanges(filterId: BigInteger): Request<*, ShhMessages> {
-        throw UnsupportedOperationException("Aion currently does not support the Whisper protocol.")
+        return UnsupportedRequest(
+            "shh_getFilterChanges",
+            listOf(Numeric.toHexStringWithPrefixSafe(filterId)),
+            ShhMessages::class.java
+        )
     }
 
     override fun shhGetMessages(filterId: BigInteger): Request<*, ShhMessages> {
-        throw UnsupportedOperationException("Aion currently does not support the Whisper protocol.")
+        return UnsupportedRequest(
+            "shh_getMessages",
+            listOf(Numeric.toHexStringWithPrefixSafe(filterId)),
+            ShhMessages::class.java
+        )
     }
 
     override fun dbPutString(databaseName: String, keyName: String, stringToStore: String): Request<*, DbPutString> {
-        throw UnsupportedOperationException("Aion currently does not support the Whisper protocol.")
+        return UnsupportedRequest(
+            "db_putString",
+            listOf(databaseName, keyName, stringToStore),
+            DbPutString::class.java
+        )
     }
 
-    @Deprecated("")
     override fun dbGetString(databaseName: String, keyName: String): Request<*, DbGetString> {
-        throw UnsupportedOperationException("The database APIs have been deprecated in the Ethereum Spec.")
+        return UnsupportedRequest(
+            "db_getString",
+            listOf(databaseName, keyName),
+            DbGetString::class.java
+        )
     }
 
-    @Deprecated("")
     override fun dbPutHex(databaseName: String, keyName: String, dataToStore: String): Request<*, DbPutHex> {
-        throw UnsupportedOperationException("The database APIs have been deprecated in the Ethereum Spec.")
+        return UnsupportedRequest(
+            "db_putHex",
+            listOf(databaseName, keyName, dataToStore),
+            DbPutHex::class.java
+        )
     }
 
-    @Deprecated("")
     override fun dbGetHex(databaseName: String, keyName: String): Request<*, DbGetHex> {
-        throw UnsupportedOperationException("The database APIs have been deprecated in the Ethereum Spec.")
-    }*/
-
-    // Implementation Deviations
+        return UnsupportedRequest(
+            "db_getHex",
+            listOf(databaseName, keyName),
+            DbGetHex::class.java
+        )
+    }
 
     /**
      * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
@@ -142,15 +251,9 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
     override fun ethGetBalance(
         address: String,
         defaultBlockParameter: DefaultBlockParameter
-    ):
-        Request<*, EthGetBalance> {
-
-        return Request<Any, EthGetBalance>(
-            "eth_getBalance",
-            removePendingStatusParameter(defaultBlockParameter, address),
-            web3jService,
-            EthGetBalance::class.java
-        )
+    ): Request<*, EthGetBalance> {
+        checkPendingStatusParameter(defaultBlockParameter)
+        return super.ethGetBalance(address, defaultBlockParameter)
     }
 
     /**
@@ -159,15 +262,9 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
     override fun ethGetCode(
         address: String,
         defaultBlockParameter: DefaultBlockParameter
-    ):
-        Request<*, EthGetCode> {
-
-        return Request<Any, EthGetCode>(
-            "eth_getCode",
-            removePendingStatusParameter(defaultBlockParameter, address),
-            web3jService,
-            EthGetCode::class.java
-        )
+    ): Request<*, EthGetCode> {
+        checkPendingStatusParameter(defaultBlockParameter)
+        return super.ethGetCode(address, defaultBlockParameter)
     }
 
     /**
@@ -176,15 +273,9 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
     override fun ethGetTransactionCount(
         address: String,
         defaultBlockParameter: DefaultBlockParameter
-    ):
-        Request<*, EthGetTransactionCount> {
-
-        return Request<Any, EthGetTransactionCount>(
-            "eth_getTransactionCount",
-            removePendingStatusParameter(defaultBlockParameter, address),
-            web3jService,
-            EthGetTransactionCount::class.java
-        )
+    ): Request<*, EthGetTransactionCount> {
+        checkPendingStatusParameter(defaultBlockParameter)
+        return super.ethGetTransactionCount(address, defaultBlockParameter)
     }
 
     /**
@@ -194,15 +285,9 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
         address: String,
         position: BigInteger,
         defaultBlockParameter: DefaultBlockParameter
-    ):
-        Request<*, EthGetStorageAt> {
-
-        return Request<Any, EthGetStorageAt>(
-            "eth_getStorageAt",
-            removePendingStatusParameter(defaultBlockParameter, address, Numeric.encodeQuantity(position)),
-            web3jService,
-            EthGetStorageAt::class.java
-        )
+    ): Request<*, EthGetStorageAt> {
+        checkPendingStatusParameter(defaultBlockParameter)
+        return super.ethGetStorageAt(address, position, defaultBlockParameter)
     }
 
     /**
@@ -211,34 +296,17 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
     override fun ethCall(
         transaction: Transaction,
         defaultBlockParameter: DefaultBlockParameter
-    ):
-        Request<*, EthCall> {
-
-        return Request<Any, EthCall>(
-            "eth_call",
-            removePendingStatusParameter(defaultBlockParameter, transaction),
-            web3jService,
-            org.web3j.protocol.core.methods.response.EthCall::class.java
-        )
+    ): Request<*, EthCall> {
+        checkPendingStatusParameter(defaultBlockParameter)
+        return ethCall(transaction, defaultBlockParameter)
     }
 
-    private fun removePendingStatusParameter(
-        defaultBlockParameter: DefaultBlockParameter,
-        vararg arguments: Any
-    ):
-        List<*> {
+    companion object : KLogging() {
 
-        val result = Arrays.asList(*arguments)
-
-        if (!DefaultBlockParameterName.PENDING.value
-                .equals(defaultBlockParameter.value, ignoreCase = true)
-        ) {
-
-            result.add(defaultBlockParameter.value)
+        private fun checkPendingStatusParameter(defaultBlockParameter: DefaultBlockParameter) {
+            if (DefaultBlockParameterName.PENDING.value.equals(defaultBlockParameter.value, ignoreCase = true)) {
+                throw AionProtocolException("'pending' status is not supported as a default block parameter.")
+            }
         }
-
-        return result
     }
-
-    companion object : KLogging()
 }
