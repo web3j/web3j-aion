@@ -2,9 +2,6 @@ package org.web3j.protocol.aion
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import assertk.assertions.isNull
-import assertk.assertions.isZero
-import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.testcontainers.containers.BindMode
@@ -13,46 +10,20 @@ import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.web3j.crypto.Credentials
 import org.web3j.greeter.Greeter
-import org.web3j.protocol.core.DefaultBlockParameterName.PENDING
 import org.web3j.protocol.http.HttpService
 import org.web3j.tx.ClientTransactionManager
 import org.web3j.tx.RawTransactionManager
 import org.web3j.tx.gas.DefaultGasProvider
 import java.math.BigInteger
-import java.security.Security
 
 @Testcontainers
 class AionIT {
-
-    init {
-        Security.addProvider(BouncyCastleProvider())
-//        Security.addProvider(EdDSASecurityProvider())
-    }
-
-    @Test
-    fun testGetUncleCountByBlockHash() {
-        val hash = "0x34e9d4af6d2bace6a54b6039843e55bdc1d4ff425cd8e8c8f3fa96ca89f58a53"
-
-        aion.ethGetUncleCountByBlockHash(hash).send().apply {
-            assertThat(result).isNull()
-            assertThat(error.code).isEqualTo(-32601)
-            assertThat(error.message).isEqualTo("Method not found")
-        }
-    }
-
-    @Test
-    fun testGetBalance() {
-        aion.ethGetBalance(ADDRESS, PENDING).send().apply {
-            assertThat(error).isNull()
-            assertThat(balance).isZero()
-        }
-    }
 
     @Test
     internal fun testContractDeployUnsigned() {
         val manager = ClientTransactionManager(aion, ADDRESS)
         Greeter.deploy(aion, manager, DefaultGasProvider(), "Aion test").send().apply {
-            assertThat(greet()).isEqualTo("Aion test")
+            assertThat(greet().send()).isEqualTo("Aion test")
         }
     }
 
@@ -61,7 +32,7 @@ class AionIT {
         val keyPair = Ed25519KeyPair.create(BigInteger(PRIVATE_KEY, 16))
         val manager = RawTransactionManager(aion, Credentials.create(keyPair))
         Greeter.deploy(aion, manager, DefaultGasProvider(), "Aion test").send().apply {
-            assertThat(greet()).isEqualTo("Aion test")
+            assertThat(greet().send()).isEqualTo("Aion test")
         }
     }
 
