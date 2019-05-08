@@ -1,6 +1,7 @@
 package org.web3j.protocol.aion
 
 import assertk.Assert
+import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
@@ -163,9 +164,11 @@ class AionTest : RequestTester() {
     }
 
     private fun <T : Response<*>> Assert<T>.isError() = given { response ->
-        assertThat(response.error.code).isEqualTo(RpcErrors.INVALID_REQUEST)
-        assertThat(response.error.message).isEqualTo("Method not found")
-        assertThat(response.result).isNull()
+        assertAll {
+            assertThat(response.error.code).isEqualTo(RpcErrors.INVALID_REQUEST)
+            assertThat(response.error.message).isEqualTo("Method not found")
+            assertThat(response.result).isNull()
+        }
     }
 
     companion object {
