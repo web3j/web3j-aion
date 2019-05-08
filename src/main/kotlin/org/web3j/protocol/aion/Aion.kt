@@ -5,13 +5,19 @@ import org.web3j.protocol.admin.Admin
 import org.web3j.protocol.core.DefaultBlockParameter
 import org.web3j.protocol.core.Request
 import org.web3j.protocol.core.methods.request.ShhFilter
+import org.web3j.protocol.core.methods.request.Transaction
 import org.web3j.protocol.core.methods.response.DbGetHex
 import org.web3j.protocol.core.methods.response.DbGetString
 import org.web3j.protocol.core.methods.response.DbPutHex
 import org.web3j.protocol.core.methods.response.DbPutString
 import org.web3j.protocol.core.methods.response.EthBlock
+import org.web3j.protocol.core.methods.response.EthCall
 import org.web3j.protocol.core.methods.response.EthCompileLLL
 import org.web3j.protocol.core.methods.response.EthCompileSerpent
+import org.web3j.protocol.core.methods.response.EthGetBalance
+import org.web3j.protocol.core.methods.response.EthGetCode
+import org.web3j.protocol.core.methods.response.EthGetStorageAt
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount
 import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockHash
 import org.web3j.protocol.core.methods.response.EthGetUncleCountByBlockNumber
 import org.web3j.protocol.core.methods.response.EthGetWork
@@ -108,6 +114,57 @@ interface Aion : Admin {
 
     @Deprecated("You should not be sending data to get hashed to the kernel API server.")
     override fun web3Sha3(data: String): Request<*, Web3Sha3>
+
+    /**
+     * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
+     * @throws AionProtocolException if `defaultBlockParameter` is equal to `pending`.
+     */
+    @Throws(AionProtocolException::class)
+    override fun ethGetBalance(
+        address: String,
+        defaultBlockParameter: DefaultBlockParameter
+    ): Request<*, EthGetBalance>
+
+    /**
+     * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
+     * @throws AionProtocolException if `defaultBlockParameter` is equal to `pending`.
+     */
+    @Throws(AionProtocolException::class)
+    override fun ethGetCode(
+        address: String,
+        defaultBlockParameter: DefaultBlockParameter
+    ): Request<*, EthGetCode>
+
+    /**
+     * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
+     * @throws AionProtocolException if `defaultBlockParameter` is equal to `pending`.
+     */
+    @Throws(AionProtocolException::class)
+    override fun ethGetTransactionCount(
+        address: String,
+        defaultBlockParameter: DefaultBlockParameter
+    ): Request<*, EthGetTransactionCount>
+
+    /**
+     * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
+     * @throws AionProtocolException if `defaultBlockParameter` is equal to `pending`.
+     */
+    @Throws(AionProtocolException::class)
+    override fun ethGetStorageAt(
+        address: String,
+        position: BigInteger,
+        defaultBlockParameter: DefaultBlockParameter
+    ): Request<*, EthGetStorageAt>
+
+    /**
+     * @param defaultBlockParameter `pending` status is not supported for as a default block parameter.
+     * @throws AionProtocolException if `defaultBlockParameter` is equal to `pending`.
+     */
+    @Throws(AionProtocolException::class)
+    override fun ethCall(
+        transaction: Transaction,
+        defaultBlockParameter: DefaultBlockParameter
+    ): Request<*, EthCall>
 
     companion object {
 
