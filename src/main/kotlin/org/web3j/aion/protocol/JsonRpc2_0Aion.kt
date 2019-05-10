@@ -1,4 +1,4 @@
-package org.web3j.protocol.aion
+package org.web3j.aion.protocol
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper

@@ -1,4 +1,4 @@
-package org.web3j.protocol.aion
+package org.web3j.aion.protocol
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -8,12 +8,12 @@ import org.testcontainers.containers.BindMode
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
+import org.web3j.aion.tx.gas.AionGasProvider
 import org.web3j.crypto.Credentials
 import org.web3j.greeter.Greeter
 import org.web3j.protocol.http.HttpService
 import org.web3j.tx.ClientTransactionManager
 import org.web3j.tx.RawTransactionManager
-import org.web3j.tx.gas.DefaultGasProvider
 import java.math.BigInteger
 
 @Testcontainers
@@ -21,8 +21,14 @@ class AionIT {
 
     @Test
     internal fun testContractDeployUnsigned() {
-        val manager = ClientTransactionManager(aion, ADDRESS)
-        Greeter.deploy(aion, manager, DefaultGasProvider(), "Aion test").send().apply {
+        val manager = ClientTransactionManager(
+            aion,
+            ADDRESS
+        )
+        Greeter.deploy(
+            aion, manager,
+            AionGasProvider, "Aion test"
+        ).send().apply {
             assertThat(greet().send()).isEqualTo("Aion test")
         }
     }
@@ -31,7 +37,10 @@ class AionIT {
     internal fun testContractDeploySigned() {
         val keyPair = Ed25519KeyPair.create(BigInteger(PRIVATE_KEY, 16))
         val manager = RawTransactionManager(aion, Credentials.create(keyPair))
-        Greeter.deploy(aion, manager, DefaultGasProvider(), "Aion test").send().apply {
+        Greeter.deploy(
+            aion, manager,
+            AionGasProvider, "Aion test"
+        ).send().apply {
             assertThat(greet().send()).isEqualTo("Aion test")
         }
     }
@@ -61,6 +70,7 @@ class AionIT {
         private val AION = KGenericContainer("aionnetwork/aion:0.3.3")
             .withClasspathResourceMapping("aion/config", "/aion/custom/config", BindMode.READ_ONLY)
             .withClasspathResourceMapping("aion/keystore", "/aion/custom/keystore", BindMode.READ_ONLY)
+            .withClasspathResourceMapping("aion/log", "/aion/custom/log", BindMode.READ_WRITE)
             .withCommand("/aion/aion.sh --network custom")
             .withExposedPorts(8545)
     }

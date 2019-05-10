@@ -1,4 +1,4 @@
-package org.web3j.protocol.aion
+package org.web3j.aion.protocol
 
 import org.web3j.abi.datatypes.Address
 import org.web3j.protocol.core.methods.response.Transaction

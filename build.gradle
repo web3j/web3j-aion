@@ -1,3 +1,8 @@
+import org.web3j.gradle.plugin.GenerateContractWrappers
+import org.web3j.solidity.gradle.plugin.SoliditySourceSet
+
+import static org.web3j.solidity.gradle.plugin.SoliditySourceSet.NAME
+
 plugins {
     id 'java'
     id 'idea'
@@ -39,6 +44,30 @@ testSets {
     integrationTest {
         dirName = 'integration-test'
     }
+}
+
+task aionCompileSolidity(group: 'aion') {
+    // Execute task between Solidity web3j plugins
+    mustRunAfter 'compileIntegrationTestSolidity'
+    doLast {
+        sourceSets.each { sourceSet ->
+            def soliditySourceSet = sourceSet.convention.plugins[NAME] as SoliditySourceSet
+            soliditySourceSet.solidity.each { source ->
+                exec {
+                    executable 'docker'
+                    args = ['run', '--rm', '-v', "$projectDir:/src", 'satran004/aion-fastvm:0.3.1',
+                            'solc', '--overwrite', '--abi', '--bin', '--optimize', '--output-dir',
+                            "${projectDir.relativePath(sourceSet.output.resourcesDir)}/solidity",
+                            projectDir.relativePath(source)]
+                }
+            }
+        }
+    }
+}
+
+// Dirty trick to trigger Aion compilation
+tasks.withType(GenerateContractWrappers) {
+    dependsOn 'aionCompileSolidity'
 }
 
 dependencies {

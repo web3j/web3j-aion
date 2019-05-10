@@ -1,4 +1,4 @@
-package org.web3j.protocol.aion
+package org.web3j.aion.protocol
 
 import assertk.Assert
 import assertk.assertAll
@@ -160,7 +160,10 @@ class AionTest : RequestTester() {
 
     @Test(expected = AionProtocolException::class)
     fun testCall() {
-        val transaction = Transaction(ADDRESS, ZERO, ONE, ONE, ADDRESS, TEN, "")
+        val transaction = Transaction(
+            ADDRESS, ZERO, ONE, ONE,
+            ADDRESS, TEN, ""
+        )
         aion.ethCall(transaction, PENDING).send()
     }
 
