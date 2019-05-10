@@ -8,6 +8,7 @@ import org.testcontainers.containers.BindMode
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
+import org.web3j.aion.crypto.Ed25519KeyPair
 import org.web3j.aion.tx.gas.AionGasProvider
 import org.web3j.crypto.Credentials
 import org.web3j.greeter.Greeter
