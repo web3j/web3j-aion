@@ -1,4 +1,4 @@
-pragma solidity ^0.4.2;
+pragma solidity ^0.4.15;
 
 // Example taken from https://www.ethereum.org/greeter, also used in
 // https://github.com/ethereum/go-ethereum/wiki/Contract-Tutorial#your-first-citizen-the-greeter
@@ -8,7 +8,7 @@ contract Mortal {
     address owner;
 
     /* this function is executed at initialization and sets the owner of the contract */
-    constructor() public {owner = msg.sender;}
+    function Mortal() public {owner = msg.sender;}
 
     /* Function to recover the funds on the contract */
     function kill() public {if (msg.sender == owner) selfdestruct(owner);}
@@ -19,7 +19,7 @@ contract Greeter is Mortal {
     string greeting;
 
     /* this runs when the contract is executed */
-    constructor(string _greeting) public {
+    function Greeter(string _greeting) public {
         greeting = _greeting;
     }
 
@@ -28,7 +28,7 @@ contract Greeter is Mortal {
     }
 
     /* main function */
-    function greet() public view returns (string) {
+    function greet() public returns (string) {
         return greeting;
     }
 }
