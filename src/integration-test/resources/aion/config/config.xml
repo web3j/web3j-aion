@@ -23,8 +23,7 @@
     </api>
     <net>
         <id>0</id>
-        <nodes>
-        </nodes>
+        <nodes/>
         <p2p>
             <ip>0.0.0.0</ip>
             <port>30303</port>
@@ -38,7 +37,7 @@
         <show-status>false</show-status>
         <!--requires show-status=true; comma separated list of options: [all, peer_states, requests, seeds, leeches, responses, none]-->
         <show-statistics>none</show-statistics>
-        <compact enabled="false" slow-import="1000" frequency="600000"></compact>
+        <compact enabled="false" slow-import="1000" frequency="600000"/>
     </sync>
     <consensus>
         <mining>true</mining>
@@ -46,7 +45,7 @@
         <cpu-mine-threads>2</cpu-mine-threads>
         <extra-data>AION</extra-data>
         <nrg-strategy>
-            <clamped-decay upper-bound="20000000" lower-bound="15000000"></clamped-decay>
+            <clamped-decay upper-bound="20000000" lower-bound="15000000"/>
         </nrg-strategy>
     </consensus>
     <db>
@@ -71,12 +70,13 @@
         <!--Sets the physical location on disk where log files will be stored.-->
         <log-path>log</log-path>
         <GEN>INFO</GEN>
-        <VM>ERROR</VM>
+        <VM>DEBUG</VM>
         <API>INFO</API>
         <SYNC>INFO</SYNC>
         <DB>WARN</DB>
         <CONS>INFO</CONS>
-        <P2P>INFO</P2P>
+        <P2P>WARN</P2P>
+        <TX>DEBUG</TX>
     </log>
     <tx>
         <cacheMax>256</cacheMax>
