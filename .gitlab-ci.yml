@@ -13,12 +13,7 @@ build:
   retry: 2
   stage: build
   script:
-    - export GRADLE_USER_HOME=`pwd`/.gradle
     - ./gradlew clean build integrationTest --stacktrace
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - .gradle/
   artifacts:
     paths:
       - build/libs/*.jar
