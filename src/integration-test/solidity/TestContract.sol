@@ -1,4 +1,4 @@
-pragma solidity >=0.4.16 < 0.6.0;
+pragma solidity ^0.4.15;
 
 contract TestContract {
 
@@ -6,25 +6,25 @@ contract TestContract {
 
     string public a = "helloWorld";
 
-    constructor(string memory _abc) public {abc = _abc;}
+    function TestContract(string memory _abc) public {abc = _abc;}
 
     function() external payable {}
 
-    function baz() public pure returns (string memory a) {}
+    function baz() public returns (string memory a) {}
 
     function bez(uint32 x, bool y) public returns (bool r) {
-        emit Bar(msg.sender, x);
+        Bar(msg.sender, x);
         r = x > 32 || y;
     }
 
     function biz(uint32 x, bool y) payable public returns (bool r)  {
-        emit Bar(msg.sender, x);
+        Bar(msg.sender, x);
         r = x > 32 || y;
     }
 
-    function boz(bytes memory, bool, uint[] memory) public pure {}
+    function boz(bytes memory, bool, uint[] memory) public {}
 
-    function buz() public view returns (string memory) {
+    function buz() public returns (string memory) {
         return abc;
     }
 
