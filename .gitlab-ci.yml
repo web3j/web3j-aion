@@ -8,8 +8,12 @@ variables:
   # Improve performance with overlayfs.
   DOCKER_DRIVER: overlay2
 
+before_script:
+  - apk add docker
+  - service docker start
+
 build:
-  image: openjdk:8-jdk
+  image: openjdk:8-jdk-alpine
   retry: 2
   stage: build
   script:
