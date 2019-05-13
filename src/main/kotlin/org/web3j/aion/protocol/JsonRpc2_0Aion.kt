@@ -76,8 +76,8 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
         scheduledExecutorService: ScheduledExecutorService
     ) : super(web3jService, pollingInterval, scheduledExecutorService)
 
-    override fun ethGetUncleCountByBlockHash(blockHash: String)
-        : Request<*, EthGetUncleCountByBlockHash> {
+    override fun ethGetUncleCountByBlockHash(blockHash: String):
+        Request<*, EthGetUncleCountByBlockHash> {
         return UnsupportedRequest(
             "eth_getUncleCountByBlockHash",
             listOf(blockHash),
@@ -85,8 +85,8 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
         )
     }
 
-    override fun ethGetUncleCountByBlockNumber(defaultBlockParameter: DefaultBlockParameter)
-        : Request<*, EthGetUncleCountByBlockNumber> {
+    override fun ethGetUncleCountByBlockNumber(defaultBlockParameter: DefaultBlockParameter):
+        Request<*, EthGetUncleCountByBlockNumber> {
         return UnsupportedRequest(
             "eth_getUncleCountByBlockNumber",
             listOf(defaultBlockParameter.value),
@@ -94,8 +94,8 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
         )
     }
 
-    override fun ethGetUncleByBlockHashAndIndex(blockHash: String, transactionIndex: BigInteger)
-        : Request<*, EthBlock> {
+    override fun ethGetUncleByBlockHashAndIndex(blockHash: String, transactionIndex: BigInteger):
+        Request<*, EthBlock> {
         return UnsupportedRequest(
             "eth_getUncleByBlockHashAndIndex",
             listOf(blockHash, Numeric.encodeQuantity(transactionIndex)),

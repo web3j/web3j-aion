@@ -40,16 +40,16 @@ class AionProtocolException(message: String, cause: Throwable? = null) : Runtime
 interface Aion : Admin {
 
     @Deprecated("Spec-defined functions that deal with Uncles are not part of the Aion protocol.")
-    override fun ethGetUncleCountByBlockHash(blockHash: String)
-        : Request<*, EthGetUncleCountByBlockHash>
+    override fun ethGetUncleCountByBlockHash(blockHash: String):
+        Request<*, EthGetUncleCountByBlockHash>
 
     @Deprecated("Spec-defined functions that deal with Uncles are not part of the Aion protocol.")
-    override fun ethGetUncleCountByBlockNumber(defaultBlockParameter: DefaultBlockParameter)
-        : Request<*, EthGetUncleCountByBlockNumber>
+    override fun ethGetUncleCountByBlockNumber(defaultBlockParameter: DefaultBlockParameter):
+        Request<*, EthGetUncleCountByBlockNumber>
 
     @Deprecated("Spec-defined functions that deal with Uncles are not part of the Aion protocol.")
-    override fun ethGetUncleByBlockHashAndIndex(blockHash: String, transactionIndex: BigInteger)
-        : Request<*, EthBlock>
+    override fun ethGetUncleByBlockHashAndIndex(blockHash: String, transactionIndex: BigInteger):
+        Request<*, EthBlock>
 
     @Deprecated("Spec-defined functions that deal with Uncles are not part of the Aion protocol.")
     override fun ethGetUncleByBlockNumberAndIndex(

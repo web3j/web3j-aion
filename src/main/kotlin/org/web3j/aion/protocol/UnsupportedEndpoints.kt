@@ -6,7 +6,8 @@ import org.web3j.protocol.core.RpcErrors
 import java.util.concurrent.CompletableFuture
 
 internal class UnsupportedRequest<S, T : Response<*>>(
-    method: String, params: List<S>,
+    method: String,
+    params: List<S>,
     private val responseType: Class<T>
 ) : Request<S, T>(method, params, null, responseType) {
 
