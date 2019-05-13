@@ -13,7 +13,7 @@ build:
   retry: 2
   stage: build
   script:
-    - ./gradlew clean build integrationTest --stacktrace
+    - ./gradlew clean build integrationTest
   artifacts:
     paths:
       - build/libs/*.jar
