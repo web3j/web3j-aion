@@ -10,7 +10,6 @@ variables:
 
 before_script:
   - apk add docker
-  - service docker start
 
 build:
   image: openjdk:8-jdk-alpine
