@@ -18,6 +18,9 @@ build:
   script:
     - ./gradlew clean build integrationTest
   artifacts:
+    paths:
+      - build/libs/*.jar
+    expire_in: 1 week
     reports:
       junit:
         - build/test-results/test/TEST-*.xml
