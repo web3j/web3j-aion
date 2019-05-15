@@ -30,6 +30,7 @@ ext {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     flatDir {
         dirs "$projectDir/lib"
     }
@@ -38,6 +39,11 @@ repositories {
 solidity {
     executable = "docker run --rm -v $projectDir:/src satran004/aion-fastvm:0.3.1 solc"
     version = '0.4.15'
+}
+
+web3j {
+    // Use customised version for now
+    excludedContracts = ['Greeter']
 }
 
 testSets {
@@ -52,6 +58,8 @@ dependencies {
     implementation name: 'org-aion-avm-rt'
     implementation name: 'org-aion-avm-tooling'
     implementation name: 'org-aion-avm-userlib'
+
+    implementation "org.web3j:core:${versions.web3j}"
 
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
