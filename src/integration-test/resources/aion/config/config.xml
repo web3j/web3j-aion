@@ -76,7 +76,7 @@
         <DB>WARN</DB>
         <CONS>INFO</CONS>
         <P2P>WARN</P2P>
-        <TX>DEBUG</TX>
+        <TX>TRACE</TX>
     </log>
     <tx>
         <cacheMax>256</cacheMax>
