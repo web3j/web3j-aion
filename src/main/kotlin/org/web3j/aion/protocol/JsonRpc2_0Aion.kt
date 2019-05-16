@@ -295,7 +295,7 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
         defaultBlockParameter: DefaultBlockParameter
     ): Request<*, EthCall> {
         checkPendingStatusParameter(defaultBlockParameter)
-        return ethCall(transaction, defaultBlockParameter)
+        return super.ethCall(transaction, defaultBlockParameter)
     }
 
     companion object : KLogging() {
