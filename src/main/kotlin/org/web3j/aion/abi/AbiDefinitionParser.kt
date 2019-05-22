@@ -60,7 +60,7 @@ class AbiDefinitionParser {
 
     private val ClassOrInterfaceDeclaration.callables: List<MethodDeclaration>
         get() = methods.filter {
-            it.isStatic && it.annotations.contains(MarkerAnnotationExpr(Callable::class.java.simpleName))
+            it.isPublic && it.isStatic && it.annotations.contains(MarkerAnnotationExpr(Callable::class.java.simpleName))
         }
 
     private fun MethodDeclaration.toAbiDefinition() =
