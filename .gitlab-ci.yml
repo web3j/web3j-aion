@@ -10,7 +10,7 @@ variables:
 
 before_script:
   - apk add docker
-  - touch /root/.docker/config.json
+#   - touch /root/.docker/config.json
 
 build:
   image: openjdk:8-jdk-alpine
@@ -18,9 +18,9 @@ build:
   script:
     - ./gradlew clean build integrationTest
   artifacts:
-    paths:
-      - build/libs/*.jar
-    expire_in: 1 week
+    # paths:
+    #   - build/libs/*.jar
+    # expire_in: 1 week
     reports:
       junit:
         - build/test-results/test/TEST-*.xml
