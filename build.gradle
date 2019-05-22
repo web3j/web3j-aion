@@ -9,7 +9,7 @@ plugins {
     id 'com.adarshr.test-logger' version '1.6.0'
 }
 
-group = 'org.web3j'
+group = 'org.web3j.aion'
 version = '1.0.0-SNAPSHOT'
 
 //apply from: 'maven.gradle'
@@ -43,7 +43,7 @@ solidity {
 
 web3j {
     // Use customised version for now
-    excludedContracts = ['Greeter']
+    excludedContracts = ['Greeter', 'Mortal']
 }
 
 testSets {
@@ -66,6 +66,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-noarg'
     implementation 'org.jetbrains.kotlin:kotlin-native-utils'
 
+    implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.14.1'
     implementation "io.github.microutils:kotlin-logging:${versions.kLogging}"
     implementation "org.bouncycastle:bcpkix-jdk15on:${versions.bouncycastle}"
 
