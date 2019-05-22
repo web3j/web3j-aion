@@ -1,4 +1,4 @@
-package org.web3j.aion.protocol
+package org.web3j.aion.abi
 
 import org.web3j.abi.datatypes.Address
 import org.web3j.protocol.core.methods.response.Transaction
@@ -48,10 +48,5 @@ var TransactionReceipt.nrgRaw: String
         setGasUsed(value)
     }
 
-fun Address.toAion(): avm.Address {
-    return avm.Address(toString().toByteArray())
-}
-
-fun avm.Address.toEthereum(): Address {
-    return Address(toString())
-}
+val Address.aionValue: avm.Address
+    get() = avm.Address(toString().toByteArray())
