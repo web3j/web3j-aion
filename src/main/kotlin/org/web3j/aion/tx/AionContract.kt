@@ -23,8 +23,10 @@ open class AionContract : Contract {
     ) : super(contractBinary, contractAddress, web3j, transactionManager, gasProvider)
 
     protected constructor(
-        contractBinary: String, contractAddress: String?,
-        web3j: Web3j, credentials: Credentials,
+        contractBinary: String,
+        contractAddress: String?,
+        web3j: Web3j,
+        credentials: Credentials,
         gasProvider: ContractGasProvider
     ) : this(contractBinary, contractAddress, web3j, RawTransactionManager(web3j, credentials), gasProvider)
 
