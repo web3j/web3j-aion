@@ -37,26 +37,27 @@ import java.nio.file.Path
  */
 class AbiDefinitionParser {
 
-    fun parse(input: String): List<AbiDefinition> {
+    fun parse(input: String): Array<AbiDefinition> {
         return parse(StaticJavaParser.parse(input))
     }
 
-    fun parse(input: InputStream): List<AbiDefinition> {
+    fun parse(input: InputStream): Array<AbiDefinition> {
         return parse(StaticJavaParser.parse(input))
     }
 
-    fun parse(input: File): List<AbiDefinition> {
+    fun parse(input: File): Array<AbiDefinition> {
         return parse(StaticJavaParser.parse(input))
     }
 
-    fun parse(input: Path): List<AbiDefinition> {
+    fun parse(input: Path): Array<AbiDefinition> {
         return parse(StaticJavaParser.parse(input))
     }
 
-    private fun parse(unit: CompilationUnit): List<AbiDefinition> {
+    private fun parse(unit: CompilationUnit): Array<AbiDefinition> {
         return unit.findAll(ClassOrInterfaceDeclaration::class.java)
             .filter { it.isSmartContract }
             .flatMap { it.callables.map { m -> m.toAbiDefinition() } }
+            .toTypedArray()
     }
 
     private val ClassOrInterfaceDeclaration.isSmartContract: Boolean
