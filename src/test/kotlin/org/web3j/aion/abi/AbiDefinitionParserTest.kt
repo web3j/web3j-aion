@@ -1,10 +1,10 @@
-package org.web3j.aion.parser
+package org.web3j.aion.abi
 
+import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
-import org.web3j.aion.abi.AbiDefinitionParser
 
 class AbiDefinitionParserTest {
 
@@ -21,7 +21,18 @@ class AbiDefinitionParserTest {
     @Test
     internal fun testJavaToSolidityErc20() {
         val defs = AbiDefinitionParser().parse(ERC20)
-        // TODO Assertions
+        assertAll {
+            assertThat(defs.find { it.name == "name" }!!.isConstant).isTrue()
+            assertThat(defs.find { it.name == "symbol" }!!.isConstant).isTrue()
+            assertThat(defs.find { it.name == "decimals" }!!.isConstant).isTrue()
+            assertThat(defs.find { it.name == "totalSupply" }!!.isConstant).isTrue()
+            assertThat(defs.find { it.name == "balanceOf" }!!.isConstant).isTrue()
+            assertThat(defs.find { it.name == "allowance" }!!.isConstant).isTrue()
+            assertThat(defs.find { it.name == "transfer" }!!.isConstant).isFalse()
+            assertThat(defs.find { it.name == "approve" }!!.isConstant).isFalse()
+            assertThat(defs.find { it.name == "transferFrom" }!!.isConstant).isFalse()
+            assertThat(defs.find { it.name == "mint" }!!.isConstant).isFalse()
+        }
         println(AbiDefinitionParser.serialize(defs, true))
     }
 

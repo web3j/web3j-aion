@@ -17,6 +17,10 @@ import com.github.javaparser.ast.expr.NameExpr
 import com.github.javaparser.ast.expr.UnaryExpr
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters
 import com.github.javaparser.ast.nodeTypes.NodeWithType
+import com.github.javaparser.ast.stmt.BlockStmt
+import com.github.javaparser.ast.stmt.ExpressionStmt
+import com.github.javaparser.ast.stmt.ReturnStmt
+import com.github.javaparser.ast.stmt.Statement
 import com.github.javaparser.ast.type.VoidType
 import org.aion.avm.tooling.abi.Callable
 import org.web3j.aion.abi.AbiDefinitionType.FUNCTION
@@ -25,10 +29,11 @@ import org.web3j.protocol.core.methods.response.AbiDefinition.NamedType
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Path
-import java.util.function.Predicate
 
 /**
  * Generated a Solidity ABI file in JSON format from an Aion Java smart contract.
+ *
+ * TODO Parse static block initializers for contract constructor.
  */
 class AbiDefinitionParser {
 
@@ -52,7 +57,6 @@ class AbiDefinitionParser {
         return unit.findAll(ClassOrInterfaceDeclaration::class.java)
             .filter { it.isSmartContract }
             .flatMap { it.callables.map { m -> m.toAbiDefinition() } }
-        // TODO Static block initializer for ABI constructor
     }
 
     private val ClassOrInterfaceDeclaration.isSmartContract: Boolean
@@ -85,13 +89,15 @@ class AbiDefinitionParser {
             else -> listOf(NamedType(null, type.toString().toLowerCase()))
         }
 
-    private val isAssignOrUnaryExpr = Predicate { expr: Expression ->
-        expr.isAssignExpr || expr.isUnaryExpr
-    }
-
     private val MethodDeclaration.isConstant: Boolean
         get() = !body.isPresent || declaringClass.staticFields.let { fields ->
-            body.get().findAll(Expression::class.java, isAssignOrUnaryExpr).all {
+            body.get().findAll(Expression::class.java) {
+                it.isAssignExpr || it.isUnaryExpr
+            }.all {
+                fields.none { field -> it.modifies(field) }
+            } && body.get().findAll(Statement::class.java) {
+                true
+            }.all {
                 fields.none { field -> it.modifies(field) }
             }
         }
@@ -103,19 +109,47 @@ class AbiDefinitionParser {
         return field.variables.first().nameAsString.let {
             when (this) {
                 is AssignExpr -> it == target.asNameExpr().nameAsString
-                is UnaryExpr -> when (expression) {
-                    is NameExpr -> it == expression.asNameExpr().nameAsString
-                    is MethodCallExpr -> it == expression.asMethodCallExpr().scope.get().asNameExpr().nameAsString
-                        && expression.asMethodCallExpr().name.asString() in listOf("put", "putAll", "remove", "clear")
-                    else -> false
-                }
+                is MethodCallExpr -> modifies(field)
+                is UnaryExpr -> modifies(field)
                 else -> false
             }
         }
     }
 
+    private fun Statement.modifies(field: FieldDeclaration): Boolean {
+        return when (this) {
+            is ExpressionStmt -> expression.modifies(field)
+            is BlockStmt -> asBlockStmt().statements.any { it.modifies(field) }
+            is ReturnStmt -> expression.map { it.modifies(field) }.orElse(false)
+            else -> false
+        }
+    }
+
     private val ClassOrInterfaceDeclaration.staticFields: List<FieldDeclaration>
         get() = fields.filter { it.isStatic }
+
+    private fun UnaryExpr.modifies(field: FieldDeclaration): Boolean {
+        return field.variables.first().nameAsString.let {
+            when (expression) {
+                is NameExpr -> it == expression.asNameExpr().nameAsString
+                is MethodCallExpr -> expression.asMethodCallExpr().modifies(field)
+                else -> false
+            }
+        }
+    }
+
+    private fun MethodCallExpr.modifies(field: FieldDeclaration): Boolean {
+        return field.variables.first().nameAsString == scopeName && name.asString() in modifyMethods
+    }
+
+    private val MethodCallExpr.scopeName: String?
+        get() = asMethodCallExpr().scope.map {
+            when (it) {
+                is NameExpr -> it.asNameExpr().nameAsString
+                is MethodCallExpr -> it.scopeName // Chained method call
+                else -> null
+            }
+        }.orElse(null)
 
     private class NamedTypeMixin(@field:JsonIgnore var indexed: Boolean)
 
@@ -124,6 +158,13 @@ class AbiDefinitionParser {
         private val mapper = ObjectMapper()
             .addMixIn(NamedType::class.java, NamedTypeMixin::class.java)
             .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+
+        private val modifyMethods = listOf(
+            "compute", "computeIfPresent", "clear",
+            "computeIfAbsent", "forEach", "merge",
+            "put", "putAll", "putIfAbsent", "remove",
+            "replace", "replaceAll"
+        )
 
         fun serialize(definitions: List<AbiDefinition>, indent: Boolean = false): String {
             return mapper.configure(SerializationFeature.INDENT_OUTPUT, indent)
