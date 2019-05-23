@@ -8,36 +8,40 @@ import org.junit.jupiter.api.Test
 
 class AbiDefinitionParserTest {
 
+    private val parser = AbiDefinitionParser()
+
     @Test
     internal fun testJavaToSolidity() {
-        val defs = AbiDefinitionParser().parse(CODE)
-        assertThat(defs.find { it.name == "greet" }!!.isConstant).isFalse()
-        assertThat(defs.find { it.name == "sayHello" }!!.isConstant).isTrue()
-        assertThat(defs.find { it.name == "getString" }!!.isConstant).isTrue()
-        assertThat(defs.find { it.name == "setString" }!!.isConstant).isFalse()
-        println(AbiDefinitionParser.serialize(defs, true))
+        parser.parse(HELLO_AVM).apply {
+            assertAll {
+                assertThat(find { it.name == "greet" }!!.isConstant).isTrue()
+                assertThat(find { it.name == "sayHello" }!!.isConstant).isTrue()
+                assertThat(find { it.name == "getString" }!!.isConstant).isTrue()
+                assertThat(find { it.name == "setString" }!!.isConstant).isFalse()
+            }
+        }
     }
 
     @Test
     internal fun testJavaToSolidityErc20() {
-        val defs = AbiDefinitionParser().parse(ERC20)
-        assertAll {
-            assertThat(defs.find { it.name == "name" }!!.isConstant).isTrue()
-            assertThat(defs.find { it.name == "symbol" }!!.isConstant).isTrue()
-            assertThat(defs.find { it.name == "decimals" }!!.isConstant).isTrue()
-            assertThat(defs.find { it.name == "totalSupply" }!!.isConstant).isTrue()
-            assertThat(defs.find { it.name == "balanceOf" }!!.isConstant).isTrue()
-            assertThat(defs.find { it.name == "allowance" }!!.isConstant).isTrue()
-            assertThat(defs.find { it.name == "transfer" }!!.isConstant).isFalse()
-            assertThat(defs.find { it.name == "approve" }!!.isConstant).isFalse()
-            assertThat(defs.find { it.name == "transferFrom" }!!.isConstant).isFalse()
-            assertThat(defs.find { it.name == "mint" }!!.isConstant).isFalse()
+        parser.parse(ERC20).apply {
+            assertAll {
+                assertThat(find { it.name == "name" }!!.isConstant).isTrue()
+                assertThat(find { it.name == "symbol" }!!.isConstant).isTrue()
+                assertThat(find { it.name == "decimals" }!!.isConstant).isTrue()
+                assertThat(find { it.name == "totalSupply" }!!.isConstant).isTrue()
+                assertThat(find { it.name == "balanceOf" }!!.isConstant).isTrue()
+                assertThat(find { it.name == "allowance" }!!.isConstant).isTrue()
+                assertThat(find { it.name == "transfer" }!!.isConstant).isFalse()
+                assertThat(find { it.name == "approve" }!!.isConstant).isFalse()
+                assertThat(find { it.name == "transferFrom" }!!.isConstant).isFalse()
+                assertThat(find { it.name == "mint" }!!.isConstant).isFalse()
+            }
         }
-        println(AbiDefinitionParser.serialize(defs, true))
     }
 
     companion object {
-        private const val CODE = """
+        private const val HELLO_AVM = """
             package org.web3j.aion;
 
             import avm.Blockchain;
@@ -47,8 +51,6 @@ class AbiDefinitionParserTest {
             {
                 private static String myStr = "Hello AVM";
 
-                private static int counter = 0;
-
                 @Callable
                 public static void sayHello() {
                     Blockchain.println("Hello Avm");
@@ -56,7 +58,6 @@ class AbiDefinitionParserTest {
 
                 @Callable
                 public static String greet(String name) {
-                    counter++;
                     return "Hello " + name;
                 }
 
