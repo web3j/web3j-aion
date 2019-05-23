@@ -2,7 +2,7 @@ package org.web3j.aion.abi
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.web3j.abi.FunctionEncoder.encode
 import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.Function
@@ -35,10 +35,17 @@ class FunctionEncoderTest {
     }
 
     @Test
+    internal fun emptyStringArray() {
+        val param = DynamicArray(Utf8String::class.java, listOf())
+        val function = Function("stringArray", listOf(param), listOf())
+        assertThat(encode(function)).isEqualTo("0x21000b737472696e67417272617931210000")
+    }
+
+    @Test
     internal fun stringArray() {
         val param = DynamicArray(Utf8String::class.java, listOf(Utf8String("Hello AVM")))
         val function = Function("stringArray", listOf(param), listOf())
-        assertThat(encode(function)).isEqualTo("0x21000b737472696e674172726179")
+        assertThat(encode(function)).isEqualTo("0x21000b737472696e6741727261793121000121000948656c6c6f2041564d")
     }
 
     @Test
@@ -51,7 +58,7 @@ class FunctionEncoderTest {
     internal fun integerArray() {
         val param = DynamicArray(Int::class.java, listOf(Int(BigInteger.ONE)))
         val function = Function("integerArray", listOf(param), listOf())
-        assertThat(encode(function)).isEqualTo("0x21000c696e74656765724172726179")
+        assertThat(encode(function)).isEqualTo("0x21000c696e7465676572417272617915000100000001")
     }
 
     @Test
@@ -64,20 +71,18 @@ class FunctionEncoderTest {
     internal fun uIntegerArray() {
         val param = DynamicArray(Uint::class.java, listOf(Uint(BigInteger.ONE)))
         val function = Function("uIntegerArray", listOf(param), listOf())
-        assertThat(encode(function)).isEqualTo("0x21000d75496e74656765724172726179")
+        assertThat(encode(function)).isEqualTo("0x21000d75496e7465676572417272617915000100000001")
     }
 
-    @Test
+    @Test(expected = AionEncodingException::class)
     internal fun string2DArray() {
 
         val param = DynamicArray(
             DynamicArray::class.java,
-            DynamicArray(Utf8String::class.java, Utf8String("string2DArray"))
+            DynamicArray(Utf8String::class.java, Utf8String("Hello AVM"))
         )
 
         val function = Function("string2DArray", listOf(param), listOf())
-        assertThat(encode(function)).isEqualTo("0x21000d737472696e6732444172726179")
+        encode(function)
     }
-
-//    object Utf8StringTypeRef : TypeReference<Utf8String>()
 }

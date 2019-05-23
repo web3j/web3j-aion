@@ -6,6 +6,7 @@ import org.web3j.abi.datatypes.Address
 import org.web3j.abi.datatypes.Array
 import org.web3j.abi.datatypes.Bool
 import org.web3j.abi.datatypes.Bytes
+import org.web3j.abi.datatypes.BytesType
 import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.DynamicBytes
 import org.web3j.abi.datatypes.Fixed
@@ -43,12 +44,9 @@ object AbiFunctionEncoder : FunctionEncoder() {
                 is Address -> encoder.encodeOneAddress(param.aionValue)
                 is Array<*> -> encodeArrayParameter(param, encoder)
                 is Bool -> encoder.encodeOneBoolean(param.value)
-                is Bytes -> encoder.encodeOneByteArray(param.value)
-                is DynamicArray<*> -> encodeArrayParameter(param, encoder)
-                is DynamicBytes -> encoder.encodeOneByteArray(param.value)
+                is BytesType -> encoder.encodeOneByteArray(param.value)
                 is Fixed -> encoder.encodeOneDouble(param.value.toDouble())
                 is Int -> encoder.encodeOneInteger(param.value.intValueExact())
-                is StaticArray<*> -> encodeArrayParameter(param, encoder)
                 is Ufixed -> encoder.encodeOneDouble(param.value.toDouble())
                 is Uint -> encoder.encodeOneInteger(param.value.intValueExact())
                 is Utf8String -> encoder.encodeOneString(param.value)
@@ -61,18 +59,18 @@ object AbiFunctionEncoder : FunctionEncoder() {
         encoder: ABIStreamingEncoder
     ) {
         when (param.componentType) {
-            is Address -> encoder.encodeOneAddressArray(param.value.map { (it as Address).aionValue }.toTypedArray())
-            is Array<*> -> encode2DArrayParameter(param, encoder)
-            is Bool -> encoder.encodeOneBooleanArray((param.value as List<Bool>).map { it.value }.toBooleanArray())
-            is Bytes -> encoder.encodeOne2DByteArray((param.value as List<Bytes>).map { it.value }.toTypedArray())
-            is DynamicArray<*> -> encode2DArrayParameter(param, encoder)
-            is DynamicBytes -> encoder.encodeOne2DByteArray((param.value as List<Bytes>).map { it.value }.toTypedArray())
-            is Fixed -> encoder.encodeOneDoubleArray((param.value as List<Fixed>).map { it.value.toDouble() }.toDoubleArray())
-            is Int -> encoder.encodeOneIntegerArray((param.value as List<Int>).map { it.value.intValueExact() }.toIntArray())
-            is StaticArray<*> -> encode2DArrayParameter(param, encoder)
-            is Ufixed -> encoder.encodeOneDoubleArray((param.value as List<Fixed>).map { it.value.toDouble() }.toDoubleArray())
-            is Uint -> encoder.encodeOneIntegerArray((param.value as List<Int>).map { it.value.intValueExact() }.toIntArray())
-            is Utf8String -> encoder.encodeOneStringArray((param.value as List<Utf8String>).map { it.value }.toTypedArray())
+            Address::class.java -> encoder.encodeOneAddressArray(param.value.map { (it as Address).aionValue }.toTypedArray())
+            Array::class.java -> encode2DArrayParameter(param, encoder)
+            DynamicArray::class.java -> encode2DArrayParameter(param, encoder)
+            StaticArray::class.java -> encode2DArrayParameter(param, encoder)
+            Bool::class.java -> encoder.encodeOneBooleanArray((param.value as List<Bool>).map { it.value }.toBooleanArray())
+            Bytes::class.java -> encoder.encodeOne2DByteArray((param.value as List<Bytes>).map { it.value }.toTypedArray())
+            DynamicBytes::class.java -> encoder.encodeOne2DByteArray((param.value as List<Bytes>).map { it.value }.toTypedArray())
+            Fixed::class.java -> encoder.encodeOneDoubleArray((param.value as List<Fixed>).map { it.value.toDouble() }.toDoubleArray())
+            Int::class.java -> encoder.encodeOneIntegerArray((param.value as List<Int>).map { it.value.intValueExact() }.toIntArray())
+            Ufixed::class.java -> encoder.encodeOneDoubleArray((param.value as List<Fixed>).map { it.value.toDouble() }.toDoubleArray())
+            Uint::class.java -> encoder.encodeOneIntegerArray((param.value as List<Uint>).map { it.value.intValueExact() }.toIntArray())
+            Utf8String::class.java -> encoder.encodeOneStringArray((param.value as List<Utf8String>).map { it.value }.toTypedArray())
         }
     }
 
@@ -80,35 +78,36 @@ object AbiFunctionEncoder : FunctionEncoder() {
         param: Array<*>,
         encoder: ABIStreamingEncoder
     ) {
-        when (param.componentType) {
-            is Address -> throw AionEncodingException("unsupported 2-dimensional array of address")
-            is Array<*> -> throw AionEncodingException("unsupported 3-dimensional array")
-            is Bool -> encoder.encodeOne2DBooleanArray((param.value as List<List<Boolean>>).map { it.toBooleanArray() }.toTypedArray())
-            is Bytes -> throw AionEncodingException("unsupported 2-dimensional array of bytes")
-            is DynamicArray<*> -> throw AionEncodingException("unsupported 3-dimensional array")
-            is DynamicBytes -> throw AionEncodingException("unsupported 2-dimensional array of bytes")
-            is Fixed -> encoder.encodeOne2DDoubleArray((param.value as List<List<Fixed>>).map { fixedList ->
+        // FIXME What to do when 2nd array dimension is empty? We cannot know its component type
+        when ((param.value as List<Array<*>>).firstOrNull()?.componentType ?: Any::class.java) {
+            Address::class.java -> throw AionEncodingException("unsupported 2-dimensional array of address")
+            Array::class.java -> throw AionEncodingException("unsupported 3-dimensional array")
+            DynamicArray::class.java -> throw AionEncodingException("unsupported 3-dimensional array")
+            StaticArray::class.java -> throw AionEncodingException("unsupported 3-dimensional array")
+            Bool::class.java -> encoder.encodeOne2DBooleanArray((param.value as List<List<Boolean>>).map { it.toBooleanArray() }.toTypedArray())
+            Bytes::class.java -> throw AionEncodingException("unsupported 2-dimensional array of bytes")
+            DynamicBytes::class.java -> throw AionEncodingException("unsupported 2-dimensional array of bytes")
+            Fixed::class.java -> encoder.encodeOne2DDoubleArray((param.value as List<List<Fixed>>).map { fixedList ->
                 fixedList.toTypedArray()
             }.map { fixedArray ->
                 fixedArray.map { it.value.toDouble() }.toDoubleArray()
             }.toTypedArray())
-            is Int -> encoder.encodeOne2DIntegerArray((param.value as List<List<Int>>).map { intList ->
+            Int::class.java -> encoder.encodeOne2DIntegerArray((param.value as List<List<Int>>).map { intList ->
                 intList.toTypedArray()
             }.map { intArray ->
                 intArray.map { it.value.toInt() }.toIntArray()
             }.toTypedArray())
-            is StaticArray<*> -> throw AionEncodingException("unsupported 3-dimensional array")
-            is Ufixed -> encoder.encodeOne2DDoubleArray((param.value as List<List<Fixed>>).map { fixedList ->
+            Ufixed::class.java -> encoder.encodeOne2DDoubleArray((param.value as List<List<Fixed>>).map { fixedList ->
                 fixedList.toTypedArray()
             }.map { fixedArray ->
                 fixedArray.map { it.value.toDouble() }.toDoubleArray()
             }.toTypedArray())
-            is Uint -> encoder.encodeOne2DIntegerArray((param.value as List<List<Uint>>).map { uintList ->
+            Uint::class.java -> encoder.encodeOne2DIntegerArray((param.value as List<List<Uint>>).map { uintList ->
                 uintList.toTypedArray()
             }.map { uintArray ->
                 uintArray.map { it.value.toInt() }.toIntArray()
             }.toTypedArray())
-            is Utf8String -> throw AionEncodingException("unsupported 2-dimensional array of string")
+            Utf8String::class.java -> throw AionEncodingException("unsupported 2-dimensional array of string")
         }
     }
 }
