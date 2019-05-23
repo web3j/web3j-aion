@@ -1,6 +1,14 @@
 package org.web3j.aion.abi
 
 import org.web3j.abi.datatypes.Address
+import org.web3j.abi.datatypes.Array
+import org.web3j.abi.datatypes.Fixed
+import org.web3j.abi.datatypes.FixedPointType
+import org.web3j.abi.datatypes.Int
+import org.web3j.abi.datatypes.IntType
+import org.web3j.abi.datatypes.Type
+import org.web3j.abi.datatypes.Ufixed
+import org.web3j.abi.datatypes.Uint
 import org.web3j.protocol.core.methods.response.Transaction
 import org.web3j.protocol.core.methods.response.TransactionReceipt
 import org.web3j.utils.Numeric
@@ -48,5 +56,26 @@ var TransactionReceipt.nrgRaw: String
         setGasUsed(value)
     }
 
-val Address.aionValue: avm.Address
-    get() = avm.Address(toString().toByteArray())
+@Suppress("UNCHECKED_CAST")
+val Type<*>.aionValue: Any
+    get() = when (this) {
+        is Address -> avm.Address(toString().toByteArray())
+        is Array<*> -> (value as List<Type<*>>).map { it.aionValue }
+        is FixedPointType -> aionValue
+        is IntType -> aionValue
+        else -> value
+    }
+
+val FixedPointType.aionValue: Number
+    get() = when (this) {
+        is Fixed -> value.toDouble()
+        is Ufixed -> value.toDouble()
+        else -> throw AionEncodingException("FixedPointType")
+    }
+
+val IntType.aionValue: Number
+    get() = when (this) {
+        is Int -> value.intValueExact()
+        is Uint -> value.intValueExact()
+        else -> throw AionEncodingException("IntType")
+    }
