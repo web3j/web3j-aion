@@ -31,7 +31,7 @@ import java.io.InputStream
 import java.nio.file.Path
 
 /**
- * Generated a Solidity ABI file in JSON format from an Aion Java smart contract.
+ *  Parses Aion Java smart contracts into Solidity ABI definitions.
  *
  * TODO Parse static block initializers for contract constructor.
  */
@@ -64,7 +64,7 @@ class AbiDefinitionParser {
 
     private val ClassOrInterfaceDeclaration.callables: List<MethodDeclaration>
         get() = methods.filter {
-            it.isPublic && it.isStatic && it.annotations.contains(MarkerAnnotationExpr(Callable::class.java.simpleName))
+            it.isPublic && it.isStatic && it.annotations.contains(callableAnnotation)
         }
 
     private fun MethodDeclaration.toAbiDefinition() =
@@ -154,6 +154,8 @@ class AbiDefinitionParser {
     private class NamedTypeMixin(@field:JsonIgnore var indexed: Boolean)
 
     companion object {
+
+        private val callableAnnotation = MarkerAnnotationExpr(Callable::class.java.simpleName)
 
         private val mapper = ObjectMapper()
             .addMixIn(NamedType::class.java, NamedTypeMixin::class.java)
