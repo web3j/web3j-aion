@@ -169,7 +169,7 @@ class AbiDefinitionParser {
             "replace", "replaceAll"
         )
 
-        fun serialize(definitions: List<AbiDefinition>, indent: Boolean = false): String {
+        fun serialize(vararg definitions: AbiDefinition, indent: Boolean = false): String {
             return mapper.configure(SerializationFeature.INDENT_OUTPUT, indent)
                 .writeValueAsString(definitions)
         }
