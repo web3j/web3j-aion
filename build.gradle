@@ -30,7 +30,12 @@ ext {
 
 repositories {
     mavenCentral()
-    mavenLocal()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
     flatDir {
         dirs "$projectDir/lib"
     }
