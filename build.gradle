@@ -65,13 +65,14 @@ dependencies {
     implementation name: 'org-aion-avm-userlib'
 
     implementation "org.web3j:core:${versions.web3j}"
+    implementation "org.web3j:codegen:${versions.web3j}"
+    implementation "info.picocli:picocli:${versions.picocli}"
 
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     implementation 'org.jetbrains.kotlin:kotlin-noarg'
     implementation 'org.jetbrains.kotlin:kotlin-native-utils'
 
-    implementation "com.github.javaparser:javaparser-core:${versions.javaparser}"
     implementation "io.github.microutils:kotlin-logging:${versions.kLogging}"
     implementation "org.bouncycastle:bcpkix-jdk15on:${versions.bouncycastle}"
 
