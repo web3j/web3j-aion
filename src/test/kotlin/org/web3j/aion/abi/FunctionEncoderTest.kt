@@ -74,7 +74,7 @@ class FunctionEncoderTest {
         assertThat(encode(function)).isEqualTo("0x21000d75496e7465676572417272617915000100000001")
     }
 
-    @Test(expected = AionEncodingException::class)
+    @Test(expected = AbiEncodingException::class)
     internal fun string2DArray() {
 
         val param = DynamicArray(
