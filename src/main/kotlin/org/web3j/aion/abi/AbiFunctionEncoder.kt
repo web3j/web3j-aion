@@ -1,5 +1,6 @@
 package org.web3j.aion.abi
 
+// FIXME Remove core dependency
 import org.aion.avm.core.util.ABIUtil
 import org.web3j.abi.FunctionEncoder
 import org.web3j.abi.datatypes.Function
@@ -20,4 +21,4 @@ object AbiFunctionEncoder : FunctionEncoder() {
     }
 }
 
-class AionEncodingException(message: String) : RuntimeException(message)
+class AbiEncodingException(message: String) : RuntimeException(message)
