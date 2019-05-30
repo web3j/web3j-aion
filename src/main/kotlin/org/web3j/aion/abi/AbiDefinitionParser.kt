@@ -47,8 +47,8 @@ internal object AbiDefinitionParser {
     private fun String.toConstructor() = AbiDefinition().apply {
 
         // Remove parentheses before parsing parameters
-        val parameters = substring(indexOf('('))
-            .trim().drop(1).dropLast(1).toParams()
+        val parameters = substring(indexOf('(') + 1)
+            .trim().dropLast(1).toParams()
 
         type = AbiDefinitionType.CONSTRUCTOR.toString()
         inputs = parameters
