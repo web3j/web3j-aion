@@ -12,21 +12,20 @@ internal object AbiDefinitionParser {
     /**
      * Parses an ABI file in Aion VM format into a list of [AbiDefinition]s.
      */
-    fun parse(input: String): Array<AbiDefinition> {
+    fun parse(input: String): List<AbiDefinition> {
         return parse(input.lines())
     }
 
     /**
      * Parses an ABI file in Aion VM format into a list of [AbiDefinition]s.
      */
-    fun parse(input: File): Array<AbiDefinition> {
+    fun parse(input: File): List<AbiDefinition> {
         return parse(Files.readAllLines(input.toPath()))
     }
 
-    private fun parse(lines: List<String>): Array<AbiDefinition> {
+    private fun parse(lines: List<String>): List<AbiDefinition> {
         return lines.drop(2) // Drop first line and contract name
             .map { it.toAbiDefinition() }
-            .toTypedArray()
     }
 
     private fun String.toAbiDefinition(): AbiDefinition {
