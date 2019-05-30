@@ -1,0 +1,7 @@
+0.0
+org.web3j.aion.HelloAvm
+Clinit: ()
+public static void sayHello()
+public static String greet(String)
+public static String getString()
+public static void setString(String)
