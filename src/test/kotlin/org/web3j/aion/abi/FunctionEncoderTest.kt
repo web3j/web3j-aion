@@ -205,16 +205,16 @@ class FunctionEncoderTest {
 
     @Test
     internal fun `encode uint40 to uint64 as int`() {
-        assertThat(encode(Function("test", listOf(Int24(min<kotlin.Long>(24))), listOf())))
+        assertThat(encode(Function("test", listOf(Int24(min<kotlin.Long>(24, true))), listOf())))
             .isEqualTo("0x2100047465737405ff800000")
 
-        assertThat(encode(Function("test", listOf(Int24(max<kotlin.Long>(24))), listOf())))
+        assertThat(encode(Function("test", listOf(Int24(max<kotlin.Long>(24, true))), listOf())))
             .isEqualTo("0x210004746573740500000001")
 
-        assertThat(encode(Function("test", listOf(Int32(min<kotlin.Int>().toLong())), listOf())))
+        assertThat(encode(Function("test", listOf(Int32(min<kotlin.Int>(true).toLong())), listOf())))
             .isEqualTo("0x210004746573740500000001")
 
-        assertThat(encode(Function("test", listOf(Int32(max<kotlin.Int>().toLong())), listOf())))
+        assertThat(encode(Function("test", listOf(Int32(max<kotlin.Int>(true).toLong())), listOf())))
             .isEqualTo("0x210004746573740500000001")
     }
 
@@ -272,16 +272,16 @@ class FunctionEncoderTest {
     @Test
     internal fun `encode uint136 to uint256 throws ABI exception`() {
         assertThrows<ABIException> {
-            encode(Function("test", listOf(Uint136(min<kotlin.Long>(136))), listOf()))
+            encode(Function("test", listOf(Uint136(min<kotlin.Long>(136, true))), listOf()))
         }
         assertThrows<ABIException> {
-            encode(Function("test", listOf(Uint136(max<kotlin.Long>(136))), listOf()))
+            encode(Function("test", listOf(Uint136(max<kotlin.Long>(136, true))), listOf()))
         }
         assertThrows<ABIException> {
-            encode(Function("test", listOf(Uint256(min<kotlin.Long>(256))), listOf()))
+            encode(Function("test", listOf(Uint256(min<kotlin.Long>(256, true))), listOf()))
         }
         assertThrows<ABIException> {
-            encode(Function("test", listOf(Uint256(max<kotlin.Long>(256))), listOf()))
+            encode(Function("test", listOf(Uint256(max<kotlin.Long>(256, true))), listOf()))
         }
     }
 
