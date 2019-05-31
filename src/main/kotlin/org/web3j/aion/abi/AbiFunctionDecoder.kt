@@ -25,5 +25,3 @@ object AionFunctionReturnDecoder : FunctionReturnDecoder() {
         TODO("Events not implemented")
     }
 }
-
-class AbiDecodingException(message: String) : RuntimeException(message)

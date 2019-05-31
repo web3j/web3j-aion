@@ -1,14 +1,13 @@
 package org.web3j.aion.abi
 
+import org.aion.avm.userlib.abi.ABIException
 import org.web3j.abi.datatypes.Address
 import org.web3j.abi.datatypes.Array
 import org.web3j.abi.datatypes.DynamicArray
-import org.web3j.abi.datatypes.Fixed
 import org.web3j.abi.datatypes.FixedPointType
 import org.web3j.abi.datatypes.Int
 import org.web3j.abi.datatypes.IntType
 import org.web3j.abi.datatypes.Type
-import org.web3j.abi.datatypes.Ufixed
 import org.web3j.abi.datatypes.Uint
 import org.web3j.abi.datatypes.Utf8String
 import org.web3j.protocol.core.methods.response.Transaction
@@ -61,27 +60,30 @@ var TransactionReceipt.nrgRaw: String
     }
 
 @Suppress("UNCHECKED_CAST")
-internal val Type<*>.aionValue: Any
+internal val Type<Any>.aionValue: Any
     get() = when (this) {
         is Address -> avm.Address(toString().toByteArray())
-        is Array<*> -> (value as List<Type<*>>).map { it.aionValue }
-        is FixedPointType -> aionValue
-        is IntType -> aionValue
-        else -> value
-    }
-
-internal val FixedPointType.aionValue: Number
-    get() = when (this) {
-        is Fixed -> value.toDouble()
-        is Ufixed -> value.toDouble()
-        else -> throw AbiEncodingException("FixedPointType")
+        is Array<*> -> (value as List<Type<Any>>).map { it.aionValue }.toTypedArray()
+        is FixedPointType -> throw ABIException("Unsupported fixed point type")
+        is IntType -> (this as IntType).aionValue
+        else -> value // Covers primitive types
     }
 
 internal val IntType.aionValue: Number
     get() = when (this) {
-        is Int -> value.intValueExact()
-        is Uint -> value.intValueExact()
-        else -> throw AbiEncodingException("IntType")
+        is Int -> when (bitSize) {
+            8, 16 -> value.shortValueExact()
+            24, 32 -> value.intValueExact()
+            40, 48, 56, 64 -> value.longValueExact()
+            else -> throw ABIException("Int value too big, use byte[]")
+        }
+        is Uint -> when (bitSize) {
+            8, 16, 24, 32 -> value.shortValueExact()
+            40, 48, 56, 64 -> value.intValueExact()
+            72, 80, 88, 96, 104, 112, 120, 128 -> value.longValueExact()
+            else -> throw ABIException("Uint value too big, use byte[]")
+        }
+        else -> throw ABIException("Unexpected error")
     }
 
 @Suppress("UNCHECKED_CAST")
@@ -98,8 +100,8 @@ internal fun <T : Type<*>> Any.toAionValue(classType: Class<T>): T {
         is String -> when (classType) {
             Utf8String::class -> Utf8String(this)
             Address::class -> Address(ADDRESS_BIT_LENGTH, this)
-            else -> throw AbiDecodingException(javaClass.canonicalName)
+            else -> throw ABIException(javaClass.canonicalName)
         }
-        else -> throw AbiDecodingException(javaClass.canonicalName)
+        else -> throw ABIException(javaClass.canonicalName)
     } as T
 }

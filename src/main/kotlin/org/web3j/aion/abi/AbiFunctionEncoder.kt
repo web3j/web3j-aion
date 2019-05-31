@@ -15,10 +15,8 @@ object AbiFunctionEncoder : FunctionEncoder() {
         return Numeric.toHexString(ABIUtil.encodeMethodArguments(function.name, *params))
     }
 
-    override fun encodeParameters(parameters: List<Type<*>>): String {
+    override fun encodeParameters(parameters: List<Type<Any>>): String {
         val params = parameters.map { it.aionValue }.toTypedArray()
         return Numeric.toHexString(ABIUtil.encodeDeploymentArguments(*params))
     }
 }
-
-class AbiEncodingException(message: String) : RuntimeException(message)
