@@ -38,7 +38,7 @@ import org.web3j.abi.datatypes.primitive.Long
 import org.web3j.abi.datatypes.primitive.Short
 import java.math.BigInteger.ONE
 
-class FunctionEncoderTest {
+class AbiFunctionEncoderTest {
 
     @Test
     internal fun `encode empty parameters`() {
@@ -161,42 +161,42 @@ class FunctionEncoderTest {
     }
 
     @Test
-    internal fun `encode int72 to int256 throws ABI exception`() {
-        assertThrows<ABIException> {
-            encode(Function("test", listOf(Int72(min<kotlin.Long>(72))), listOf()))
-        }
-        assertThrows<ABIException> {
-            encode(Function("test", listOf(Int72(max<kotlin.Long>(72))), listOf()))
-        }
-        assertThrows<ABIException> {
-            encode(Function("test", listOf(Int256(min<kotlin.Long>(256))), listOf()))
-        }
-        assertThrows<ABIException> {
-            encode(Function("test", listOf(Int72(max<kotlin.Long>(256))), listOf()))
-        }
+    internal fun `encode int72 to int256 as byte array`() {
+        assertThat(encode(Function("test", listOf(Int72(min<kotlin.Long>(72))), listOf())))
+            .isEqualTo("0x210004746573741100088000000000000000")
+
+        assertThat(encode(Function("test", listOf(Int72(max<kotlin.Long>(72))), listOf())))
+            .isEqualTo("0x210004746573741100087ffffffffffffffe")
+
+        assertThat(encode(Function("test", listOf(Int256(min<kotlin.Long>(256))), listOf())))
+            .isEqualTo("0x210004746573741100088000000000000000")
+
+        assertThat(encode(Function("test", listOf(Int72(max<kotlin.Long>(256))), listOf())))
+            .isEqualTo("0x210004746573741100087ffffffffffffffe")
+
     }
 
     @Test
     internal fun `encode uint8 to uint32 as short`() {
-        assertThat(encode(Function("test", listOf(Uint8(min<Byte>(true).toLong())), listOf())))
+        assertThat(encode(Function("test", listOf(Uint8(0)), listOf())))
+            .isEqualTo("0x21000474657374040000")
+
+        assertThat(encode(Function("test", listOf(Uint8(max<kotlin.Short>(true).toLong())), listOf())))
             .isEqualTo("0x21000474657374040001")
 
-        assertThat(encode(Function("test", listOf(Uint8(max<Byte>(true).toLong())), listOf())))
+        assertThat(encode(Function("test", listOf(Uint16(0)), listOf())))
+            .isEqualTo("0x21000474657374040000")
+
+        assertThat(encode(Function("test", listOf(Uint16(max<kotlin.Int>(true).toLong())), listOf())))
             .isEqualTo("0x21000474657374040001")
 
-        assertThat(encode(Function("test", listOf(Uint16(min<kotlin.Short>(true).toLong())), listOf())))
-            .isEqualTo("0x21000474657374040001")
-
-        assertThat(encode(Function("test", listOf(Uint16(max<kotlin.Short>(true).toLong())), listOf())))
-            .isEqualTo("0x21000474657374040001")
-
-        assertThat(encode(Function("test", listOf(Uint24(min<kotlin.Long>(24, true))), listOf())))
+        assertThat(encode(Function("test", listOf(Uint24(0)), listOf())))
             .isEqualTo("0x21000474657374040001")
 
         assertThat(encode(Function("test", listOf(Uint24(max<kotlin.Long>(24, true))), listOf())))
             .isEqualTo("0x21000474657374040001")
 
-        assertThat(encode(Function("test", listOf(Uint32(min<kotlin.Int>(true).toLong())), listOf())))
+        assertThat(encode(Function("test", listOf(Uint32(0)), listOf())))
             .isEqualTo("0x21000474657374040001")
 
         assertThat(encode(Function("test", listOf(Uint32(max<kotlin.Int>(true).toLong())), listOf())))
@@ -205,64 +205,64 @@ class FunctionEncoderTest {
 
     @Test
     internal fun `encode uint40 to uint64 as int`() {
-        assertThat(encode(Function("test", listOf(Int24(min<kotlin.Long>(24, true))), listOf())))
-            .isEqualTo("0x2100047465737405ff800000")
+        assertThat(encode(Function("test", listOf(Uint24(0)), listOf())))
+            .isEqualTo("0x210004746573740500000000")
 
-        assertThat(encode(Function("test", listOf(Int24(max<kotlin.Long>(24, true))), listOf())))
-            .isEqualTo("0x210004746573740500000001")
+        assertThat(encode(Function("test", listOf(Uint24(max<kotlin.Long>(24, true))), listOf())))
+            .isEqualTo("0x210004746573740500ffffff")
 
-        assertThat(encode(Function("test", listOf(Int32(min<kotlin.Int>(true).toLong())), listOf())))
-            .isEqualTo("0x210004746573740500000001")
+        assertThat(encode(Function("test", listOf(Uint32(0)), listOf())))
+            .isEqualTo("0x210004746573740500000000")
 
-        assertThat(encode(Function("test", listOf(Int32(max<kotlin.Int>(true).toLong())), listOf())))
-            .isEqualTo("0x210004746573740500000001")
+        assertThat(encode(Function("test", listOf(Uint32(max<kotlin.Long>(true))), listOf())))
+            .isEqualTo("0x2100047465737405ffffffff")
     }
 
     @Test
     internal fun `encode uint72 to uint128 as long`() {
-        assertThat(encode(Function("test", listOf(Uint72(min<kotlin.Long>(72, true))), listOf())))
+        assertThat(encode(Function("test", listOf(Uint72(0)), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
         assertThat(encode(Function("test", listOf(Uint72(max<kotlin.Long>(72, true))), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
-        assertThat(encode(Function("test", listOf(Uint80(min<kotlin.Long>(80, true))), listOf())))
+        assertThat(encode(Function("test", listOf(Uint80(0)), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
         assertThat(encode(Function("test", listOf(Uint80(max<kotlin.Long>(80, true))), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
-        assertThat(encode(Function("test", listOf(Uint88(min<kotlin.Long>(88, true))), listOf())))
+        assertThat(encode(Function("test", listOf(Uint88(0)), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
         assertThat(encode(Function("test", listOf(Uint88(max<kotlin.Long>(88, true))), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
-        assertThat(encode(Function("test", listOf(Uint96(min<kotlin.Long>(96, true))), listOf())))
+        assertThat(encode(Function("test", listOf(Uint96(0)), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
         assertThat(encode(Function("test", listOf(Uint96(max<kotlin.Long>(96, true))), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
-        assertThat(encode(Function("test", listOf(Uint104(min<kotlin.Long>(104, true))), listOf())))
+        assertThat(encode(Function("test", listOf(Uint104(0)), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
         assertThat(encode(Function("test", listOf(Uint104(max<kotlin.Long>(104, true))), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
-        assertThat(encode(Function("test", listOf(Uint112(min<kotlin.Long>(112, true))), listOf())))
+        assertThat(encode(Function("test", listOf(Uint112(0)), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
         assertThat(encode(Function("test", listOf(Uint112(max<kotlin.Long>(112, true))), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
-        assertThat(encode(Function("test", listOf(Uint120(min<kotlin.Long>(120, true))), listOf())))
+        assertThat(encode(Function("test", listOf(Uint120(0)), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
         assertThat(encode(Function("test", listOf(Uint120(max<kotlin.Long>(120, true))), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
-        assertThat(encode(Function("test", listOf(Uint128(min<kotlin.Long>(128, true))), listOf())))
+        assertThat(encode(Function("test", listOf(Uint128(0)), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
 
         assertThat(encode(Function("test", listOf(Uint128(max<kotlin.Long>(128, true))), listOf())))
@@ -270,19 +270,19 @@ class FunctionEncoderTest {
     }
 
     @Test
-    internal fun `encode uint136 to uint256 throws ABI exception`() {
-        assertThrows<ABIException> {
-            encode(Function("test", listOf(Uint136(min<kotlin.Long>(136, true))), listOf()))
-        }
-        assertThrows<ABIException> {
-            encode(Function("test", listOf(Uint136(max<kotlin.Long>(136, true))), listOf()))
-        }
-        assertThrows<ABIException> {
-            encode(Function("test", listOf(Uint256(min<kotlin.Long>(256, true))), listOf()))
-        }
-        assertThrows<ABIException> {
-            encode(Function("test", listOf(Uint256(max<kotlin.Long>(256, true))), listOf()))
-        }
+    internal fun `encode uint136 to uint256 as byte array`() {
+        assertThat(encode(Function("test", listOf(Uint136(0)), listOf())))
+            .isEqualTo("0x2100047465737411000100")
+
+        assertThat(encode(Function("test", listOf(Uint136(max<kotlin.Long>(136, true))), listOf())))
+            .isEqualTo("0x210004746573741100087ffffffffffffffe")
+
+        assertThat(encode(Function("test", listOf(Uint256(0)), listOf())))
+            .isEqualTo("0x2100047465737411000100")
+
+        assertThat(encode(Function("test", listOf(Uint256(max<kotlin.Long>(256, true))), listOf())))
+            .isEqualTo("0x210004746573741100087ffffffffffffffe")
+
     }
 
     @Test
