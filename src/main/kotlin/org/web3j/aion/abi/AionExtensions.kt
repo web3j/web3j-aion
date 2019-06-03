@@ -69,19 +69,19 @@ internal val Type<Any>.aionValue: Any
         else -> value // Covers primitive types
     }
 
-internal val IntType.aionValue: Number
+internal val IntType.aionValue: Any
     get() = when (this) {
         is Int -> when (bitSize) {
             8, 16 -> value.shortValueExact()
             24, 32 -> value.intValueExact()
             40, 48, 56, 64 -> value.longValueExact()
-            else -> throw ABIException("Int value too big, use byte[]")
+            else -> value.toByteArray() // Avoid overflow
         }
         is Uint -> when (bitSize) {
             8, 16, 24, 32 -> value.shortValueExact()
             40, 48, 56, 64 -> value.intValueExact()
             72, 80, 88, 96, 104, 112, 120, 128 -> value.longValueExact()
-            else -> throw ABIException("Uint value too big, use byte[]")
+            else -> value.toByteArray() // Avoid overflow
         }
         else -> throw ABIException("Unexpected error")
     }
@@ -100,6 +100,19 @@ internal fun <T : Type<*>> Any.toAionValue(classType: Class<T>): T {
         is String -> when (classType) {
             Utf8String::class -> Utf8String(this)
             Address::class -> Address(ADDRESS_BIT_LENGTH, this)
+            else -> throw ABIException(javaClass.canonicalName)
+        }
+        is ByteArray -> when (classType) {
+            IntType::class -> {
+                // Attempt conversion from Aion byte[] to Solidity numeric value
+                val constructor = classType.getDeclaredConstructor(BigInteger::class.java)
+                constructor.newInstance(BigInteger(this))
+            }
+            Array::class -> {
+                // Attempt conversion from Aion byte[] to Solidity static or dynamic array
+                val constructor = classType.getDeclaredConstructor(ByteArray::class.java)
+                constructor.newInstance(this)
+            }
             else -> throw ABIException(javaClass.canonicalName)
         }
         else -> throw ABIException(javaClass.canonicalName)
