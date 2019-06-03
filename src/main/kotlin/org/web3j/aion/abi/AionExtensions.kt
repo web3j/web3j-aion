@@ -3,7 +3,6 @@ package org.web3j.aion.abi
 import org.aion.avm.userlib.abi.ABIException
 import org.web3j.abi.datatypes.Address
 import org.web3j.abi.datatypes.Array
-import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.FixedPointType
 import org.web3j.abi.datatypes.Int
 import org.web3j.abi.datatypes.IntType
@@ -89,7 +88,6 @@ internal val IntType.aionValue: Any
 @Suppress("UNCHECKED_CAST")
 internal fun <T : Type<*>> Any.toAionValue(classType: Class<T>): T {
     return when (this) {
-        is kotlin.Array<*> -> DynamicArray(*this.map { it!!.toAionValue(Utf8String::class.java) }.toTypedArray())
         is Boolean -> org.web3j.abi.datatypes.primitive.Boolean(this)
         is Byte -> org.web3j.abi.datatypes.primitive.Byte(this)
         is Char -> org.web3j.abi.datatypes.primitive.Char(this)
@@ -104,16 +102,21 @@ internal fun <T : Type<*>> Any.toAionValue(classType: Class<T>): T {
         }
         is ByteArray -> when (classType) {
             IntType::class -> {
-                // Attempt conversion from Aion byte[] to Solidity numeric value
+                // Conversion from Aion byte[] to Solidity numeric value
                 val constructor = classType.getDeclaredConstructor(BigInteger::class.java)
                 constructor.newInstance(BigInteger(this))
             }
             Array::class -> {
-                // Attempt conversion from Aion byte[] to Solidity static or dynamic array
+                // Conversion from Aion byte[] to Solidity static or dynamic array
                 val constructor = classType.getDeclaredConstructor(ByteArray::class.java)
                 constructor.newInstance(this)
             }
             else -> throw ABIException(javaClass.canonicalName)
+        }
+        is kotlin.Array<*> -> {
+            // Conversion from Aion array to Solidity static or dynamic array
+            val constructor = classType.getDeclaredConstructor(Class::class.java, kotlin.Array<Any>::class.java)
+            constructor.newInstance(classType, *this.map { it!!.toAionValue(Utf8String::class.java) }.toTypedArray())
         }
         else -> throw ABIException(javaClass.canonicalName)
     } as T
