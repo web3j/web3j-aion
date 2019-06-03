@@ -71,15 +71,16 @@ internal val Type<Any>.aionValue: Any
 internal val IntType.aionValue: Any
     get() = when (this) {
         is Int -> when (bitSize) {
-            8, 16 -> value.shortValueExact()
+            8 -> value.byteValueExact()
+            16 -> value.shortValueExact()
             24, 32 -> value.intValueExact()
             40, 48, 56, 64 -> value.longValueExact()
             else -> value.toByteArray() // Avoid overflow
         }
         is Uint -> when (bitSize) {
-            8, 16, 24, 32 -> value.shortValueExact()
-            40, 48, 56, 64 -> value.intValueExact()
-            72, 80, 88, 96, 104, 112, 120, 128 -> value.longValueExact()
+            8 -> value.shortValueExact()
+            16, 24 -> value.intValueExact()
+            32, 40, 48, 56 -> value.longValueExact()
             else -> value.toByteArray() // Avoid overflow
         }
         else -> throw ABIException("Unexpected error")
