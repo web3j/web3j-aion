@@ -2,13 +2,10 @@ package org.web3j.aion.abi
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import org.aion.avm.userlib.abi.ABIException
 import org.junit.Test
-import org.junit.jupiter.api.assertThrows
 import org.web3j.abi.FunctionEncoder.encode
-import org.web3j.abi.datatypes.DynamicArray
+import org.web3j.abi.datatypes.Bool
 import org.web3j.abi.datatypes.Function
-import org.web3j.abi.datatypes.Uint
 import org.web3j.abi.datatypes.Utf8String
 import org.web3j.abi.datatypes.generated.Int16
 import org.web3j.abi.datatypes.generated.Int24
@@ -28,11 +25,12 @@ import org.web3j.abi.datatypes.generated.Uint48
 import org.web3j.abi.datatypes.generated.Uint56
 import org.web3j.abi.datatypes.generated.Uint64
 import org.web3j.abi.datatypes.generated.Uint8
+import org.web3j.abi.datatypes.primitive.Boolean
+import org.web3j.abi.datatypes.primitive.Char
 import org.web3j.abi.datatypes.primitive.Int
 import org.web3j.abi.datatypes.primitive.Long
 import org.web3j.abi.datatypes.primitive.Short
 import java.math.BigInteger
-import java.math.BigInteger.ONE
 
 @ExperimentalUnsignedTypes
 class AbiFunctionEncoderTest {
@@ -44,46 +42,31 @@ class AbiFunctionEncoderTest {
     }
 
     @Test
-    internal fun `encode empty string`() {
+    internal fun `encode string`() {
         assertThat(encode(Function("test", listOf(Utf8String("")), listOf())))
             .isEqualTo("0x21000474657374210000")
-    }
 
-    @Test
-    internal fun `encode string`() {
         assertThat(encode(Function("test", listOf(Utf8String("Hello AVM")), listOf())))
             .isEqualTo("0x2100047465737421000948656c6c6f2041564d")
     }
 
     @Test
-    internal fun `encode empty string array`() {
-        val param = DynamicArray(Utf8String::class.java, listOf())
-
-        assertThat(encode(Function("test", listOf(param), listOf())))
-            .isEqualTo("0x21000b737472696e67417272617931210000")
+    internal fun `encode char`() {
+        assertThat(encode(Function("test", listOf(Char('a')), listOf())))
+            .isEqualTo("0x21000474657374030061")
     }
 
     @Test
-    internal fun `encode string array`() {
-        val param = DynamicArray(Utf8String::class.java, listOf(Utf8String("Hello AVM")))
+    internal fun `encode boolean`() {
+        assertThat(encode(Function("test", listOf(Boolean(true)), listOf())))
+            .isEqualTo("0x210004746573740201")
 
-        assertThat(encode(Function("test", listOf(param), listOf())))
-            .isEqualTo("0x21000b737472696e6741727261793121000121000948656c6c6f2041564d")
+        assertThat(encode(Function("test", listOf(Bool(true)), listOf())))
+            .isEqualTo("0x210004746573740201")
     }
 
     @Test
-    internal fun `encode 2D string array`() {
-        assertThrows<ABIException> {
-            val param = DynamicArray(
-                DynamicArray::class.java,
-                DynamicArray(Utf8String::class.java, Utf8String("Hello AVM"))
-            )
-            encode(Function("test", listOf(param), listOf()))
-        }
-    }
-
-    @Test
-    fun `encode short as short`() {
+    internal fun `encode short`() {
         assertThat(encode(Function("test", listOf(Short(min())), listOf())))
             .isEqualTo("0x21000474657374048000")
 
@@ -101,7 +84,7 @@ class AbiFunctionEncoderTest {
     }
 
     @Test
-    fun `encode int as int`() {
+    internal fun `encode int as int`() {
         assertThat(encode(Function("test", listOf(Int(min())), listOf())))
             .isEqualTo("0x210004746573740580000000")
 
@@ -125,7 +108,7 @@ class AbiFunctionEncoderTest {
     }
 
     @Test
-    fun `encode long as long`() {
+    internal fun `encode long`() {
         assertThat(encode(Function("test", listOf(Long(1)), listOf())))
             .isEqualTo("0x21000474657374060000000000000001")
     }
@@ -236,19 +219,5 @@ class AbiFunctionEncoderTest {
 
         assertThat(encode(Function("test", listOf(Uint256(max<BigInteger>(256, true))), listOf())))
             .isEqualTo("0x210004746573741100087ffffffffffffffe")
-    }
-
-    @Test
-    internal fun intArray() {
-        val param = DynamicArray(Int32::class.java, listOf(Int32(ONE)))
-        val function = Function("test", listOf(param), listOf())
-        assertThat(encode(function)).isEqualTo("0x21000c696e7465676572417272617915000100000001")
-    }
-
-    @Test
-    internal fun uIntArray() {
-        val param = DynamicArray(Uint::class.java, listOf(Uint32(ONE)))
-        val function = Function("test", listOf(param), listOf())
-        assertThat(encode(function)).isEqualTo("0x21000d75496e7465676572417272617915000100000001")
     }
 }

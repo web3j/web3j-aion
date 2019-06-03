@@ -3,12 +3,22 @@ package org.web3j.aion.abi
 import org.aion.avm.userlib.abi.ABIException
 import org.web3j.abi.datatypes.Address
 import org.web3j.abi.datatypes.Array
+import org.web3j.abi.datatypes.Bool
 import org.web3j.abi.datatypes.FixedPointType
-import org.web3j.abi.datatypes.Int
 import org.web3j.abi.datatypes.IntType
+import org.web3j.abi.datatypes.NumericType
 import org.web3j.abi.datatypes.Type
 import org.web3j.abi.datatypes.Uint
 import org.web3j.abi.datatypes.Utf8String
+import org.web3j.abi.datatypes.primitive.Boolean
+import org.web3j.abi.datatypes.primitive.Byte
+import org.web3j.abi.datatypes.primitive.Char
+import org.web3j.abi.datatypes.primitive.Double
+import org.web3j.abi.datatypes.primitive.Float
+import org.web3j.abi.datatypes.primitive.Int
+import org.web3j.abi.datatypes.primitive.Long
+import org.web3j.abi.datatypes.primitive.Number
+import org.web3j.abi.datatypes.primitive.Short
 import org.web3j.protocol.core.methods.response.Transaction
 import org.web3j.protocol.core.methods.response.TransactionReceipt
 import org.web3j.utils.Numeric
@@ -59,18 +69,61 @@ var TransactionReceipt.nrgRaw: String
     }
 
 @Suppress("UNCHECKED_CAST")
-internal val Type<Any>.aionValue: Any
-    get() = when (this) {
+internal fun <T> Type<T>.toAionValue(): Any {
+    return when (this) {
         is Address -> avm.Address(toString().toByteArray())
-        is Array<*> -> (value as List<Type<Any>>).map { it.aionValue }.toTypedArray()
         is FixedPointType -> throw ABIException("Unsupported fixed point type")
-        is IntType -> (this as IntType).aionValue
-        else -> value // Covers primitive types
+        is IntType -> (this as IntType).toAionValue()
+        is Array<*> -> when (this.componentType) {
+            Address::class.java ->
+                (value as List<Type<avm.Address>>).map { it.toAionValue() }.toTypedArray()
+            Utf8String::class.java ->
+                (value as List<Type<String>>).map { it.value }.toTypedArray()
+            Char::class.java ->
+                (value as List<Type<kotlin.Char>>).map { it.value }.toCharArray()
+            Bool::class.java, Boolean::class.java ->
+                (value as List<Type<kotlin.Boolean>>).map { it.value }.toBooleanArray()
+            Byte::class.java ->
+                (value as List<Type<kotlin.Byte>>).map { it.value }.toByteArray()
+            Short::class.java ->
+                (value as List<Type<kotlin.Short>>).map { it.value }.toShortArray()
+            Int::class.java ->
+                (value as List<Type<kotlin.Int>>).map { it.value }.toIntArray()
+            Long::class.java ->
+                (value as List<Type<kotlin.Long>>).map { it.value }.toLongArray()
+            Float::class.java ->
+                (value as List<Type<kotlin.Float>>).map { it.value }.toFloatArray()
+            Double::class.java ->
+                (value as List<Type<kotlin.Double>>).map { it.value }.toDoubleArray()
+            NumericType::class.java -> TODO()
+            else -> throw ABIException("Unknown type $javaClass")
+        }
+        else -> value as Any // Covers primitive types
     }
+}
 
-internal val IntType.aionValue: Any
-    get() = when (this) {
-        is Int -> when (bitSize) {
+@Suppress("UNCHECKED_CAST")
+internal fun <T : kotlin.Number> Number<T>.toAionValue(): List<T> {
+    return when (this) {
+        Byte::class.java ->
+            (value as List<Type<kotlin.Byte>>).map { it.value }
+        Short::class.java ->
+            (value as List<Type<kotlin.Short>>).map { it.value }
+        Int::class.java ->
+            (value as List<Type<kotlin.Int>>).map { it.value }
+        Long::class.java ->
+            (value as List<Type<kotlin.Long>>).map { it.value }
+        Float::class.java ->
+            (value as List<Type<kotlin.Float>>).map { it.value }
+        Double::class.java ->
+            (value as List<Type<kotlin.Double>>).map { it.value }
+        else -> throw ABIException("Unknown type $javaClass")
+    } as List<T>
+}
+
+internal fun IntType.toAionValue(): Any {
+    return when (this) {
+        is org.web3j.abi.datatypes.Int -> when (bitSize) {
             8 -> value.byteValueExact()
             16 -> value.shortValueExact()
             24, 32 -> value.intValueExact()
@@ -83,20 +136,21 @@ internal val IntType.aionValue: Any
             32, 40, 48, 56 -> value.longValueExact()
             else -> value.toByteArray() // Avoid overflow
         }
-        else -> throw ABIException("Unexpected error")
+        else -> throw ABIException("Unknown type ${javaClass.canonicalName}")
     }
+}
 
 @Suppress("UNCHECKED_CAST")
 internal fun <T : Type<*>> Any.toAionValue(classType: Class<T>): T {
     return when (this) {
-        is Boolean -> org.web3j.abi.datatypes.primitive.Boolean(this)
-        is Byte -> org.web3j.abi.datatypes.primitive.Byte(this)
-        is Char -> org.web3j.abi.datatypes.primitive.Char(this)
-        is Long -> org.web3j.abi.datatypes.primitive.Long(this)
-        is Short -> org.web3j.abi.datatypes.primitive.Short(this)
-        is Float -> org.web3j.abi.datatypes.primitive.Float(this)
-        is Double -> org.web3j.abi.datatypes.primitive.Double(this)
-        is String -> when (classType) {
+        is kotlin.Boolean -> Boolean(this)
+        is kotlin.Byte -> Byte(this)
+        is kotlin.Char -> Char(this)
+        is kotlin.Long -> Long(this)
+        is kotlin.Short -> Short(this)
+        is kotlin.Float -> Float(this)
+        is kotlin.Double -> Double(this)
+        is kotlin.String -> when (classType) {
             Utf8String::class -> Utf8String(this)
             Address::class -> Address(ADDRESS_BIT_LENGTH, this)
             else -> throw ABIException(javaClass.canonicalName)

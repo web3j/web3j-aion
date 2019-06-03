@@ -11,12 +11,12 @@ import org.web3j.utils.Numeric
 object AbiFunctionEncoder : FunctionEncoder() {
 
     override fun encodeFunction(function: Function): String {
-        val params = function.inputParameters.map { it.aionValue }.toTypedArray()
+        val params = function.inputParameters.map { it.toAionValue() }.toTypedArray()
         return Numeric.toHexString(ABIUtil.encodeMethodArguments(function.name, *params))
     }
 
     override fun encodeParameters(parameters: List<Type<Any>>): String {
-        val params = parameters.map { it.aionValue }.toTypedArray()
+        val params = parameters.map { it.toAionValue() }.toTypedArray()
         return Numeric.toHexString(ABIUtil.encodeDeploymentArguments(*params))
     }
 }
