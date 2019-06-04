@@ -73,7 +73,7 @@ class AbiFunctionEncoderArrayTest {
         assertThat(FunctionEncoder.encode(Function("test", listOf(empty), listOf())))
             .isEqualTo("0x21000474657374110000")
 
-        val single = DynamicArray(Byte::class.java, listOf(Byte(max())))
+        val single = DynamicArray(Byte::class.java, listOf(Byte(kotlin.Byte.MAX_VALUE)))
         assertThat(FunctionEncoder.encode(Function("test", listOf(single), listOf())))
             .isEqualTo("0x210004746573741100017f")
     }
@@ -84,7 +84,7 @@ class AbiFunctionEncoderArrayTest {
         assertThat(FunctionEncoder.encode(Function("test", listOf(empty), listOf())))
             .isEqualTo("0x21000474657374140000")
 
-        val single = DynamicArray(Short::class.java, listOf(Short(max())))
+        val single = DynamicArray(Short::class.java, listOf(Short(kotlin.Short.MAX_VALUE)))
         assertThat(FunctionEncoder.encode(Function("test", listOf(single), listOf())))
             .isEqualTo("0x210004746573741400017fff")
     }
@@ -95,7 +95,7 @@ class AbiFunctionEncoderArrayTest {
         assertThat(FunctionEncoder.encode(Function("test", listOf(empty), listOf())))
             .isEqualTo("0x21000474657374150000")
 
-        val single = DynamicArray(Int::class.java, listOf(Int(max())))
+        val single = DynamicArray(Int::class.java, listOf(Int(kotlin.Int.MAX_VALUE)))
         assertThat(FunctionEncoder.encode(Function("test", listOf(single), listOf())))
             .isEqualTo("0x210004746573741500017fffffff")
     }
@@ -106,7 +106,7 @@ class AbiFunctionEncoderArrayTest {
         assertThat(FunctionEncoder.encode(Function("test", listOf(empty), listOf())))
             .isEqualTo("0x21000474657374160000")
 
-        val single = DynamicArray(Long::class.java, listOf(Long(max())))
+        val single = DynamicArray(Long::class.java, listOf(Long(kotlin.Long.MAX_VALUE)))
         assertThat(FunctionEncoder.encode(Function("test", listOf(single), listOf())))
             .isEqualTo("0x210004746573741600017fffffffffffffff")
     }
@@ -117,7 +117,7 @@ class AbiFunctionEncoderArrayTest {
         assertThat(FunctionEncoder.encode(Function("test", listOf(empty), listOf())))
             .isEqualTo("0x21000474657374170000")
 
-        val single = DynamicArray(Float::class.java, listOf(Float(max())))
+        val single = DynamicArray(Float::class.java, listOf(Float(kotlin.Float.MAX_VALUE)))
         assertThat(FunctionEncoder.encode(Function("test", listOf(single), listOf())))
             .isEqualTo("0x210004746573741700017f7fffff")
     }
@@ -128,7 +128,7 @@ class AbiFunctionEncoderArrayTest {
         assertThat(FunctionEncoder.encode(Function("test", listOf(empty), listOf())))
             .isEqualTo("0x21000474657374180000")
 
-        val single = DynamicArray(Double::class.java, listOf(Double(max())))
+        val single = DynamicArray(Double::class.java, listOf(Double(kotlin.Double.MAX_VALUE)))
         assertThat(FunctionEncoder.encode(Function("test", listOf(single), listOf())))
             .isEqualTo("0x210004746573741800017fefffffffffffff")
     }
