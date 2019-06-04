@@ -7,7 +7,7 @@ import org.web3j.abi.TypeReference
 import org.web3j.abi.datatypes.Type
 import org.web3j.utils.Numeric
 
-object AionFunctionReturnDecoder : FunctionReturnDecoder() {
+object AbiFunctionDecoder : FunctionReturnDecoder() {
 
     override fun decodeFunctionResult(
         rawInput: String,
