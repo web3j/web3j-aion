@@ -27,7 +27,10 @@ import org.web3j.abi.datatypes.generated.Uint56
 import org.web3j.abi.datatypes.generated.Uint64
 import org.web3j.abi.datatypes.generated.Uint8
 
-class AbiFunctionEncoderTest {
+/**
+ * TODO Array tests
+ */
+class AbiFunctionEncoderFvmTest {
 
     @Test
     internal fun `encode empty parameters`() {
@@ -53,10 +56,10 @@ class AbiFunctionEncoderTest {
     @Test
     internal fun `encode int8`() {
         assertThat(encode(Function("test", listOf(Int8(Byte.MIN_VALUE.toLong())), listOf())))
-            .isEqualTo("0x21000474657374048000")
+            .isEqualTo("0x210004746573740180")
 
         assertThat(encode(Function("test", listOf(Int8(Byte.MAX_VALUE.toLong())), listOf())))
-            .isEqualTo("0x21000474657374047fff")
+            .isEqualTo("0x21000474657374017f")
     }
 
     @Test
