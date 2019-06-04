@@ -1,5 +1,6 @@
 package org.web3j.aion.abi
 
+import org.aion.avm.userlib.abi.ABIException
 import org.web3j.protocol.core.methods.response.AbiDefinition
 import org.web3j.protocol.core.methods.response.AbiDefinition.NamedType
 import java.io.File
@@ -10,7 +11,7 @@ internal object AbiDefinitionParser {
     private val FUNCTION_REGEX = "^public\\s+static\\s+(\\w+)\\s+(\\w+)\\s*\\(\\s*(.+)*\\s*\\)\$".toRegex()
 
     /**
-     * Parses an ABI file in Aion VM format into a list of [AbiDefinition]s.
+     * Parses an ABI string in Aion VM format into a list of [AbiDefinition]s.
      */
     fun parse(input: String): List<AbiDefinition> {
         return parse(input.lines())
@@ -57,7 +58,9 @@ internal object AbiDefinitionParser {
     }
 
     private fun String.toFunction(): AbiDefinition {
-        val result = FUNCTION_REGEX.matchEntire(this)!!
+        val result = FUNCTION_REGEX.matchEntire(this)
+            ?: throw ABIException("Invalid function definition: $this")
+
         return AbiDefinition().apply {
             type = AbiDefinitionType.FUNCTION.toString()
             outputs = result.groupValues[1].toReturnType()
