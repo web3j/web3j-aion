@@ -33,13 +33,13 @@ import org.web3j.abi.datatypes.generated.Uint8
 class AbiFunctionEncoderFvmTest {
 
     @Test
-    internal fun `encode empty parameters`() {
+    fun `encode empty parameters`() {
         assertThat(encode(Function("test", listOf(), listOf())))
             .isEqualTo("0x21000474657374")
     }
 
     @Test
-    internal fun `encode string`() {
+    fun `encode string`() {
         assertThat(encode(Function("test", listOf(Utf8String("")), listOf())))
             .isEqualTo("0x21000474657374210000")
 
@@ -48,13 +48,13 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    internal fun `encode bool`() {
+    fun `encode bool`() {
         assertThat(encode(Function("test", listOf(Bool(true)), listOf())))
             .isEqualTo("0x210004746573740201")
     }
 
     @Test
-    internal fun `encode int8`() {
+    fun `encode int8`() {
         assertThat(encode(Function("test", listOf(Int8(Byte.MIN_VALUE.toLong())), listOf())))
             .isEqualTo("0x210004746573740180")
 
@@ -63,7 +63,7 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    internal fun `encode int16`() {
+    fun `encode int16`() {
         assertThat(encode(Function("test", listOf(Int16(kotlin.Short.MIN_VALUE.toLong())), listOf())))
             .isEqualTo("0x21000474657374048000")
 
@@ -72,7 +72,7 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    internal fun `encode int24 to int32 as int`() {
+    fun `encode int24 to int32 as int`() {
         assertThat(encode(Function("test", listOf(Int24(MIN_24_VALUE)), listOf())))
             .isEqualTo("0x2100047465737405ff800000")
 
@@ -87,7 +87,7 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    internal fun `encode int40 to int64`() {
+    fun `encode int40 to int64`() {
         assertThat(encode(Function("test", listOf(Int40(MIN_40_VALUE)), listOf())))
             .isEqualTo("0x2100047465737406ffffff8000000000")
 
@@ -114,7 +114,7 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    internal fun `encode int72 to int256`() {
+    fun `encode int72 to int256`() {
         assertThat(encode(Function("test", listOf(Int72(MIN_72_VALUE)), listOf())))
             .isEqualTo("0x21000474657374110009800000000000000001")
 
@@ -129,7 +129,7 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    internal fun `encode uint8`() {
+    fun `encode uint8`() {
         assertThat(encode(Function("test", listOf(Uint8(0)), listOf())))
             .isEqualTo("0x21000474657374040000")
 
@@ -138,7 +138,7 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    internal fun `encode uint16 to uint24`() {
+    fun `encode uint16 to uint24`() {
         assertThat(encode(Function("test", listOf(Uint16(0)), listOf())))
             .isEqualTo("0x210004746573740500000000")
 
@@ -153,7 +153,7 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    internal fun `encode uint32 to uint56`() {
+    fun `encode uint32 to uint56`() {
         assertThat(encode(Function("test", listOf(Uint32(0)), listOf())))
             .isEqualTo("0x21000474657374060000000000000000")
 
@@ -180,7 +180,7 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    internal fun `encode uint64 to uint256`() {
+    fun `encode uint64 to uint256`() {
         assertThat(encode(Function("test", listOf(Uint64(0)), listOf())))
             .isEqualTo("0x2100047465737411000100")
 
