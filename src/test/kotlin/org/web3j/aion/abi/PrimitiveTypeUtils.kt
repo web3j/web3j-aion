@@ -1,85 +1,39 @@
 package org.web3j.aion.abi
 
 import java.math.BigInteger
-import kotlin.math.pow
-import kotlin.reflect.KClass
 
-internal inline fun <reified T : Number> min(): T {
-    return when (T::class) {
-        Byte::class -> min(Byte.SIZE_BITS)
-        Short::class -> min(Short.SIZE_BITS)
-        Int::class -> min(Int.SIZE_BITS)
-        Long::class -> min(Long.SIZE_BITS)
-        Float::class -> Float.MIN_VALUE.convertTo(T::class)
-        Double::class -> Double.MIN_VALUE.convertTo(T::class)
-        else -> throw ArithmeticException("unknown number type: ${T::class}")
-    }
-}
+const val MIN_24_VALUE = (-8388608).toLong()
+const val MAX_24_VALUE = 8388607.toLong()
 
-internal inline fun <reified T : Number> min(bitSize: Int): T {
-    return when (bitSize) {
-        Byte.SIZE_BITS -> Byte.MIN_VALUE.convertTo(T::class)
-        Short.SIZE_BITS -> Short.MIN_VALUE.convertTo(T::class)
-        Int.SIZE_BITS -> Int.MIN_VALUE.convertTo(T::class)
-        Long.SIZE_BITS -> Long.MIN_VALUE.convertTo(T::class)
-        // Because is test code, this calculation is made for 64-256 bit sizes
-        else -> 2.toDouble().pow(bitSize.dec()).unaryMinus().convertTo(T::class)
-    }
-}
+const val MIN_40_VALUE = (-549755813888)
+const val MAX_40_VALUE = 549755813887
 
-internal inline fun <reified T : Number> max(unsigned: Boolean = false): T {
-    val unsignedFactor = if (unsigned) 2 else 1
-    return when (T::class) {
-        Byte::class -> max(Byte.SIZE_BITS, unsigned)
-        Short::class -> max(Short.SIZE_BITS, unsigned)
-        Int::class -> max(Int.SIZE_BITS, unsigned)
-        Long::class -> max(Long.SIZE_BITS, unsigned)
-        Float::class -> Float.MAX_VALUE.times(unsignedFactor).convertTo(T::class)
-        Double::class -> Double.MAX_VALUE.times(unsignedFactor).convertTo(T::class)
-        else -> throw ArithmeticException("unknown number type: ${T::class}")
-    }
-}
+const val MIN_48_VALUE = -140737488355328
+const val MAX_48_VALUE = 140737488355327
 
-@ExperimentalUnsignedTypes
-internal inline fun <reified T : Number> max(bitSize: Int, unsigned: Boolean = false): T {
-    return if (unsigned) {
-        when (bitSize) {
-            Byte.SIZE_BITS -> UByte.MAX_VALUE.toShort().convertTo(T::class)
-            Short.SIZE_BITS -> UShort.MAX_VALUE.toInt().convertTo(T::class)
-            Int.SIZE_BITS -> UInt.MAX_VALUE.toLong().convertTo(T::class)
-            // Because is test code, this calculation is made for 64-256 bit sizes
-            // FIXME Convert to Long to avoid Double ignoring dec operation is needed?
-            else -> {
-                2.toDouble().pow(bitSize).toLong().dec().convertTo(T::class)
-            }
-        }
-    } else {
-        when (bitSize) {
-            Byte.SIZE_BITS -> Byte.MAX_VALUE.convertTo(T::class)
-            Short.SIZE_BITS -> Short.MAX_VALUE.convertTo(T::class)
-            Int.SIZE_BITS -> Int.MAX_VALUE.convertTo(T::class)
-            Long.SIZE_BITS -> Long.MAX_VALUE.convertTo(T::class)
-            else -> {
-                // Because is test code, this calculation is made for 64-256 bit sizes
-                // FIXME Convert to Long to avoid Double ignoring dec operation is needed?
-                2.toDouble().pow(bitSize.dec()).toLong().dec().convertTo(T::class)
-            }
-        }
-    }
-}
+const val MIN_56_VALUE = -36028797018963968
+const val MAX_56_VALUE = 36028797018963967
 
-@Suppress("IMPLICIT_CAST_TO_ANY", "UNCHECKED_CAST")
-internal fun <T : Number> Number.convertTo(clazz: KClass<T>): T {
-    return when (clazz) {
-        Byte::class -> toByte()
-        Short::class -> toShort()
-        Int::class -> toInt()
-        Long::class -> toLong()
-        Float::class -> toFloat()
-        Double::class -> toDouble()
-        BigInteger::class -> toBigInteger()
-        else -> throw ArithmeticException("unknown number type: $clazz")
-    } as T
-}
+val MIN_72_VALUE = BigInteger("-2361183241434822606847")
+val MAX_72_VALUE = BigInteger("2361183241434822606848")
 
-internal fun Number.toBigInteger() = BigInteger(toString())
+val MIN_256_VALUE = BigInteger("-57896044618658097711785492504343953926634992332820282019728792003956564819967")
+val MAX_256_VALUE = BigInteger("57896044618658097711785492504343953926634992332820282019728792003956564819968")
+
+const val UMAX_8_VALUE = 255.toLong()
+
+const val UMAX_16_VALUE = 65535.toLong()
+
+const val UMAX_24_VALUE = 16777215.toLong()
+
+const val UMAX_32_VALUE = 4294967295
+
+const val UMAX_40_VALUE = 1099511627775
+
+const val UMAX_48_VALUE = 281474976710655
+
+const val UMAX_56_VALUE = 72057594037927935
+
+val UMAX_64_VALUE = BigInteger("18446744073709551615")
+
+val UMAX_256_VALUE = BigInteger("115792089237316195423570985008687907853269984665640564039457584007913129639935")
