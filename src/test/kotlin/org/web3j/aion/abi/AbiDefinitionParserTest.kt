@@ -14,7 +14,7 @@ import java.io.File
 class AbiDefinitionParserTest {
 
     @Test
-    fun parseEmptyConstructor() {
+    fun `parse empty constructor`() {
         AbiDefinitionParser.parse(
             """
             0.0
@@ -29,7 +29,7 @@ class AbiDefinitionParserTest {
     }
 
     @Test
-    fun parseNonEmptyConstructor() {
+    fun `parse non-empty constructor`() {
         AbiDefinitionParser.parse(
             """
             0.0
@@ -48,7 +48,7 @@ class AbiDefinitionParserTest {
     }
 
     @Test
-    fun parseVoidFunction() {
+    fun `parse void function`() {
         AbiDefinitionParser.parse(
             """
             0.0
@@ -63,7 +63,7 @@ class AbiDefinitionParserTest {
     }
 
     @Test
-    fun parseFunction() {
+    fun `parse non-void function`() {
         AbiDefinitionParser.parse(
             """
             0.0
@@ -83,7 +83,7 @@ class AbiDefinitionParserTest {
     }
 
     @Test
-    fun parseErc20TokenFile() {
+    fun `parse ERC20Token ABI file`() {
         val abiFile = File(javaClass.classLoader.getResource("erc20/ERC20Token.abi").file)
 
         AbiDefinitionParser.parse(abiFile).apply {
