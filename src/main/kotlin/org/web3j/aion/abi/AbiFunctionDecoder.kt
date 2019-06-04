@@ -22,13 +22,50 @@ import java.math.BigInteger
 
 object AbiFunctionDecoder : FunctionReturnDecoder() {
 
+    private val typeSizes = mapOf(
+        Boolean::class.java to 1,
+        Char::class.java to 2,
+        Byte::class.java to 1,
+        Short::class.java to 2,
+        Int::class.java to 4,
+        Long::class.java to 8,
+        Float::class.java to 4,
+        Double::class.java to 8
+    )
+
     override fun decodeFunctionResult(
         rawInput: String,
         outputParameters: List<TypeReference<Type<*>>>
     ): List<Type<*>> {
-        val classType = outputParameters.first().classType
+
         val bytes = Numeric.hexStringToByteArray(rawInput)
-        return listOf(ABIUtil.decodeOneObject(bytes).toAionValue(classType))
+        var range = 0..sizeOf(Utf8String::class.java, bytes, 0) + 2
+
+        // Decode and ignore function name
+        ABIUtil.decodeOneObject(bytes.sliceArray(range))
+
+        val result = mutableListOf<Type<*>>()
+
+        for (param in outputParameters) {
+            val size = sizeOf(param.classType, bytes, range.start)
+            range = range.endInclusive + 1..range.endInclusive + size + 1
+
+            ABIUtil.decodeOneObject(bytes.sliceArray(range))
+                .toAionValue(param.classType).let { result.add(it) }
+        }
+
+        return result
+    }
+
+    private fun <T : Type<*>> sizeOf(type: Class<T>, data: ByteArray, index: Int): Int {
+        return when (type) {
+            Boolean::class.java, Byte::class.java -> 1
+            Char::class.java, Short::class.java -> 2
+            Int::class.java, Float::class.java -> 4
+            Long::class.java, Double::class.java -> 8
+            Utf8String::class.java, Array::class.java -> data[index + 1] + data[index + 2]
+            else -> throw ABIException("Unsupported ABI type")
+        }
     }
 
     override fun <T : Type<*>> decodeEventParameter(
