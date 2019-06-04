@@ -22,17 +22,6 @@ import java.math.BigInteger
 
 object AbiFunctionDecoder : FunctionReturnDecoder() {
 
-    private val typeSizes = mapOf(
-        Boolean::class.java to 1,
-        Char::class.java to 2,
-        Byte::class.java to 1,
-        Short::class.java to 2,
-        Int::class.java to 4,
-        Long::class.java to 8,
-        Float::class.java to 4,
-        Double::class.java to 8
-    )
-
     override fun decodeFunctionResult(
         rawInput: String,
         outputParameters: List<TypeReference<Type<*>>>
