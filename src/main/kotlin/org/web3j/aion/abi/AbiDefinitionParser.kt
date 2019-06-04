@@ -47,11 +47,10 @@ internal object AbiDefinitionParser {
     private fun String.toConstructor() = AbiDefinition().apply {
 
         // Remove parentheses before parsing parameters
-        val parameters = substring(indexOf('(') + 1)
-            .trim().dropLast(1).toParams()
+        val parameters = substring(indexOf('(').inc()).trim().dropLast(1)
 
         type = AbiDefinitionType.CONSTRUCTOR.toString()
-        inputs = parameters
+        inputs = parameters.toInputs()
         outputs = listOf()
         isConstant = false
         isPayable = false
@@ -63,8 +62,8 @@ internal object AbiDefinitionParser {
 
         return AbiDefinition().apply {
             type = AbiDefinitionType.FUNCTION.toString()
-            outputs = result.groupValues[1].toReturnType()
-            inputs = result.groupValues[3].toParams()
+            outputs = result.groupValues[1].toOutputs()
+            inputs = result.groupValues[3].toInputs()
             name = result.groupValues[2]
             isConstant = false
             isPayable = false
@@ -72,11 +71,11 @@ internal object AbiDefinitionParser {
     }
 
     /**
-     * Parses a return type or `null` if the type is `void`.
+     * Parses a return type or an empty list if the type is `void`.
      */
-    private fun String.toReturnType(): List<NamedType> {
+    private fun String.toOutputs(): List<NamedType> {
         return if (this != "void") {
-            toParams()
+            listOf(toNamedType())
         } else {
             listOf()
         }
@@ -85,7 +84,7 @@ internal object AbiDefinitionParser {
     /**
      * Parses the function parameters from a string `param1, param2, ...`.
      */
-    private fun String.toParams(): List<NamedType> {
+    private fun String.toInputs(): List<NamedType> {
         return if (isNotEmpty()) {
             split(',')
                 .map { it.trim() }
