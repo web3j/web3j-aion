@@ -8,6 +8,11 @@ import java.nio.file.Files
 
 internal object AbiDefinitionParser {
 
+    /**
+     * Regular expression matching function definitions in Aion ABI format, e.g.:
+     *
+     *    public static boolean transferFrom(Address, Address, long)
+     */
     private val FUNCTION_REGEX = "^public\\s+static\\s+(\\w+)\\s+(\\w+)\\s*\\(\\s*(.+)*\\s*\\)\$".toRegex()
 
     /**
