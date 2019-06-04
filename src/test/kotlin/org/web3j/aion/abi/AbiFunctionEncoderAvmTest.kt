@@ -18,6 +18,9 @@ import org.web3j.abi.datatypes.primitive.Int
 import org.web3j.abi.datatypes.primitive.Long
 import org.web3j.abi.datatypes.primitive.Short
 
+/**
+ * TODO 2 dimensional array tests.
+ */
 class AbiFunctionEncoderAvmTest {
 
     @Test
