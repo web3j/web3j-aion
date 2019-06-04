@@ -150,7 +150,7 @@ internal fun <T : Type<*>> Any.toAionValue(classType: Class<T>): T {
         is kotlin.Short -> Short(this)
         is kotlin.Float -> Float(this)
         is kotlin.Double -> Double(this)
-        is kotlin.String -> when (classType) {
+        is String -> when (classType) {
             Utf8String::class -> Utf8String(this)
             Address::class -> Address(ADDRESS_BIT_LENGTH, this)
             else -> throw ABIException(javaClass.canonicalName)
