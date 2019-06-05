@@ -53,7 +53,7 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
     private val UINT_REGEX = "^Uint(\\d*)\$".toRegex()
 
     /**
-     * Regex to match the bit size of an unsigned [Uint].
+     * Regex to match the bit size of a [org.web3j.abi.datatypes.Bytes].
      */
     private val BYTES_REGEX = "^Bytes(\\d*)\$".toRegex()
 
