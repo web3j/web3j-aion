@@ -9,7 +9,6 @@ import org.web3j.abi.FunctionEncoder.encode
 import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.Utf8String
-import org.web3j.abi.datatypes.primitive.Boolean
 import org.web3j.abi.datatypes.primitive.Byte
 import org.web3j.abi.datatypes.primitive.Char
 import org.web3j.abi.datatypes.primitive.Double
@@ -22,12 +21,6 @@ import org.web3j.abi.datatypes.primitive.Short
  * TODO 2 dimensional array tests.
  */
 class AbiFunctionEncoderAvmTest {
-
-    @Test
-    internal fun `encode boolean`() {
-        assertThat(encode(Function("test", listOf(Boolean(true)), listOf())))
-            .isEqualTo("0x210004746573740201")
-    }
 
     @Test
     internal fun `encode char`() {
@@ -120,17 +113,6 @@ class AbiFunctionEncoderAvmTest {
         val abc = DynamicArray(Char::class.java, listOf(Char('a'), Char('b'), Char('c')))
         assertThat(encode(Function("test", listOf(abc), listOf())))
             .isEqualTo("0x21000474657374130003006100620063")
-    }
-
-    @Test
-    internal fun `encode boolean array`() {
-        val empty = DynamicArray(Boolean::class.java)
-        assertThat(encode(Function("test", listOf(empty), listOf())))
-            .isEqualTo("0x21000474657374120000")
-
-        val trueFalse = DynamicArray(Boolean::class.java, listOf(Boolean(true), Boolean(false)))
-        assertThat(encode(Function("test", listOf(trueFalse), listOf())))
-            .isEqualTo("0x210004746573741200020100")
     }
 
     @Test

@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import org.junit.Test
 import org.web3j.abi.FunctionEncoder.encode
 import org.web3j.abi.datatypes.Bool
+import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.Utf8String
 import org.web3j.abi.datatypes.generated.Int16
@@ -28,7 +29,7 @@ import org.web3j.abi.datatypes.generated.Uint64
 import org.web3j.abi.datatypes.generated.Uint8
 
 /**
- * TODO Array tests
+ * TODO Add array tests.
  */
 class AbiFunctionEncoderFvmTest {
 
@@ -192,5 +193,16 @@ class AbiFunctionEncoderFvmTest {
 
         assertThat(encode(Function("test", listOf(Uint256(UMAX_256_VALUE)), listOf())))
             .isEqualTo("0x2100047465737411002100ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+    }
+
+    @Test
+    internal fun `encode boolean array`() {
+        val empty = DynamicArray(Bool::class.java)
+        assertThat(encode(Function("test", listOf(empty), listOf())))
+            .isEqualTo("0x21000474657374120000")
+
+        val trueFalse = DynamicArray(Bool::class.java, listOf(Bool(true), Bool(false)))
+        assertThat(encode(Function("test", listOf(trueFalse), listOf())))
+            .isEqualTo("0x210004746573741200020100")
     }
 }
