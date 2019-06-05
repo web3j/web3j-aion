@@ -7,6 +7,7 @@ import org.web3j.abi.FunctionEncoder.encode
 import org.web3j.abi.datatypes.Bool
 import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.Function
+import org.web3j.abi.datatypes.Uint
 import org.web3j.abi.datatypes.Utf8String
 import org.web3j.abi.datatypes.generated.Int16
 import org.web3j.abi.datatypes.generated.Int24
@@ -27,6 +28,7 @@ import org.web3j.abi.datatypes.generated.Uint48
 import org.web3j.abi.datatypes.generated.Uint56
 import org.web3j.abi.datatypes.generated.Uint64
 import org.web3j.abi.datatypes.generated.Uint8
+import java.math.BigInteger
 
 /**
  * TODO Add array tests.
@@ -52,6 +54,15 @@ class AbiFunctionEncoderFvmTest {
     fun `encode bool`() {
         assertThat(encode(Function("test", listOf(Bool(true)), listOf())))
             .isEqualTo("0x210004746573740201")
+    }
+
+    @Test
+    fun `encode int`() {
+        assertThat(encode(Function("test", listOf(org.web3j.abi.datatypes.Int(MIN_256_VALUE)), listOf())))
+            .isEqualTo("0x210004746573741100208000000000000000000000000000000000000000000000000000000000000001")
+
+        assertThat(encode(Function("test", listOf(org.web3j.abi.datatypes.Int(MAX_256_VALUE)), listOf())))
+            .isEqualTo("0x21000474657374110021008000000000000000000000000000000000000000000000000000000000000000")
     }
 
     @Test
@@ -130,6 +141,15 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
+    fun `encode uint`() {
+        assertThat(encode(Function("test", listOf(Uint(BigInteger.ZERO)), listOf())))
+            .isEqualTo("0x2100047465737411000100")
+
+        assertThat(encode(Function("test", listOf(Uint(UMAX_256_VALUE)), listOf())))
+            .isEqualTo("0x2100047465737411002100ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+    }
+
+    @Test
     fun `encode uint8`() {
         assertThat(encode(Function("test", listOf(Uint8(0)), listOf())))
             .isEqualTo("0x21000474657374040000")
@@ -196,7 +216,7 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    internal fun `encode boolean array`() {
+    internal fun `encode bool array`() {
         val empty = DynamicArray(Bool::class.java)
         assertThat(encode(Function("test", listOf(empty), listOf())))
             .isEqualTo("0x21000474657374120000")
