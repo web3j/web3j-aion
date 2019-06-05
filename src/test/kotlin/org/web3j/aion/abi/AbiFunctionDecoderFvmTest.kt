@@ -10,7 +10,25 @@ import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.Int
 import org.web3j.abi.datatypes.Utf8String
+import org.web3j.abi.datatypes.generated.Int16
+import org.web3j.abi.datatypes.generated.Int24
+import org.web3j.abi.datatypes.generated.Int256
+import org.web3j.abi.datatypes.generated.Int32
+import org.web3j.abi.datatypes.generated.Int40
+import org.web3j.abi.datatypes.generated.Int48
+import org.web3j.abi.datatypes.generated.Int56
+import org.web3j.abi.datatypes.generated.Int64
+import org.web3j.abi.datatypes.generated.Int72
 import org.web3j.abi.datatypes.generated.Int8
+import org.web3j.abi.datatypes.generated.Uint16
+import org.web3j.abi.datatypes.generated.Uint24
+import org.web3j.abi.datatypes.generated.Uint256
+import org.web3j.abi.datatypes.generated.Uint32
+import org.web3j.abi.datatypes.generated.Uint40
+import org.web3j.abi.datatypes.generated.Uint48
+import org.web3j.abi.datatypes.generated.Uint56
+import org.web3j.abi.datatypes.generated.Uint64
+import org.web3j.abi.datatypes.generated.Uint8
 
 /**
  * TODO Array tests
@@ -71,138 +89,216 @@ class AbiFunctionDecoderFvmTest {
         assertThat(decode("0x017f", function.outputParameters))
             .isEqualTo(listOf(Int8(Byte.MAX_VALUE.toLong())))
     }
-//
-//    @Test
-//    fun `decode int16`() {
-//        assertThat(decode(Function("test", listOf(Int16(kotlin.Short.MIN_VALUE.toLong())), listOf())))
-//            .isEqualTo("0x048000")
-//
-//        assertThat(decode(Function("test", listOf(Int16(kotlin.Short.MAX_VALUE.toLong())), listOf())))
-//            .isEqualTo("0x047fff")
-//    }
-//
-//    @Test
-//    fun `decode int24 to int32 as int`() {
-//        assertThat(decode(Function("test", listOf(Int24(MIN_24_VALUE)), listOf())))
-//            .isEqualTo("0x05ff800000")
-//
-//        assertThat(decode(Function("test", listOf(Int24(MAX_24_VALUE)), listOf())))
-//            .isEqualTo("0x05007fffff")
-//
-//        assertThat(decode(Function("test", listOf(Int32(kotlin.Int.MIN_VALUE.toLong())), listOf())))
-//            .isEqualTo("0x0580000000")
-//
-//        assertThat(decode(Function("test", listOf(Int32(kotlin.Int.MAX_VALUE.toLong())), listOf())))
-//            .isEqualTo("0x057fffffff")
-//    }
-//
-//    @Test
-//    fun `decode int40 to int64`() {
-//        assertThat(decode(Function("test", listOf(Int40(MIN_40_VALUE)), listOf())))
-//            .isEqualTo("0x06ffffff8000000000")
-//
-//        assertThat(decode(Function("test", listOf(Int40(MAX_40_VALUE)), listOf())))
-//            .isEqualTo("0x060000007fffffffff")
-//
-//        assertThat(decode(Function("test", listOf(Int48(MIN_48_VALUE)), listOf())))
-//            .isEqualTo("0x06ffff800000000000")
-//
-//        assertThat(decode(Function("test", listOf(Int48(MAX_48_VALUE)), listOf())))
-//            .isEqualTo("0x0600007fffffffffff")
-//
-//        assertThat(decode(Function("test", listOf(Int56(MIN_56_VALUE)), listOf())))
-//            .isEqualTo("0x06ff80000000000000")
-//
-//        assertThat(decode(Function("test", listOf(Int56(MAX_56_VALUE)), listOf())))
-//            .isEqualTo("0x06007fffffffffffff")
-//
-//        assertThat(decode(Function("test", listOf(Int64(kotlin.Long.MIN_VALUE)), listOf())))
-//            .isEqualTo("0x068000000000000000")
-//
-//        assertThat(decode(Function("test", listOf(Int64(kotlin.Long.MAX_VALUE)), listOf())))
-//            .isEqualTo("0x067fffffffffffffff")
-//    }
-//
-//    @Test
-//    fun `decode int72 to int256`() {
-//        assertThat(decode(Function("test", listOf(Int72(MIN_72_VALUE)), listOf())))
-//            .isEqualTo("0x110009800000000000000001")
-//
-//        assertThat(decode(Function("test", listOf(Int72(MAX_72_VALUE)), listOf())))
-//            .isEqualTo("0x11000a00800000000000000000")
-//
-//        assertThat(decode(Function("test", listOf(Int256(MIN_256_VALUE)), listOf())))
-//            .isEqualTo("0x1100208000000000000000000000000000000000000000000000000000000000000001")
-//
-//        assertThat(decode(Function("test", listOf(Int256(MAX_256_VALUE)), listOf())))
-//            .isEqualTo("0x110021008000000000000000000000000000000000000000000000000000000000000000")
-//    }
-//
-//    @Test
-//    fun `decode uint8`() {
-//        assertThat(decode(Function("test", listOf(Uint8(0)), listOf())))
-//            .isEqualTo("0x040000")
-//
-//        assertThat(decode(Function("test", listOf(Uint8(UMAX_8_VALUE)), listOf())))
-//            .isEqualTo("0x0400ff")
-//    }
-//
-//    @Test
-//    fun `decode uint16 to uint24`() {
-//        assertThat(decode(Function("test", listOf(Uint16(0)), listOf())))
-//            .isEqualTo("0x0500000000")
-//
-//        assertThat(decode(Function("test", listOf(Uint16(UMAX_16_VALUE)), listOf())))
-//            .isEqualTo("0x050000ffff")
-//
-//        assertThat(decode(Function("test", listOf(Uint24(0)), listOf())))
-//            .isEqualTo("0x0500000000")
-//
-//        assertThat(decode(Function("test", listOf(Uint24(UMAX_24_VALUE)), listOf())))
-//            .isEqualTo("0x0500ffffff")
-//    }
-//
-//    @Test
-//    fun `decode uint32 to uint56`() {
-//        assertThat(decode(Function("test", listOf(Uint32(0)), listOf())))
-//            .isEqualTo("0x060000000000000000")
-//
-//        assertThat(decode(Function("test", listOf(Uint32(UMAX_32_VALUE)), listOf())))
-//            .isEqualTo("0x0600000000ffffffff")
-//
-//        assertThat(decode(Function("test", listOf(Uint40(0)), listOf())))
-//            .isEqualTo("0x060000000000000000")
-//
-//        assertThat(decode(Function("test", listOf(Uint40(UMAX_40_VALUE)), listOf())))
-//            .isEqualTo("0x06000000ffffffffff")
-//
-//        assertThat(decode(Function("test", listOf(Uint48(0)), listOf())))
-//            .isEqualTo("0x060000000000000000")
-//
-//        assertThat(decode(Function("test", listOf(Uint48(UMAX_48_VALUE)), listOf())))
-//            .isEqualTo("0x060000ffffffffffff")
-//
-//        assertThat(decode(Function("test", listOf(Uint56(0)), listOf())))
-//            .isEqualTo("0x060000000000000000")
-//
-//        assertThat(decode(Function("test", listOf(Uint56(UMAX_56_VALUE)), listOf())))
-//            .isEqualTo("0x0600ffffffffffffff")
-//    }
-//
-//    @Test
-//    fun `decode uint64 to uint256`() {
-//        assertThat(decode(Function("test", listOf(Uint64(0)), listOf())))
-//            .isEqualTo("0x11000100")
-//
-//        assertThat(decode(Function("test", listOf(Uint64(UMAX_64_VALUE)), listOf())))
-//            .isEqualTo("0x11000900ffffffffffffffff")
-//
-//        assertThat(decode(Function("test", listOf(Uint256(0)), listOf())))
-//            .isEqualTo("0x11000100")
-//
-//        assertThat(decode(Function("test", listOf(Uint256(UMAX_256_VALUE)), listOf())))
-//            .isEqualTo("0x11002100ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
-//    }
+
+    @Test
+    fun `decode int16`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Int16>() {}))
+
+        assertThat(decode("0x048000", function.outputParameters))
+            .isEqualTo(listOf(Int16(Short.MIN_VALUE.toLong())))
+
+        assertThat(decode("0x047fff", function.outputParameters))
+            .isEqualTo(listOf(Int16(Short.MAX_VALUE.toLong())))
+    }
+
+    @Test
+    fun `decode int24`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Int24>() {}))
+
+        assertThat(decode("0x05ff800000", function.outputParameters))
+            .isEqualTo(listOf(Int24(MIN_24_VALUE)))
+
+        assertThat(decode("0x05007fffff", function.outputParameters))
+            .isEqualTo(listOf(Int24(MAX_24_VALUE)))
+    }
+
+    @Test
+    fun `decode int32`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Int32>() {}))
+
+        assertThat(decode("0x0580000000", function.outputParameters))
+            .isEqualTo(listOf(Int32(kotlin.Int.MIN_VALUE.toLong())))
+
+        assertThat(decode("0x057fffffff", function.outputParameters))
+            .isEqualTo(listOf(Int32(kotlin.Int.MAX_VALUE.toLong())))
+    }
+
+    @Test
+    fun `decode int40`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Int40>() {}))
+
+        assertThat(decode("0x06ffffff8000000000", function.outputParameters))
+            .isEqualTo(listOf(Int40(MIN_40_VALUE)))
+
+        assertThat(decode("0x060000007fffffffff", function.outputParameters))
+            .isEqualTo(listOf(Int40(MAX_40_VALUE)))
+    }
+
+    @Test
+    fun `decode int48`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Int48>() {}))
+
+        assertThat(decode("0x06ffff800000000000", function.outputParameters))
+            .isEqualTo(listOf(Int48(MIN_48_VALUE)))
+
+        assertThat(decode("0x0600007fffffffffff", function.outputParameters))
+            .isEqualTo(listOf(Int48(MAX_48_VALUE)))
+    }
+
+    @Test
+    fun `decode int56`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Int56>() {}))
+
+        assertThat(decode("0x06ff80000000000000", function.outputParameters))
+            .isEqualTo(listOf(Int56(MIN_56_VALUE)))
+
+        assertThat(decode("0x06007fffffffffffff", function.outputParameters))
+            .isEqualTo(listOf(Int56(MAX_56_VALUE)))
+    }
+
+    @Test
+    fun `decode int64`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Int64>() {}))
+
+        assertThat(decode("0x068000000000000000", function.outputParameters))
+            .isEqualTo(listOf(Int64(Long.MIN_VALUE)))
+
+        assertThat(decode("0x067fffffffffffffff", function.outputParameters))
+            .isEqualTo(listOf(Int64(kotlin.Long.MAX_VALUE)))
+    }
+
+    @Test
+    fun `decode int72`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Int72>() {}))
+
+        assertThat(decode("0x110009800000000000000001", function.outputParameters))
+            .isEqualTo(listOf(Int72(MIN_72_VALUE)))
+
+        assertThat(decode("0x11000a00800000000000000000", function.outputParameters))
+            .isEqualTo(listOf(Int72(MAX_72_VALUE)))
+    }
+
+    @Test
+    fun `decode int256`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Int256>() {}))
+
+        assertThat(
+            decode(
+                "0x1100208000000000000000000000000000000000000000000000000000000000000001",
+                function.outputParameters
+            )
+        ).isEqualTo(listOf(Int256(MIN_256_VALUE)))
+
+        assertThat(
+            decode(
+                "0x110021008000000000000000000000000000000000000000000000000000000000000000",
+                function.outputParameters
+            )
+        ).isEqualTo(listOf(Int256(MAX_256_VALUE)))
+    }
+
+    @Test
+    fun `decode uint8`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Uint8>() {}))
+
+        assertThat(decode("0x040000", function.outputParameters))
+            .isEqualTo(listOf(Uint8(0)))
+
+        assertThat(decode("0x0400ff", function.outputParameters))
+            .isEqualTo(listOf(Uint8(UMAX_8_VALUE)))
+    }
+
+    @Test
+    fun `decode uint16`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Uint16>() {}))
+
+        assertThat(decode("0x0500000000", function.outputParameters))
+            .isEqualTo(listOf(Uint16(0)))
+
+        assertThat(decode("0x050000ffff", function.outputParameters))
+            .isEqualTo(listOf(Uint16(UMAX_16_VALUE)))
+    }
+
+    @Test
+    fun `decode uint24`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Uint24>() {}))
+
+        assertThat(decode("0x0500000000", function.outputParameters))
+            .isEqualTo(listOf(Uint24(0)))
+
+        assertThat(decode("0x0500ffffff", function.outputParameters))
+            .isEqualTo(listOf(Uint24(UMAX_24_VALUE)))
+    }
+
+    @Test
+    fun `decode uint32`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Uint32>() {}))
+
+        assertThat(decode("0x060000000000000000", function.outputParameters))
+            .isEqualTo(listOf(Uint32(0)))
+
+        assertThat(decode("0x0600000000ffffffff", function.outputParameters))
+            .isEqualTo(listOf(Uint32(UMAX_32_VALUE)))
+    }
+
+    @Test
+    fun `decode uint40`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Uint40>() {}))
+
+        assertThat(decode("0x060000000000000000", function.outputParameters))
+            .isEqualTo(listOf(Uint40(0)))
+
+        assertThat(decode("0x06000000ffffffffff", function.outputParameters))
+            .isEqualTo(listOf(Uint40(UMAX_40_VALUE)))
+    }
+
+    @Test
+    fun `decode uint48`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Uint48>() {}))
+
+        assertThat(decode("0x060000000000000000", function.outputParameters))
+            .isEqualTo(listOf(Uint48(0)))
+
+        assertThat(decode("0x060000ffffffffffff", function.outputParameters))
+            .isEqualTo(listOf(Uint48(UMAX_48_VALUE)))
+    }
+
+    @Test
+    fun `decode uint56`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Uint56>() {}))
+
+        assertThat(decode("0x060000000000000000", function.outputParameters))
+            .isEqualTo(listOf(Uint56(0)))
+
+        assertThat(decode("0x0600ffffffffffffff", function.outputParameters))
+            .isEqualTo(listOf(Uint56(UMAX_56_VALUE)))
+    }
+
+    @Test
+    fun `decode uint64`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Uint64>() {}))
+
+        assertThat(decode("0x11000100", function.outputParameters))
+            .isEqualTo(listOf(Uint64(0)))
+
+        assertThat(decode("0x11000900ffffffffffffffff", function.outputParameters))
+            .isEqualTo(listOf(Uint64(UMAX_64_VALUE)))
+    }
+
+    @Test
+    fun `decode uint256`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Uint256>() {}))
+
+        assertThat(decode("0x11000100", function.outputParameters))
+            .isEqualTo(listOf(Uint256(0)))
+
+        assertThat(
+            decode(
+                "0x11002100ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                function.outputParameters
+            )
+        ).isEqualTo(listOf(Uint256(UMAX_256_VALUE)))
+    }
 
     @Test
     fun `decode string array`() {
