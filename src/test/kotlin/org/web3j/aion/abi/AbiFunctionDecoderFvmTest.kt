@@ -31,7 +31,7 @@ import org.web3j.abi.datatypes.generated.Uint64
 import org.web3j.abi.datatypes.generated.Uint8
 
 /**
- * TODO Array tests
+ * TODO Add array and 2D array tests.
  */
 class AbiFunctionDecoderFvmTest {
 

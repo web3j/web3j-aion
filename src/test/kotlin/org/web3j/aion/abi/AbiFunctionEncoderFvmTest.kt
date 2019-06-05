@@ -31,7 +31,7 @@ import org.web3j.abi.datatypes.generated.Uint8
 import java.math.BigInteger
 
 /**
- * TODO Add array tests.
+ * TODO Add array and 2D array tests.
  */
 class AbiFunctionEncoderFvmTest {
 
