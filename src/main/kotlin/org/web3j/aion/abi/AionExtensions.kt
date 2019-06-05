@@ -5,8 +5,6 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt
 import org.web3j.utils.Numeric
 import java.math.BigInteger
 
-const val ADDRESS_BIT_LENGTH = avm.Address.LENGTH * 8
-
 val org.web3j.protocol.core.methods.request.Transaction.nrg: String
     get() = gas
 

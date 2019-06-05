@@ -1,6 +1,5 @@
 package org.web3j.aion.codegen
 
-import org.web3j.aion.abi.ADDRESS_BIT_LENGTH
 import org.web3j.aion.abi.AbiDefinitionParser
 import org.web3j.aion.codegen.AionFunctionWrapperGenerator.CommandLineRunner
 import org.web3j.codegen.Console.exitError
@@ -90,6 +89,10 @@ private class AionFunctionWrapperGenerator constructor(
                 exitError(e)
             }
         }
+    }
+
+    companion object {
+        const val ADDRESS_BIT_LENGTH = avm.Address.LENGTH * 8
     }
 }
 
