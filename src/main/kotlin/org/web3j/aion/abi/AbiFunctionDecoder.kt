@@ -62,7 +62,6 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
         outputParameters: List<TypeReference<Type<*>>>
     ): List<Type<*>> {
         return ABIDecoder(Numeric.hexStringToByteArray(rawInput)).run {
-            decodeMethodName() // FIXME Remove as method name won't be returned
             outputParameters.map { decodeResult(it, this) }
         }
     }
@@ -135,15 +134,15 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
         }
 
     private fun bitSize(input: String, regex: Regex): kotlin.Int? {
-        return regex.matchEntire(input)?.groupValues?.get(1)?.toInt()
+        return regex.matchEntire(input)?.groupValues?.get(1)?.toIntOrNull()
     }
 
     private fun newNumericInstance(bitSize: kotlin.Int?, decoder: ABIDecoder, unsigned: Boolean): IntType {
 
-        val className = "${if (unsigned) "Int" else "Uint"}${bitSize ?: ""}"
+        val className = "${if (unsigned) "Uint" else "Int"}${bitSize ?: ""}"
         val packageName = "org.web3j.abi.datatypes${if (bitSize != null) ".generated" else ""}"
 
-        val constructor = Class.forName("$packageName$className")
+        val constructor = Class.forName("$packageName.$className")
             .getDeclaredConstructor(BigInteger::class.java)
 
         return constructor.newInstance(BigInteger(decoder.decodeOneByteArray())) as IntType
