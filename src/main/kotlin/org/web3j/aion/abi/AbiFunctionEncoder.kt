@@ -24,7 +24,7 @@ import org.web3j.abi.datatypes.primitive.Long
 import org.web3j.abi.datatypes.primitive.Short
 import org.web3j.utils.Numeric
 
-object AbiFunctionEncoder : FunctionEncoder() {
+internal object AbiFunctionEncoder : FunctionEncoder() {
 
     override fun encodeFunction(function: Function): String {
         val params = function.inputParameters.map { it.toAionValue() }.toTypedArray()
