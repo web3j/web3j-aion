@@ -16,7 +16,7 @@ internal class UnsupportedRequest<S, T : Response<*>>(
     }
 
     override fun send(): T {
-        return responseType.newInstance().apply {
+        return responseType.getDeclaredConstructor().newInstance().apply {
             error = MethodNotFound
             jsonrpc = "2.0"
             id = 1
