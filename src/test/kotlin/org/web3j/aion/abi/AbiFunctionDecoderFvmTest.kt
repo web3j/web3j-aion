@@ -8,11 +8,10 @@ import org.web3j.abi.TypeReference
 import org.web3j.abi.datatypes.Bool
 import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.Function
-import org.web3j.abi.datatypes.Int
 import org.web3j.abi.datatypes.Utf8String
+import org.web3j.abi.datatypes.generated.Int128
 import org.web3j.abi.datatypes.generated.Int16
 import org.web3j.abi.datatypes.generated.Int24
-import org.web3j.abi.datatypes.generated.Int256
 import org.web3j.abi.datatypes.generated.Int32
 import org.web3j.abi.datatypes.generated.Int40
 import org.web3j.abi.datatypes.generated.Int48
@@ -20,9 +19,9 @@ import org.web3j.abi.datatypes.generated.Int56
 import org.web3j.abi.datatypes.generated.Int64
 import org.web3j.abi.datatypes.generated.Int72
 import org.web3j.abi.datatypes.generated.Int8
+import org.web3j.abi.datatypes.generated.Uint128
 import org.web3j.abi.datatypes.generated.Uint16
 import org.web3j.abi.datatypes.generated.Uint24
-import org.web3j.abi.datatypes.generated.Uint256
 import org.web3j.abi.datatypes.generated.Uint32
 import org.web3j.abi.datatypes.generated.Uint40
 import org.web3j.abi.datatypes.generated.Uint48
@@ -58,25 +57,6 @@ class AbiFunctionDecoderFvmTest {
         val function = Function("test", listOf(), listOf(object : TypeReference<Bool>() {}))
         assertThat(decode("0x0201", function.outputParameters))
             .isEqualTo(listOf(Bool(true)))
-    }
-
-    @Test
-    fun `decode int`() {
-        val function = Function("test", listOf(), listOf(object : TypeReference<Int>() {}))
-
-        assertThat(
-            decode(
-                "0x1100208000000000000000000000000000000000000000000000000000000000000001",
-                function.outputParameters
-            )
-        ).isEqualTo(listOf(Int(MIN_256_VALUE)))
-
-        assertThat(
-            decode(
-                "0x110021008000000000000000000000000000000000000000000000000000000000000000",
-                function.outputParameters
-            )
-        ).isEqualTo(listOf(Int(MAX_256_VALUE)))
     }
 
     @Test
@@ -164,7 +144,7 @@ class AbiFunctionDecoderFvmTest {
             .isEqualTo(listOf(Int64(Long.MIN_VALUE)))
 
         assertThat(decode("0x067fffffffffffffff", function.outputParameters))
-            .isEqualTo(listOf(Int64(kotlin.Long.MAX_VALUE)))
+            .isEqualTo(listOf(Int64(Long.MAX_VALUE)))
     }
 
     @Test
@@ -179,22 +159,22 @@ class AbiFunctionDecoderFvmTest {
     }
 
     @Test
-    fun `decode int256`() {
-        val function = Function("test", listOf(), listOf(object : TypeReference<Int256>() {}))
+    fun `decode int128`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Int128>() {}))
 
         assertThat(
             decode(
-                "0x1100208000000000000000000000000000000000000000000000000000000000000001",
+                "0x11001080000000000000000000000000000000",
                 function.outputParameters
             )
-        ).isEqualTo(listOf(Int256(MIN_256_VALUE)))
+        ).isEqualTo(listOf(Int128(MIN_128_VALUE)))
 
         assertThat(
             decode(
-                "0x110021008000000000000000000000000000000000000000000000000000000000000000",
+                "0x1100107fffffffffffffffffffffffffffffff",
                 function.outputParameters
             )
-        ).isEqualTo(listOf(Int256(MAX_256_VALUE)))
+        ).isEqualTo(listOf(Int128(MAX_128_VALUE)))
     }
 
     @Test
@@ -286,18 +266,18 @@ class AbiFunctionDecoderFvmTest {
     }
 
     @Test
-    fun `decode uint256`() {
-        val function = Function("test", listOf(), listOf(object : TypeReference<Uint256>() {}))
+    fun `decode uint128`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Uint128>() {}))
 
         assertThat(decode("0x11000100", function.outputParameters))
-            .isEqualTo(listOf(Uint256(0)))
+            .isEqualTo(listOf(Uint128(0)))
 
         assertThat(
             decode(
-                "0x11002100ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                "0x11001100ffffffffffffffffffffffffffffffff",
                 function.outputParameters
             )
-        ).isEqualTo(listOf(Uint256(UMAX_256_VALUE)))
+        ).isEqualTo(listOf(Uint128(UMAX_128_VALUE)))
     }
 
     @Test

@@ -77,12 +77,14 @@ internal object AbiFunctionEncoder : FunctionEncoder() {
                 16 -> value.shortValueExact()
                 24, 32 -> value.intValueExact()
                 40, 48, 56, 64 -> value.longValueExact()
+                in 136..256 -> throw ABIException("Unsupported type: int$bitSize")
                 else -> value.toByteArray() // Avoid overflow
             }
             is Uint -> when (bitSize) {
                 8 -> value.shortValueExact()
                 16, 24 -> value.intValueExact()
                 32, 40, 48, 56 -> value.longValueExact()
+                in 136..256 -> throw ABIException("Unsupported type: uint$bitSize")
                 else -> value.toByteArray() // Avoid overflow
             }
             else -> throw ABIException("Unknown type ${javaClass.canonicalName}")

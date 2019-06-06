@@ -2,16 +2,19 @@ package org.web3j.aion.abi
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import org.aion.avm.userlib.abi.ABIException
 import org.junit.Test
+import org.junit.jupiter.api.assertThrows
 import org.web3j.abi.FunctionEncoder.encode
 import org.web3j.abi.datatypes.Bool
 import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.Function
+import org.web3j.abi.datatypes.Int
 import org.web3j.abi.datatypes.Uint
 import org.web3j.abi.datatypes.Utf8String
+import org.web3j.abi.datatypes.generated.Int128
 import org.web3j.abi.datatypes.generated.Int16
 import org.web3j.abi.datatypes.generated.Int24
-import org.web3j.abi.datatypes.generated.Int256
 import org.web3j.abi.datatypes.generated.Int32
 import org.web3j.abi.datatypes.generated.Int40
 import org.web3j.abi.datatypes.generated.Int48
@@ -19,9 +22,9 @@ import org.web3j.abi.datatypes.generated.Int56
 import org.web3j.abi.datatypes.generated.Int64
 import org.web3j.abi.datatypes.generated.Int72
 import org.web3j.abi.datatypes.generated.Int8
+import org.web3j.abi.datatypes.generated.Uint128
 import org.web3j.abi.datatypes.generated.Uint16
 import org.web3j.abi.datatypes.generated.Uint24
-import org.web3j.abi.datatypes.generated.Uint256
 import org.web3j.abi.datatypes.generated.Uint32
 import org.web3j.abi.datatypes.generated.Uint40
 import org.web3j.abi.datatypes.generated.Uint48
@@ -57,12 +60,10 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    fun `encode int`() {
-        assertThat(encode(Function("test", listOf(org.web3j.abi.datatypes.Int(MIN_256_VALUE)), listOf())))
-            .isEqualTo("0x210004746573741100208000000000000000000000000000000000000000000000000000000000000001")
-
-        assertThat(encode(Function("test", listOf(org.web3j.abi.datatypes.Int(MAX_256_VALUE)), listOf())))
-            .isEqualTo("0x21000474657374110021008000000000000000000000000000000000000000000000000000000000000000")
+    fun `encode int throws ABIException`() {
+        assertThrows<ABIException> {
+            encode(Function("test", listOf(Int(BigInteger.ZERO)), listOf()))
+        }
     }
 
     @Test
@@ -118,35 +119,33 @@ class AbiFunctionEncoderFvmTest {
         assertThat(encode(Function("test", listOf(Int56(MAX_56_VALUE)), listOf())))
             .isEqualTo("0x2100047465737406007fffffffffffff")
 
-        assertThat(encode(Function("test", listOf(Int64(kotlin.Long.MIN_VALUE)), listOf())))
+        assertThat(encode(Function("test", listOf(Int64(Long.MIN_VALUE)), listOf())))
             .isEqualTo("0x21000474657374068000000000000000")
 
-        assertThat(encode(Function("test", listOf(Int64(kotlin.Long.MAX_VALUE)), listOf())))
+        assertThat(encode(Function("test", listOf(Int64(Long.MAX_VALUE)), listOf())))
             .isEqualTo("0x21000474657374067fffffffffffffff")
     }
 
     @Test
-    fun `encode int72 to int256`() {
+    fun `encode int72 to int128`() {
         assertThat(encode(Function("test", listOf(Int72(MIN_72_VALUE)), listOf())))
             .isEqualTo("0x21000474657374110009800000000000000001")
 
         assertThat(encode(Function("test", listOf(Int72(MAX_72_VALUE)), listOf())))
             .isEqualTo("0x2100047465737411000a00800000000000000000")
 
-        assertThat(encode(Function("test", listOf(Int256(MIN_256_VALUE)), listOf())))
-            .isEqualTo("0x210004746573741100208000000000000000000000000000000000000000000000000000000000000001")
+        assertThat(encode(Function("test", listOf(Int128(MIN_128_VALUE)), listOf())))
+            .isEqualTo("0x2100047465737411001080000000000000000000000000000000")
 
-        assertThat(encode(Function("test", listOf(Int256(MAX_256_VALUE)), listOf())))
-            .isEqualTo("0x21000474657374110021008000000000000000000000000000000000000000000000000000000000000000")
+        assertThat(encode(Function("test", listOf(Int128(MAX_128_VALUE)), listOf())))
+            .isEqualTo("0x210004746573741100107fffffffffffffffffffffffffffffff")
     }
 
     @Test
-    fun `encode uint`() {
-        assertThat(encode(Function("test", listOf(Uint(BigInteger.ZERO)), listOf())))
-            .isEqualTo("0x2100047465737411000100")
-
-        assertThat(encode(Function("test", listOf(Uint(UMAX_256_VALUE)), listOf())))
-            .isEqualTo("0x2100047465737411002100ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+    fun `encode uint throws ABIException`() {
+        assertThrows<ABIException> {
+            encode(Function("test", listOf(Uint(BigInteger.ZERO)), listOf()))
+        }
     }
 
     @Test
@@ -201,18 +200,18 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    fun `encode uint64 to uint256`() {
+    fun `encode uint64 to uint128`() {
         assertThat(encode(Function("test", listOf(Uint64(0)), listOf())))
             .isEqualTo("0x2100047465737411000100")
 
         assertThat(encode(Function("test", listOf(Uint64(UMAX_64_VALUE)), listOf())))
             .isEqualTo("0x2100047465737411000900ffffffffffffffff")
 
-        assertThat(encode(Function("test", listOf(Uint256(0)), listOf())))
+        assertThat(encode(Function("test", listOf(Uint128(0)), listOf())))
             .isEqualTo("0x2100047465737411000100")
 
-        assertThat(encode(Function("test", listOf(Uint256(UMAX_256_VALUE)), listOf())))
-            .isEqualTo("0x2100047465737411002100ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+        assertThat(encode(Function("test", listOf(Uint128(UMAX_128_VALUE)), listOf())))
+            .isEqualTo("0x2100047465737411001100ffffffffffffffffffffffffffffffff")
     }
 
     @Test
