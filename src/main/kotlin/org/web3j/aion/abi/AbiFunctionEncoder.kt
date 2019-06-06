@@ -27,24 +27,24 @@ import org.web3j.utils.Numeric
 internal object AbiFunctionEncoder : FunctionEncoder() {
 
     override fun encodeFunction(function: Function): String {
-        val params = function.inputParameters.map { it.toAionValue() }.toTypedArray()
+        val params = function.inputParameters.map { it.toAion() }.toTypedArray()
         return Numeric.toHexString(ABIUtil.encodeMethodArguments(function.name, *params))
     }
 
     override fun encodeParameters(parameters: List<Type<Any>>): String {
-        val params = parameters.map { it.toAionValue() }.toTypedArray()
+        val params = parameters.map { it.toAion() }.toTypedArray()
         return Numeric.toHexString(ABIUtil.encodeDeploymentArguments(*params))
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun <T> Type<T>.toAionValue(): Any {
+    private fun <T> Type<T>.toAion(): Any {
         return when (this) {
             is Address -> avm.Address(toString().toByteArray())
             is FixedPointType -> throw ABIException("Unsupported fixed point type")
-            is IntType -> (this as IntType).toAionValue()
+            is IntType -> (this as IntType).toAion()
             is Array<*> -> when (this.componentType) {
                 Address::class.java ->
-                    (value as List<Type<avm.Address>>).map { it.toAionValue() }.toTypedArray()
+                    (value as List<Type<avm.Address>>).map { it.toAion() }.toTypedArray()
                 Utf8String::class.java ->
                     (value as List<Type<String>>).map { it.value }.toTypedArray()
                 Char::class.java ->
@@ -70,7 +70,7 @@ internal object AbiFunctionEncoder : FunctionEncoder() {
         }
     }
 
-    private fun IntType.toAionValue(): Any {
+    private fun IntType.toAion(): Any {
         return when (this) {
             is org.web3j.abi.datatypes.Int -> when (bitSize) {
                 8 -> value.byteValueExact()
