@@ -13,8 +13,10 @@ import org.web3j.abi.datatypes.Int
 import org.web3j.abi.datatypes.Uint
 import org.web3j.abi.datatypes.Utf8String
 import org.web3j.abi.datatypes.generated.Int128
+import org.web3j.abi.datatypes.generated.Int136
 import org.web3j.abi.datatypes.generated.Int16
 import org.web3j.abi.datatypes.generated.Int24
+import org.web3j.abi.datatypes.generated.Int256
 import org.web3j.abi.datatypes.generated.Int32
 import org.web3j.abi.datatypes.generated.Int40
 import org.web3j.abi.datatypes.generated.Int48
@@ -23,8 +25,10 @@ import org.web3j.abi.datatypes.generated.Int64
 import org.web3j.abi.datatypes.generated.Int72
 import org.web3j.abi.datatypes.generated.Int8
 import org.web3j.abi.datatypes.generated.Uint128
+import org.web3j.abi.datatypes.generated.Uint136
 import org.web3j.abi.datatypes.generated.Uint16
 import org.web3j.abi.datatypes.generated.Uint24
+import org.web3j.abi.datatypes.generated.Uint256
 import org.web3j.abi.datatypes.generated.Uint32
 import org.web3j.abi.datatypes.generated.Uint40
 import org.web3j.abi.datatypes.generated.Uint48
@@ -60,9 +64,15 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    fun `encode int throws ABIException`() {
+    fun `encode int 136 to int256 throws ABIException`() {
         assertThrows<ABIException> {
             encode(Function("test", listOf(Int(BigInteger.ZERO)), listOf()))
+        }
+        assertThrows<ABIException> {
+            encode(Function("test", listOf(Int136(BigInteger.ZERO)), listOf()))
+        }
+        assertThrows<ABIException> {
+            encode(Function("test", listOf(Int256(BigInteger.ZERO)), listOf()))
         }
     }
 
@@ -85,7 +95,7 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    fun `encode int24 to int32 as int`() {
+    fun `encode int24 to int32`() {
         assertThat(encode(Function("test", listOf(Int24(MIN_24_VALUE)), listOf())))
             .isEqualTo("0x2100047465737405ff800000")
 
@@ -142,9 +152,15 @@ class AbiFunctionEncoderFvmTest {
     }
 
     @Test
-    fun `encode uint throws ABIException`() {
+    fun `encode uint136 to uint256 throws ABIException`() {
         assertThrows<ABIException> {
             encode(Function("test", listOf(Uint(BigInteger.ZERO)), listOf()))
+        }
+        assertThrows<ABIException> {
+            encode(Function("test", listOf(Uint136(BigInteger.ZERO)), listOf()))
+        }
+        assertThrows<ABIException> {
+            encode(Function("test", listOf(Uint256(BigInteger.ZERO)), listOf()))
         }
     }
 
