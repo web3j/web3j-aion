@@ -35,5 +35,4 @@ class AionFvmIntegrationTest : AionIntegrationTest() {
             assertThat(greet().send()).isEqualTo("Aion test")
         }
     }
-
 }

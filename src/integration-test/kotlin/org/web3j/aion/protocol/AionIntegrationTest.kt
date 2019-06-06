@@ -20,7 +20,7 @@ abstract class AionIntegrationTest {
     companion object {
 
         @JvmStatic
-        protected val NETWORK = MASTERY
+        protected val NETWORK = LOCALHOST
 
         private val RPC_URL = mapOf(
             LOCALHOST to "http://localhost:8545",
