@@ -56,7 +56,7 @@ abstract class AionIntegrationTest {
 
         @Container
         @JvmStatic
-        private val AION = KGenericContainer("aionnetwork/aion:0.3.4")
+        private val AION = KGenericContainer("aionnetwork/aion:0.4.0.1")
             .withClasspathResourceMapping("aion/config", "/aion/custom/config", BindMode.READ_ONLY)
             .withClasspathResourceMapping("aion/keystore", "/aion/custom/keystore", BindMode.READ_ONLY)
             .withClasspathResourceMapping("aion/log", "/aion/custom/log", BindMode.READ_WRITE)
