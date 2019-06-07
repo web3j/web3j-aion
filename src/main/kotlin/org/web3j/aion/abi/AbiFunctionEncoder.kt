@@ -38,7 +38,7 @@ internal object AbiFunctionEncoder : FunctionEncoder() {
     @Suppress("UNCHECKED_CAST")
     private fun <T> Type<T>.toAion(): Any {
         return when (this) {
-            is Address -> avm.Address(toString().toByteArray())
+            is Address -> avm.Address(Numeric.hexStringToByteArray(value.drop(2)))
             is FixedPointType -> throw ABIException("Unsupported fixed point type")
             is IntType -> (this as IntType).toAion()
             is Array<*> -> when (this.componentType) {

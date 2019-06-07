@@ -6,6 +6,7 @@ import org.aion.avm.userlib.abi.ABIException
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 import org.web3j.abi.FunctionEncoder.encode
+import org.web3j.abi.datatypes.Address
 import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.Utf8String
@@ -21,6 +22,13 @@ import org.web3j.abi.datatypes.primitive.Short
  * TODO 2 dimensional array tests.
  */
 class AbiFunctionEncoderAvmTest {
+
+    @Test
+    internal fun `encode address`() {
+        val address = Address(256, "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f")
+        assertThat(encode(Function("test", listOf(address), listOf())))
+            .isEqualTo("0x2100047465737422a04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f")
+    }
 
     @Test
     internal fun `encode char`() {
