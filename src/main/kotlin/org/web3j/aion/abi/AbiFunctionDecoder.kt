@@ -36,6 +36,7 @@ import org.web3j.abi.datatypes.primitive.Float
 import org.web3j.abi.datatypes.primitive.Int
 import org.web3j.abi.datatypes.primitive.Long
 import org.web3j.abi.datatypes.primitive.Short
+import org.web3j.aion.AionConstants.ADDRESS_BIT_LENGTH
 import org.web3j.utils.Numeric
 import java.lang.reflect.ParameterizedType
 import java.math.BigInteger
@@ -204,7 +205,7 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
     @Suppress("UNCHECKED_CAST")
     private fun <T> T.toWeb3j(): Type<*> {
         return when (this) {
-            is avm.Address -> Address(BigInteger(unwrap()))
+            is avm.Address -> Address(ADDRESS_BIT_LENGTH, Numeric.toHexString(unwrap()))
             is Boolean -> Bool(this)
             is kotlin.Char -> Char(this)
             is kotlin.Byte -> Byte(this)

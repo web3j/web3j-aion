@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import org.junit.Test
 import org.web3j.abi.FunctionReturnDecoder.decode
 import org.web3j.abi.TypeReference
+import org.web3j.abi.datatypes.Address
 import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.primitive.Byte
@@ -14,11 +15,30 @@ import org.web3j.abi.datatypes.primitive.Float
 import org.web3j.abi.datatypes.primitive.Int
 import org.web3j.abi.datatypes.primitive.Long
 import org.web3j.abi.datatypes.primitive.Short
+import org.web3j.aion.AionConstants.ADDRESS_BIT_LENGTH
 
 /**
  * TODO 2 dimensional array tests.
  */
 class AbiFunctionDecoderAvmTest {
+
+    @Test
+    fun `decode address`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<Address>() {}))
+        assertThat(
+            decode(
+                "0x22a04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f",
+                function.outputParameters
+            )
+        ).isEqualTo(
+            listOf(
+                Address(
+                    ADDRESS_BIT_LENGTH,
+                    "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f"
+                )
+            )
+        )
+    }
 
     @Test
     fun `decode char`() {
@@ -91,6 +111,37 @@ class AbiFunctionDecoderAvmTest {
 
         assertThat(decode("0x087fefffffffffffff", function.outputParameters))
             .isEqualTo(listOf(Double(kotlin.Double.MAX_VALUE)))
+    }
+
+    @Test
+    fun `decode address array`() {
+        val function = Function("test", listOf(), listOf(object : TypeReference<DynamicArray<Address>>() {}))
+
+        assertThat(decode("0x31220000", function.outputParameters))
+            .isEqualTo(listOf(DynamicArray(Address::class.java)))
+
+        assertThat(
+            decode(
+                "0x3122000222a04462684b510796c186d19abfa6929742f79394583d6efb1243bbb47" +
+                    "3f21d9f22a02e5aad91bed3a1c6bbd1958cea6f0ecedd31ac8801a435913b7ada136dcdfa",
+                function.outputParameters
+            )
+        ).isEqualTo(
+            listOf(
+                DynamicArray(
+                    Address::class.java,
+                    listOf(
+                        Address(
+                            ADDRESS_BIT_LENGTH,
+                            "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f"
+                        ), Address(
+                            ADDRESS_BIT_LENGTH,
+                            "0xa02e5aad91bed3a1c6bbd1958cea6f0ecedd31ac8801a435913b7ada136dcdfa"
+                        )
+                    )
+                )
+            )
+        )
     }
 
     @Test

@@ -2,7 +2,6 @@ package org.web3j.aion.abi
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import org.aion.avm.userlib.abi.ABIException
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 import org.web3j.abi.FunctionEncoder.encode
@@ -103,11 +102,41 @@ class AbiFunctionEncoderAvmTest {
 
     @Test
     internal fun `encode 2D string array`() {
-        assertThrows<ABIException> {
+        assertThrows<NotImplementedError> {
             val param = DynamicArray(
                 DynamicArray::class.java,
                 DynamicArray(Utf8String::class.java, Utf8String("Hello AVM"))
             )
+            encode(Function("test", listOf(param), listOf()))
+        }
+    }
+
+    @Test
+    internal fun `encode address array`() {
+        val empty = DynamicArray(Address::class.java)
+        assertThat(encode(Function("test", listOf(empty), listOf())))
+            .isEqualTo("0x2100047465737431220000")
+
+        val abc = DynamicArray(
+            Address::class.java,
+            listOf(
+                Address(256, "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f"),
+                Address(256, "0xa02e5aad91bed3a1c6bbd1958cea6f0ecedd31ac8801a435913b7ada136dcdfa")
+            )
+        )
+        assertThat(encode(Function("test", listOf(abc), listOf())))
+            .isEqualTo(
+                "0x210004746573743122000222a04462684b510796c186d19abfa6929742f79394583d6efb1243bbb47" +
+                    "3f21d9f22a02e5aad91bed3a1c6bbd1958cea6f0ecedd31ac8801a435913b7ada136dcdfa"
+            )
+    }
+
+    @Test
+    internal fun `encode 2D address array`() {
+        val address = Address(256, "0xa04462684b510796c186d19abfa6929742f79394583d6efb1243bbb473f21d9f")
+
+        assertThrows<NotImplementedError> {
+            val param = DynamicArray(DynamicArray::class.java, DynamicArray(Address::class.java, address))
             encode(Function("test", listOf(param), listOf()))
         }
     }
@@ -121,6 +150,19 @@ class AbiFunctionEncoderAvmTest {
         val abc = DynamicArray(Char::class.java, listOf(Char('a'), Char('b'), Char('c')))
         assertThat(encode(Function("test", listOf(abc), listOf())))
             .isEqualTo("0x21000474657374130003006100620063")
+    }
+
+    @Test(expected = NotImplementedError::class)
+    internal fun `encode 2D char array`() {
+        val param = DynamicArray(
+            DynamicArray::class.java,
+            listOf(
+                DynamicArray(Char::class.java, listOf(Char('a'), Char('b'), Char('c'))),
+                DynamicArray(Char::class.java, listOf(Char('d'), Char('e'), Char('f')))
+            )
+        )
+        assertThat(encode(Function("test", listOf(param), listOf())))
+            .isEqualTo("0x2100047465737431130002130003006100620063130003006400650066")
     }
 
     @Test

@@ -7,10 +7,12 @@ import org.web3j.abi.FunctionEncoder
 import org.web3j.abi.datatypes.Address
 import org.web3j.abi.datatypes.Array
 import org.web3j.abi.datatypes.Bool
+import org.web3j.abi.datatypes.Bytes
+import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.FixedPointType
 import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.IntType
-import org.web3j.abi.datatypes.NumericType
+import org.web3j.abi.datatypes.StaticArray
 import org.web3j.abi.datatypes.Type
 import org.web3j.abi.datatypes.Uint
 import org.web3j.abi.datatypes.Utf8String
@@ -22,6 +24,7 @@ import org.web3j.abi.datatypes.primitive.Int
 import org.web3j.abi.datatypes.primitive.Long
 import org.web3j.abi.datatypes.primitive.Short
 import org.web3j.utils.Numeric
+import java.math.BigInteger
 
 internal object AbiFunctionEncoder : FunctionEncoder() {
 
@@ -43,7 +46,7 @@ internal object AbiFunctionEncoder : FunctionEncoder() {
             is IntType -> (this as IntType).toAion()
             is Array<*> -> when (this.componentType) {
                 Address::class.java ->
-                    (value as List<Type<avm.Address>>).map { it.toAion() }.toTypedArray()
+                    (value as List<Type<Address>>).map { it.toAion() as avm.Address }.toTypedArray()
                 Utf8String::class.java ->
                     (value as List<Type<String>>).map { it.value }.toTypedArray()
                 Char::class.java ->
@@ -62,7 +65,14 @@ internal object AbiFunctionEncoder : FunctionEncoder() {
                     (value as List<Type<kotlin.Float>>).map { it.value }.toFloatArray()
                 Double::class.java ->
                     (value as List<Type<kotlin.Double>>).map { it.value }.toDoubleArray()
-                NumericType::class.java -> TODO()
+                IntType::class.java ->
+                    (value as List<Type<BigInteger>>).map { (it as IntType).toAion() }.toTypedArray()
+                Bytes::class.java ->
+                    (value as List<Type<ByteArray>>).map { it.value }.toTypedArray()
+                DynamicArray::class.java, StaticArray::class.java ->
+                    TODO("2D arrays not implemented")
+//                      (value as List<DynamicArray<Type<Char>>>)
+//                      .map { it.toAion() as CharArray }.toTypedArray()
                 else -> throw ABIException("Unknown type $javaClass")
             }
             else -> value as Any // Covers primitive types
