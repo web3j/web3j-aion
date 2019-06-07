@@ -14,7 +14,6 @@ import org.web3j.abi.datatypes.NumericType
 import org.web3j.abi.datatypes.Type
 import org.web3j.abi.datatypes.Uint
 import org.web3j.abi.datatypes.Utf8String
-import org.web3j.abi.datatypes.primitive.Boolean
 import org.web3j.abi.datatypes.primitive.Byte
 import org.web3j.abi.datatypes.primitive.Char
 import org.web3j.abi.datatypes.primitive.Double
@@ -49,8 +48,8 @@ internal object AbiFunctionEncoder : FunctionEncoder() {
                     (value as List<Type<String>>).map { it.value }.toTypedArray()
                 Char::class.java ->
                     (value as List<Type<kotlin.Char>>).map { it.value }.toCharArray()
-                Bool::class.java, Boolean::class.java ->
-                    (value as List<Type<kotlin.Boolean>>).map { it.value }.toBooleanArray()
+                Bool::class.java ->
+                    (value as List<Type<Boolean>>).map { it.value }.toBooleanArray()
                 Byte::class.java ->
                     (value as List<Type<kotlin.Byte>>).map { it.value }.toByteArray()
                 Short::class.java ->
