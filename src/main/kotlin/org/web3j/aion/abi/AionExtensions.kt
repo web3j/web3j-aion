@@ -1,5 +1,6 @@
 package org.web3j.aion.abi
 
+import org.web3j.crypto.RawTransaction
 import org.web3j.protocol.core.methods.response.Transaction
 import org.web3j.protocol.core.methods.response.TransactionReceipt
 import org.web3j.utils.Numeric
@@ -46,3 +47,9 @@ var TransactionReceipt.nrgRaw: String
     set(value) {
         setGasUsed(value)
     }
+
+val RawTransaction.nrg: BigInteger
+    get() = gasLimit
+
+val RawTransaction.nrgPrice: BigInteger
+    get() = gasPrice
