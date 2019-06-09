@@ -1,15 +1,17 @@
 package org.web3j.aion.protocol
 
 import org.junit.jupiter.api.BeforeAll
-import org.testcontainers.containers.BindMode
-import org.testcontainers.containers.GenericContainer
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
+import org.web3j.aion.crypto.Ed25519KeyPair
 import org.web3j.aion.protocol.AionIntegrationTest.Network.LOCALHOST
 import org.web3j.aion.protocol.AionIntegrationTest.Network.MASTERY
+import org.web3j.crypto.Credentials
 import org.web3j.protocol.http.HttpService
+import org.web3j.tx.RawTransactionManager
+import org.web3j.tx.TransactionManager
+import org.web3j.utils.Numeric
+import java.math.BigInteger
 
-@Testcontainers
+// @Testcontainers
 abstract class AionIntegrationTest {
 
     enum class Network {
@@ -20,10 +22,11 @@ abstract class AionIntegrationTest {
     companion object {
 
         @JvmStatic
-        protected val NETWORK = LOCALHOST
+        protected val NETWORK = MASTERY
 
         private val RPC_URL = mapOf(
             LOCALHOST to "http://localhost:8545",
+//            LOCALHOST to "http://${AION.containerIpAddress}:${AION.getMappedPort(8545)}/",
             MASTERY to "https://aion.api.nodesmith.io/v1/mastery/jsonrpc?apiKey=7b1d449f07774200bc1000a8b0eb1a9e"
         )
 
@@ -42,27 +45,32 @@ abstract class AionIntegrationTest {
         @JvmStatic
         protected lateinit var aion: Aion
 
+        @JvmStatic
+        protected lateinit var manager: TransactionManager
+
         @BeforeAll
         @JvmStatic
         fun initClient() {
-            "http://${AION.containerIpAddress}:${AION.getMappedPort(8545)}/".apply {
-                aion = Aion.build(HttpService(this))
-            }
+            aion = Aion.build(HttpService(RPC_URL[NETWORK]))
 
-            if (NETWORK != MASTERY) {
+            val bytes = Numeric.hexStringToByteArray(PRIVATE_KEY.getValue(NETWORK))
+            val keyPair = Ed25519KeyPair.create(BigInteger(bytes))
+            manager = RawTransactionManager(aion, Credentials.create(keyPair))
+
+            if (NETWORK != MASTERY) { // Unlock account not supported in Nodesmith
                 aion.personalUnlockAccount(ACCOUNT[NETWORK], "410n").send()
             }
         }
 
-        @Container
-        @JvmStatic
-        private val AION = KGenericContainer("aionnetwork/aion:0.4.0.1")
-            .withClasspathResourceMapping("aion/config", "/aion/custom/config", BindMode.READ_ONLY)
-            .withClasspathResourceMapping("aion/keystore", "/aion/custom/keystore", BindMode.READ_ONLY)
-            .withClasspathResourceMapping("aion/log", "/aion/custom/log", BindMode.READ_WRITE)
-            .withCommand("/aion/aion.sh --network custom")
-            .withExposedPorts(8545)
+//        @Container
+//        @JvmStatic
+//        private val AION = KGenericContainer("aionnetwork/aion:0.4.0.1")
+//            .withClasspathResourceMapping("aion/config", "/aion/custom/config", BindMode.READ_ONLY)
+//            .withClasspathResourceMapping("aion/keystore", "/aion/custom/keystore", BindMode.READ_ONLY)
+//            .withClasspathResourceMapping("aion/log", "/aion/custom/log", BindMode.READ_WRITE)
+//            .withCommand("/aion/aion.sh --network custom")
+//            .withExposedPorts(8545)
 
-        class KGenericContainer(imageName: String) : GenericContainer<KGenericContainer>(imageName)
+//        class KGenericContainer(imageName: String) : GenericContainer<KGenericContainer>(imageName)
     }
 }
