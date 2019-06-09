@@ -1,18 +1,16 @@
 package org.web3j.aion.tx
 
-import org.web3j.aion.ens.AionEnsResolver
+import avm.Address
 import org.web3j.crypto.Credentials
+import org.web3j.ens.EnsResolver
 import org.web3j.protocol.Web3j
 import org.web3j.tx.Contract
-import org.web3j.tx.RawTransactionManager
 import org.web3j.tx.TransactionManager
 import org.web3j.tx.gas.ContractGasProvider
+import org.web3j.tx.gas.StaticGasProvider
+import java.math.BigInteger
 
-open class AionContract : Contract {
-
-    init {
-        ensResolver = AionEnsResolver(web3j)
-    }
+abstract class AionContract : Contract {
 
     protected constructor(
         contractBinary: String,
@@ -20,7 +18,10 @@ open class AionContract : Contract {
         web3j: Web3j,
         transactionManager: TransactionManager,
         gasProvider: ContractGasProvider
-    ) : super(contractBinary, contractAddress, web3j, transactionManager, gasProvider)
+    ) : super(
+        EnsResolver(web3j, EnsResolver.DEFAULT_SYNC_THRESHOLD, Address.LENGTH),
+        contractBinary, contractAddress, web3j, transactionManager, gasProvider
+    )
 
     protected constructor(
         contractBinary: String,
@@ -28,7 +29,36 @@ open class AionContract : Contract {
         web3j: Web3j,
         credentials: Credentials,
         gasProvider: ContractGasProvider
-    ) : this(contractBinary, contractAddress, web3j, RawTransactionManager(web3j, credentials), gasProvider)
+    ) : this(
+        contractBinary, contractAddress, web3j,
+        AionTransactionManager(web3j, credentials),
+        gasProvider
+    )
 
-    override fun resolveContractAddress(contractAddress: String?) = contractAddress
+    @Deprecated(message = "Removed in v5.0")
+    protected constructor(
+        contractBinary: String,
+        contractAddress: String?,
+        web3j: Web3j,
+        credentials: Credentials,
+        gasPrice: BigInteger,
+        gasLimit: BigInteger
+    ) : this(
+        contractBinary, contractAddress, web3j,
+        AionTransactionManager(web3j, credentials),
+        StaticGasProvider(gasPrice, gasLimit)
+    )
+
+    @Deprecated(message = "Removed in v5.0")
+    protected constructor(
+        contractBinary: String,
+        contractAddress: String?,
+        web3j: Web3j,
+        transactionManager: TransactionManager,
+        gasPrice: BigInteger,
+        gasLimit: BigInteger
+    ) : this(
+        contractBinary, contractAddress, web3j, transactionManager,
+        StaticGasProvider(gasPrice, gasLimit)
+    )
 }

@@ -2,6 +2,7 @@ package org.web3j.aion.codegen
 
 import org.web3j.aion.abi.AbiDefinitionParser
 import org.web3j.aion.codegen.AionFunctionWrapperGenerator.CommandLineRunner
+import org.web3j.aion.tx.AionContract
 import org.web3j.codegen.Console.exitError
 import org.web3j.codegen.SolidityFunctionWrapperGenerator
 import org.web3j.protocol.core.methods.response.AbiDefinition
@@ -28,6 +29,7 @@ private class AionFunctionWrapperGenerator constructor(
     destinationDir,
     basePackageName,
     true,
+    AionContract::class.java,
     ADDRESS_BIT_LENGTH
 ) {
     @Throws(IOException::class)
