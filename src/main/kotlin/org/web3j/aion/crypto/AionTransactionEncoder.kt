@@ -3,7 +3,7 @@ package org.web3j.aion.crypto
 import org.web3j.aion.abi.nrg
 import org.web3j.aion.abi.nrgPrice
 import org.web3j.crypto.Sign
-import org.web3j.crypto.spi.TransactionAdapter
+import org.web3j.crypto.TransactionEncoder
 import org.web3j.rlp.RlpString
 import org.web3j.rlp.RlpType
 import org.web3j.utils.Bytes
@@ -27,10 +27,10 @@ import java.util.ArrayList
  *
  *  FINAL: encode either (1-8) or (1-9) as list
  */
-internal class AionTransactionAdapter(private val clock: Clock = Clock.systemUTC()) :
-    TransactionAdapter<AionTransaction> {
+internal class AionTransactionEncoder(private val clock: Clock = Clock.systemUTC()) :
+    TransactionEncoder() {
 
-    override fun asRlpValues(rawTransaction: AionTransaction, signatureData: Sign.SignatureData): List<RlpType> {
+    fun asRlpValues(rawTransaction: AionTransaction, signatureData: Sign.SignatureData?): List<RlpType> {
 
         val result = ArrayList<RlpType>()
         result.add(RlpString.create(rawTransaction.nonce))
@@ -53,9 +53,12 @@ internal class AionTransactionAdapter(private val clock: Clock = Clock.systemUTC
         result.add(RlpString.create(rawTransaction.nrg))
         result.add(RlpString.create(rawTransaction.nrgPrice))
         result.add(RlpString.create(rawTransaction.type.data))
-        result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.v)))
-        result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.r)))
-        result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.s)))
+
+        signatureData?.apply {
+            result.add(RlpString.create(Bytes.trimLeadingZeroes(v)))
+            result.add(RlpString.create(Bytes.trimLeadingZeroes(r)))
+            result.add(RlpString.create(Bytes.trimLeadingZeroes(s)))
+        }
 
         return result
     }
