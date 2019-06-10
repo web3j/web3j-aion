@@ -1,14 +1,14 @@
 package org.web3j.aion.tx
 
 import org.web3j.aion.crypto.AionTransaction
+import org.web3j.aion.protocol.Aion
 import org.web3j.crypto.Credentials
 import org.web3j.crypto.RawTransaction
-import org.web3j.protocol.Web3j
 import org.web3j.protocol.core.methods.response.EthSendTransaction
 import org.web3j.tx.RawTransactionManager
 
-class AionTransactionManager(web3j: Web3j, credentials: Credentials) :
-    RawTransactionManager(web3j, credentials) {
+class AionTransactionManager(aion: Aion, credentials: Credentials) :
+    RawTransactionManager(aion, credentials) {
 
     override fun sign(rawTransaction: RawTransaction): String {
         if (rawTransaction !is AionTransaction) {
