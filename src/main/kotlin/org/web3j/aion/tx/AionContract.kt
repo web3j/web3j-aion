@@ -1,6 +1,7 @@
 package org.web3j.aion.tx
 
 import avm.Address
+import org.web3j.aion.crypto.Ed25519KeyPair
 import org.web3j.aion.protocol.Aion
 import org.web3j.crypto.Credentials
 import org.web3j.ens.EnsResolver
@@ -34,7 +35,14 @@ abstract class AionContract : Contract {
         gasProvider: ContractGasProvider
     ) : this(
         contractBinary, contractAddress, web3j,
-        AionTransactionManager(web3j as Aion, credentials),
+        AionTransactionManager(
+            web3j as Aion,
+            credentials.address,
+            Ed25519KeyPair(
+                credentials.ecKeyPair.publicKey,
+                credentials.ecKeyPair.privateKey
+            )
+        ),
         gasProvider
     )
 
@@ -48,7 +56,14 @@ abstract class AionContract : Contract {
         gasLimit: BigInteger
     ) : this(
         contractBinary, contractAddress, web3j,
-        AionTransactionManager(web3j as Aion, credentials),
+        AionTransactionManager(
+            web3j as Aion,
+            credentials.address,
+            Ed25519KeyPair(
+                credentials.ecKeyPair.publicKey,
+                credentials.ecKeyPair.privateKey
+            )
+        ),
         StaticGasProvider(gasPrice, gasLimit)
     )
 
