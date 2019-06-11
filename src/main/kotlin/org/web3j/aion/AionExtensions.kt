@@ -1,4 +1,4 @@
-package org.web3j.aion.abi
+package org.web3j.aion
 
 import org.web3j.crypto.RawTransaction
 import org.web3j.protocol.core.methods.response.Transaction
