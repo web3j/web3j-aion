@@ -9,7 +9,7 @@ class AionTransaction(
     nrgPrice: Long? = null,
     nrg: Long = NRG_TRANSACTION_DEFAULT,
     to: String? = null,
-    value: Long = 0,
+    value: Long? = null,
     data: String,
     val timestamp: Long = System.nanoTime(),
     val type: AionTransactionType = AionTransactionType.FVM
@@ -18,7 +18,7 @@ class AionTransaction(
     nrgPrice?.let { BigInteger.valueOf(it) },
     BigInteger.valueOf(nrg),
     to,
-    BigInteger.valueOf(value),
+    value?.let { BigInteger.valueOf(it) },
     data
 ) {
     val nrg: Long

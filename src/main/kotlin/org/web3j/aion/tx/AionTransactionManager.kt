@@ -2,6 +2,7 @@ package org.web3j.aion.tx
 
 import org.aion.rlp.RLP
 import org.web3j.aion.crypto.AionTransaction
+import org.web3j.aion.crypto.AionTransactionType
 import org.web3j.aion.crypto.Ed25519KeyPair
 import org.web3j.aion.protocol.Aion
 import org.web3j.crypto.Hash
@@ -10,6 +11,7 @@ import org.web3j.protocol.core.DefaultBlockParameterName.LATEST
 import org.web3j.protocol.core.methods.request.Transaction
 import org.web3j.protocol.core.methods.response.EthSendTransaction
 import org.web3j.tx.TransactionManager
+import org.web3j.tx.exceptions.TxHashMismatchException
 import org.web3j.utils.Numeric
 import java.math.BigInteger
 import java.util.Arrays
@@ -39,12 +41,32 @@ class AionTransactionManager(
 
     override fun sendTransaction(
         gasPrice: BigInteger?,
-        gasLimit: BigInteger?,
+        gasLimit: BigInteger,
         to: String?,
-        data: String?,
+        data: String,
         value: BigInteger?
     ): EthSendTransaction {
-        TODO("not implemented")
+
+        val transaction = AionTransaction(
+            data = data,
+            type = AionTransactionType.FVM,
+            nrgPrice = gasPrice?.longValueExact(),
+            nrg = gasLimit.longValueExact()
+        )
+
+        val rawTx = sign(transaction)
+        val result = aion.ethSendRawTransaction(rawTx).send()
+
+        if (result != null && !result.hasError()) {
+            val txHashLocal = Numeric.toHexString(Hash.blake2b256(Numeric.hexStringToByteArray(rawTx)))
+            val txHashRemote = result.transactionHash
+
+            if (txHashLocal != txHashRemote) {
+                throw TxHashMismatchException(txHashLocal, txHashRemote)
+            }
+        }
+
+        return result
     }
 
     override fun sendCall(to: String, data: String, defaultBlockParameter: DefaultBlockParameter): String {
@@ -82,14 +104,13 @@ class AionTransactionManager(
 
     private fun AionTransaction.toRplElements(): Array<ByteArray> {
         val nonce = nonce ?: this@AionTransactionManager.getNonce()
-        val value = value?.toByteArray() ?: ByteArray(0)
         val timestamp = BigInteger.valueOf(timestamp)
         val nrgPrice = nrgPrice ?: this@AionTransactionManager.getNrgPrice()
 
         return arrayOf(
             RLP.encodeElement(nonce.toByteArray()),
             RLP.encodeElement(hexToBytes(to)),
-            RLP.encodeElement(value),
+            RLP.encodeElement(value?.toByteArray()),
             RLP.encodeElement(hexToBytes(data)),
             RLP.encodeElement(timestamp.toByteArray()),
             RLP.encodeLong(nrg),
