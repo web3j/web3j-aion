@@ -47,8 +47,7 @@ solidity {
 }
 
 web3j {
-    // Use customised version for now
-    excludedContracts = ['Greeter', 'Mortal']
+    excludedContracts = ['Mortal']
 }
 
 testSets {
@@ -63,6 +62,9 @@ dependencies {
     implementation name: 'org-aion-avm-rt'
     implementation name: 'org-aion-avm-tooling'
     implementation name: 'org-aion-avm-userlib'
+
+    implementation name: 'rlp4j', version: '46e0cb3'
+    implementation name: 'util4j', version: '2c5aa4ad'
 
     implementation "org.web3j:core:${versions.web3j}"
     implementation "org.web3j:codegen:${versions.web3j}"
@@ -82,8 +84,6 @@ dependencies {
     }
 
     testImplementation(group: 'org.web3j', name: 'core', version: versions.web3j, classifier: 'tests')
-
-    testImplementation "net.i2p.crypto:eddsa:${versions.eddsa}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${versions.junit5}"
     testImplementation "com.willowtreeapps.assertk:assertk-jvm:${versions.assertk}"
     testImplementation "junit:junit:${versions.junit4}"
