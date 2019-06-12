@@ -29,13 +29,19 @@ import java.math.BigInteger
 internal object AbiFunctionEncoder : FunctionEncoder() {
 
     override fun encodeFunction(function: Function): String {
+        val name = buildMethodSignature(function.name, function.inputParameters)
         val params = function.inputParameters.map { it.toAion() }.toTypedArray()
-        return Numeric.toHexString(ABIUtil.encodeMethodArguments(function.name, *params))
+
+        return if (params.isEmpty()) {
+            buildMethodId(name)
+        } else {
+            Numeric.toHexStringNoPrefix(ABIUtil.encodeMethodArguments(name, *params))
+        }
     }
 
     override fun encodeParameters(parameters: List<Type<Any>>): String {
         val params = parameters.map { it.toAion() }.toTypedArray()
-        return Numeric.toHexString(ABIUtil.encodeDeploymentArguments(*params))
+        return Numeric.toHexStringNoPrefix(ABIUtil.encodeDeploymentArguments(*params))
     }
 
     @Suppress("UNCHECKED_CAST")
