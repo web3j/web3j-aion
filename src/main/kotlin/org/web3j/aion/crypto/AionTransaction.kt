@@ -1,14 +1,29 @@
 package org.web3j.aion.crypto
 
-import org.web3j.aion.AionConstants
+import org.web3j.aion.AionConstants.NRG_TRANSACTION_DEFAULT
 import org.web3j.crypto.RawTransaction
 import java.math.BigInteger
 
 class AionTransaction(
-    nonce: BigInteger? = null,
-    gasPrice: BigInteger? = null,
-    gasLimit: BigInteger = BigInteger.valueOf(AionConstants.NRG_TRANSACTION_DEFAULT),
-    to: String, value: BigInteger, data: String,
-    val timestamp: Long? = null,
+    nonce: Long? = null,
+    nrgPrice: Long? = null,
+    nrg: Long = NRG_TRANSACTION_DEFAULT,
+    to: String? = null,
+    value: Long = 0,
+    data: String,
+    val timestamp: Long = System.nanoTime(),
     val type: AionTransactionType = AionTransactionType.FVM
-) : RawTransaction(nonce, gasPrice, gasLimit, to, value, data)
+) : RawTransaction(
+    nonce?.let { BigInteger.valueOf(it) },
+    nrgPrice?.let { BigInteger.valueOf(it) },
+    BigInteger.valueOf(nrg),
+    to,
+    BigInteger.valueOf(value),
+    data
+) {
+    val nrg: Long
+        get() = gasLimit.longValueExact()
+
+    val nrgPrice: Long?
+        get() = gasPrice?.longValueExact()
+}

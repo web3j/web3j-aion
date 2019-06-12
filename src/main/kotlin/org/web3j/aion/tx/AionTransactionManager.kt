@@ -1,21 +1,17 @@
 package org.web3j.aion.tx
 
+import org.aion.rlp.RLP
 import org.web3j.aion.crypto.AionTransaction
 import org.web3j.aion.crypto.Ed25519KeyPair
 import org.web3j.aion.protocol.Aion
 import org.web3j.crypto.Hash
-import org.web3j.crypto.RawTransaction
 import org.web3j.protocol.core.DefaultBlockParameter
 import org.web3j.protocol.core.DefaultBlockParameterName.LATEST
 import org.web3j.protocol.core.methods.response.EthSendTransaction
-import org.web3j.rlp.RlpDecoder
-import org.web3j.rlp.RlpEncoder
-import org.web3j.rlp.RlpList
-import org.web3j.rlp.RlpString
-import org.web3j.rlp.RlpType
 import org.web3j.tx.TransactionManager
 import org.web3j.utils.Numeric
 import java.math.BigInteger
+import java.util.Arrays
 
 /**
  *  Notes for serialization:
@@ -31,6 +27,8 @@ import java.math.BigInteger
  *  9) SIGNATURE (byte[]) (HashUtil.h256(encodeList(1-8)) (optional)
  *
  *  FINAL: encode either (1-8) or (1-9) as list
+ *
+ *  Based on the code from [TxTool](https://github.com/arajasek/TxTool/blob/master/src/main/java/org/aion/offline/TxTool.java).
  */
 class AionTransactionManager(
     private val aion: Aion,
@@ -52,76 +50,59 @@ class AionTransactionManager(
         TODO("not implemented")
     }
 
-    fun sign(transaction: RawTransaction): String {
-        if (transaction !is AionTransaction) {
-            error("Invalid transaction type: ${transaction.javaClass}")
-        }
+    fun sign(transaction: AionTransaction): String {
 
         // hash and sign encoded message
-        val rlpValues = transaction.rlpEncode()
-        val rlpEncoded = RlpEncoder.encode(RlpList(rlpValues))
+        val rlpTransaction = transaction.toRplElements()
+        val rplEncoded = RLP.encodeList(*rlpTransaction)
+        val hash = Hash.blake2b256(rplEncoded)
 
-        val hash = Hash.blake2b256(rlpEncoded)
+        // Sign and verify hash
         val signature = keyPair.sign(hash)
-
         if (!keyPair.verify(hash, signature)) {
             error("Invalid signature")
         }
 
-        // aion-specific signature scheme
-        val pubSig = RlpDecoder.decode(rlpEncoded).values.apply {
-            add(RlpString.create(keyPair.publicKey + signature))
-        }
+        // Encode signature with Aion-specific signature scheme
+        val rlpSignature = RLP.encodeElement(keyPair.publicKey + signature)
+        val encodedWithPayload = RLP.encodeList(*rlpTransaction, rlpSignature)
 
-        // re-encode with signature included
-        val rawTransaction = RlpEncoder.encode(RlpList(pubSig))
-        return Numeric.toHexString(rawTransaction)
+        return Numeric.toHexString(encodedWithPayload)
     }
 
-    private fun getGasPrice(): BigInteger {
-        return aion.ethGasPrice().send().gasPrice
+    private fun getNrgPrice(): Long {
+        return aion.ethGasPrice().send().gasPrice.longValueExact()
     }
 
     private fun getNonce(): BigInteger {
         return aion.ethGetTransactionCount(address, LATEST).send().transactionCount
     }
 
-    private fun AionTransaction.rlpEncode(): List<RlpType> {
-        return mutableListOf<RlpType>().apply {
+    private fun AionTransaction.toRplElements(): Array<ByteArray> {
+        val nonce = nonce ?: this@AionTransactionManager.getNonce()
+        val value = value?.toByteArray() ?: ByteArray(0)
+        val timestamp = BigInteger.valueOf(timestamp)
+        val nrgPrice = nrgPrice ?: this@AionTransactionManager.getNrgPrice()
 
-            add(RlpString.create(this@rlpEncode.nonce ?: this@AionTransactionManager.getNonce()))
-
-            // an empty to address (contract creation) should not be encoded as a numeric 0 value
-            if (to != null && to.isNotEmpty()) {
-                // addresses that start with zeros should be encoded with the zeros included, not
-                // as numeric values
-                add(RlpString.create(Numeric.hexStringToByteArray(to)))
-            } else {
-                add(RlpString.create(""))
-            }
-
-            add(RlpString.create(value))
-
-            // data field will already be hex encoded, so we need to convert into binary first
-            add(RlpString.create(Numeric.hexStringToByteArray(data)))
-
-            // Timestamp
-            val timestamp = timestamp ?: System.nanoTime()
-            add(RlpString.create(timestamp))
-
-            add(RlpString.create(gasLimit))
-            add(RlpString.create(gasPrice ?: this@AionTransactionManager.getGasPrice()))
-            add(RlpString.create(type.data))
-
-//        if (signatureData != null) {
-//            add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.v)))
-//            add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.r)))
-//            add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.s)))
-//        }
-        }
+        return arrayOf(
+            RLP.encodeElement(nonce.toByteArray()),
+            RLP.encodeElement(hexToBytes(to)),
+            RLP.encodeElement(value),
+            RLP.encodeElement(hexToBytes(data)),
+            RLP.encodeElement(timestamp.toByteArray()),
+            RLP.encodeLong(nrg),
+            RLP.encodeLong(nrgPrice),
+            RLP.encodeByte(type.data)
+        )
     }
 
     companion object {
-        const val AION_PUB_SIG_LEN = 96
+        private fun hexToBytes(data: String?): ByteArray {
+            return data?.run {
+                val cleanData = Numeric.cleanHexPrefix(data).replace("\\s".toRegex(), "")
+                val biBytes = BigInteger("10$cleanData", 16).toByteArray()
+                Arrays.copyOfRange(biBytes, 1, biBytes.size)
+            } ?: ByteArray(0)
+        }
     }
 }
