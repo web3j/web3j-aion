@@ -11,17 +11,8 @@ import java.math.BigInteger
  */
 class Ed25519KeyPair(publicKey: ByteArray, privateKey: ByteArray) {
 
-    constructor(privateKey: ByteArray) : this(
-        ByteArray(0), // TODO Extract public key
-        privateKey
-    )
-
     constructor(publicKey: BigInteger, privateKey: BigInteger) : this(
         publicKey.toByteArray(), privateKey.toByteArray()
-    )
-
-    constructor(privateKey: String) : this(
-        Numeric.hexStringToByteArray(privateKey)
     )
 
     constructor(publicKey: String, privateKey: String) : this(
