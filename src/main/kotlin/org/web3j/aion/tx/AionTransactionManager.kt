@@ -7,6 +7,7 @@ import org.web3j.aion.protocol.Aion
 import org.web3j.crypto.Hash
 import org.web3j.protocol.core.DefaultBlockParameter
 import org.web3j.protocol.core.DefaultBlockParameterName.LATEST
+import org.web3j.protocol.core.methods.request.Transaction
 import org.web3j.protocol.core.methods.response.EthSendTransaction
 import org.web3j.tx.TransactionManager
 import org.web3j.utils.Numeric
@@ -46,8 +47,9 @@ class AionTransactionManager(
         TODO("not implemented")
     }
 
-    override fun sendCall(to: String?, data: String?, defaultBlockParameter: DefaultBlockParameter?): String {
-        TODO("not implemented")
+    override fun sendCall(to: String, data: String, defaultBlockParameter: DefaultBlockParameter): String {
+        val transaction = Transaction.createEthCallTransaction(fromAddress, to, data)
+        return aion.ethCall(transaction, defaultBlockParameter).send().value
     }
 
     fun sign(transaction: AionTransaction): String {
