@@ -4,12 +4,9 @@ import org.junit.jupiter.api.BeforeAll
 import org.web3j.aion.crypto.Ed25519KeyPair
 import org.web3j.aion.protocol.AionIntegrationTest.Network.LOCALHOST
 import org.web3j.aion.protocol.AionIntegrationTest.Network.MASTERY
-import org.web3j.crypto.Credentials
+import org.web3j.aion.tx.AionTransactionManager
 import org.web3j.protocol.http.HttpService
-import org.web3j.tx.RawTransactionManager
 import org.web3j.tx.TransactionManager
-import org.web3j.utils.Numeric
-import java.math.BigInteger
 
 // @Testcontainers
 abstract class AionIntegrationTest {
@@ -43,6 +40,12 @@ abstract class AionIntegrationTest {
         )
 
         @JvmStatic
+        protected val PUBLIC_KEY = mapOf(
+            LOCALHOST to "",
+            MASTERY to "08fe2bf5757b8261d4937f13b5815448f2144f9c1409a3fab4c99ca86fff8a36"
+        )
+
+        @JvmStatic
         protected lateinit var aion: Aion
 
         @JvmStatic
@@ -53,9 +56,8 @@ abstract class AionIntegrationTest {
         fun initClient() {
             aion = Aion.build(HttpService(RPC_URL[NETWORK]))
 
-            val bytes = Numeric.hexStringToByteArray(PRIVATE_KEY.getValue(NETWORK))
-            val keyPair = Ed25519KeyPair.create(BigInteger(bytes))
-            manager = RawTransactionManager(aion, Credentials.create(keyPair))
+            val keyPair = Ed25519KeyPair(PUBLIC_KEY.getValue(NETWORK), PRIVATE_KEY.getValue(NETWORK))
+            manager = AionTransactionManager(aion, ACCOUNT.getValue(NETWORK), keyPair)
 
             if (NETWORK != MASTERY) { // Unlock account not supported in Nodesmith
                 aion.personalUnlockAccount(ACCOUNT[NETWORK], "410n").send()
