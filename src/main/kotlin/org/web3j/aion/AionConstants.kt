@@ -4,5 +4,8 @@ object AionConstants {
     const val NRG_CREATE_CONTRACT_DEFAULT = 350000L
     const val NRG_TRANSACTION_DEFAULT = 90000L
 
+    const val MAX_BIT_LENGTH = 128
+    const val MAX_BYTE_LENGTH = MAX_BIT_LENGTH / 8
+
     const val ADDRESS_BIT_LENGTH = avm.Address.LENGTH * Byte.SIZE_BITS
 }
