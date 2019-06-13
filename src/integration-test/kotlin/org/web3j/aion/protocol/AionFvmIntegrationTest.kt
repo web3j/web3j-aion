@@ -2,9 +2,9 @@ package org.web3j.aion.protocol
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import org.aion.greeter.Greeter
 import org.junit.jupiter.api.Test
 import org.web3j.aion.tx.gas.AionGasProvider
-import org.web3j.greeter.Greeter
 import org.web3j.tx.ClientTransactionManager
 
 class AionFvmIntegrationTest : AionIntegrationTest() {
@@ -26,7 +26,7 @@ class AionFvmIntegrationTest : AionIntegrationTest() {
 
     @Test
     internal fun testContractLoad() {
-        val address = "0xa08f5C149f4Ba76582D23da202266554Ffa2d613cFD40C5F6816b897ccFd5978"
+        val address = "0xa0c34906d069497cC9d33DF73aD36C4349C1d04ac45f2b0Ec357EfD3797e4E3A"
         Greeter.load(address, aion, manager, AionGasProvider).apply {
             assertThat(greet().send()).isEqualTo("Aion test")
         }
