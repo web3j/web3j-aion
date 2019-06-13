@@ -23,7 +23,7 @@ abstract class AionContract : Contract {
     ) : super(
         EnsResolver(web3j, EnsResolver.DEFAULT_SYNC_THRESHOLD, Address.LENGTH * 2),
         contractBinary, contractAddress, web3j,
-        transactionManager as AionTransactionManager,
+        transactionManager,
         gasProvider
     )
 
@@ -76,8 +76,8 @@ abstract class AionContract : Contract {
         gasPrice: BigInteger,
         gasLimit: BigInteger
     ) : this(
-        contractBinary, contractAddress, web3j,
-        transactionManager as AionTransactionManager,
+        contractBinary, contractAddress,
+        web3j, transactionManager,
         StaticGasProvider(gasPrice, gasLimit)
     )
 }
