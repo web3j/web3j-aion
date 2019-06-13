@@ -29,14 +29,8 @@ import java.math.BigInteger
 internal object AbiFunctionEncoder : FunctionEncoder() {
 
     override fun encodeFunction(function: Function): String {
-        val name = buildMethodSignature(function.name, function.inputParameters)
         val params = function.inputParameters.map { it.toAion() }.toTypedArray()
-
-        return if (params.isEmpty()) {
-            buildMethodId(name)
-        } else {
-            Numeric.toHexStringNoPrefix(ABIUtil.encodeMethodArguments(name, *params))
-        }
+        return Numeric.toHexString(ABIUtil.encodeMethodArguments(function.name, *params))
     }
 
     override fun encodeParameters(parameters: List<Type<Any>>): String {
