@@ -45,11 +45,19 @@ class AbiFunctionDecoderFvmTest {
     fun `decode string`() {
         val function = Function("test", listOf(), listOf(object : TypeReference<Utf8String>() {}))
 
-        assertThat(decode("0x210000", function.outputParameters))
-            .isEqualTo(listOf(Utf8String("")))
+//        assertThat(decode("0x210000", function.outputParameters))
+//            .isEqualTo(listOf(Utf8String("")))
+//
+//        assertThat(decode("0x21000948656c6c6f2041564d", function.outputParameters))
+//            .isEqualTo(listOf(Utf8String("Hello AVM")))
 
-        assertThat(decode("0x21000948656c6c6f2041564d", function.outputParameters))
-            .isEqualTo(listOf(Utf8String("Hello AVM")))
+        assertThat(
+            decode(
+                "0x000000000000000000000000000000100000000000000000000000000000000e48657920796f7520616761696e210000",
+                function.outputParameters
+            )
+        )
+            .isEqualTo(listOf(Utf8String("Hey you again!")))
     }
 
     @Test

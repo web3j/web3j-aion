@@ -6,6 +6,7 @@ import org.aion.avm.userlib.abi.ABIException
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 import org.web3j.abi.FunctionEncoder.encode
+import org.web3j.abi.FunctionEncoder.encodeConstructor
 import org.web3j.abi.datatypes.Bool
 import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.Function
@@ -41,6 +42,17 @@ import java.math.BigInteger
  * TODO Add array and 2D array tests.
  */
 class AbiFunctionEncoderFvmTest {
+
+    @Test
+    fun `encode empty constructor`() {
+        assertThat(encodeConstructor(listOf())).isEqualTo("")
+    }
+
+    @Test
+    fun `encode constructor`() {
+        assertThat(encodeConstructor(listOf(Utf8String("Aion test"))))
+            .isEqualTo("000000000000000000000000000000100000000000000000000000000000000941696f6e20746573740000000000000000000000000000000000000000000000")
+    }
 
     @Test
     fun `encode empty parameters`() {
