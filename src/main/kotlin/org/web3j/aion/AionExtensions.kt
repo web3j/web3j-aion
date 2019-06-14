@@ -48,6 +48,12 @@ var TransactionReceipt.nrgRaw: String
         setGasUsed(value)
     }
 
+var TransactionReceipt.cumulativeNrgUsed: String
+    get() = cumulativeGasUsedRaw
+    set(value) {
+        setCumulativeGasUsed(value)
+    }
+
 val RawTransaction.nrg: BigInteger
     get() = gasLimit
 
