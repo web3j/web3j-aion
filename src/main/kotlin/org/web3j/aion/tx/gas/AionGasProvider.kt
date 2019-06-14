@@ -9,7 +9,7 @@ object AionGasProvider : StaticGasProvider(
     BigInteger.valueOf(10_000_000_000),
     BigInteger.ZERO // Overriden here
 ) {
-    private val CREATE_CONTRACT_DEFAULT = BigInteger.valueOf(NRG_CREATE_CONTRACT_DEFAULT)
+    private val CREATE_CONTRACT_DEFAULT = BigInteger.valueOf(NRG_CREATE_CONTRACT_DEFAULT * 10)
     private val TRANSACTION_DEFAULT = BigInteger.valueOf(NRG_TRANSACTION_DEFAULT)
 
     override fun getGasLimit(): BigInteger {
