@@ -1,6 +1,7 @@
 package org.web3j.aion.protocol
 
 import org.junit.jupiter.api.BeforeAll
+import org.web3j.aion.VirtualMachine
 import org.web3j.aion.crypto.Ed25519KeyPair
 import org.web3j.aion.protocol.AionIntegrationTest.Network.LOCALHOST
 import org.web3j.aion.protocol.AionIntegrationTest.Network.MASTERY
@@ -9,7 +10,7 @@ import org.web3j.protocol.http.HttpService
 import org.web3j.tx.TransactionManager
 
 // @Testcontainers
-abstract class AionIntegrationTest {
+abstract class AionIntegrationTest(private val targetVm: VirtualMachine) {
 
     enum class Network {
         LOCALHOST,
@@ -57,7 +58,7 @@ abstract class AionIntegrationTest {
             aion = Aion.build(HttpService(RPC_URL[NETWORK]))
 
             val keyPair = Ed25519KeyPair(PUBLIC_KEY.getValue(NETWORK), PRIVATE_KEY.getValue(NETWORK))
-            manager = AionTransactionManager(aion, ACCOUNT.getValue(NETWORK), keyPair)
+            manager = AionTransactionManager(aion, ACCOUNT.getValue(NETWORK), keyPair, VirtualMachine.AVM)
 
             if (NETWORK != MASTERY) { // Unlock account not supported in Nodesmith
                 aion.personalUnlockAccount(ACCOUNT[NETWORK], "410n").send()

@@ -4,18 +4,37 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import helloavm.HelloAvm
 import org.junit.jupiter.api.Test
+import org.web3j.aion.VirtualMachine
 import org.web3j.aion.tx.gas.AionGasProvider
-import org.web3j.tx.ClientTransactionManager
 
-class AionAvmIntegrationTest : AionIntegrationTest() {
+class AionAvmIntegrationTest : AionIntegrationTest(VirtualMachine.AVM) {
 
     @Test
-    internal fun testAvmLoad() {
+    internal fun `deploy and call contract`() {
+        HelloAvm.deploy(aion, manager, AionGasProvider).send().apply {
+            assertThat(string.send()).isEqualTo("Hello AVM")
+        }
+    }
+
+    @Test
+    internal fun `load and call contract`() {
         HelloAvm.load(
-            "0xa040f6b14cd0a7158d6b120cdd0994a5dbc11b19f3e8914154938088ac1bc041",
-            aion, ClientTransactionManager(aion, ACCOUNT[NETWORK]), AionGasProvider
+            "0xa01af11dc05cc9aedcafdc80c8b94301e11540cf7fbdcff477b6bd964a208adc",
+            aion, manager, AionGasProvider
         ).apply {
             assertThat(string.send()).isEqualTo("Hello AVM")
+        }
+    }
+
+    @Test
+    internal fun `load and transact contract`() {
+        HelloAvm.load(
+            "0xa01af11dc05cc9aedcafdc80c8b94301e11540cf7fbdcff477b6bd964a208adc",
+            aion, manager, AionGasProvider
+        ).apply {
+            setString("Hello test").sendAsync().thenAccept {
+                assertThat(string.send()).isEqualTo("Hello test")
+            }.join()
         }
     }
 }

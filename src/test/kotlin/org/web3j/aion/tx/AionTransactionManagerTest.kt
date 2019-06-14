@@ -24,7 +24,7 @@ class AionTransactionManagerTest {
             timestamp = 1560507493830000,
             targetVm = VirtualMachine.AVM,
             nrgPrice = 10000000000,
-            nrg = 4000000,
+            nrg = 5000000,
             nonce = 42
         )
         assertThat(manager.sign(aionTransaction)).isEqualTo(

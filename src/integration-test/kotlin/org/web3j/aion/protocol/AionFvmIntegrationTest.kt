@@ -4,10 +4,11 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import org.aion.greeter.Greeter
 import org.junit.jupiter.api.Test
+import org.web3j.aion.VirtualMachine
 import org.web3j.aion.tx.gas.AionGasProvider
 import org.web3j.tx.ClientTransactionManager
 
-class AionFvmIntegrationTest : AionIntegrationTest() {
+class AionFvmIntegrationTest : AionIntegrationTest(VirtualMachine.FVM) {
 
     @Test
     internal fun testContractDeployUnsigned() {
