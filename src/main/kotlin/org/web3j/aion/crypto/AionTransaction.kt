@@ -1,6 +1,5 @@
 package org.web3j.aion.crypto
 
-import org.web3j.aion.AionConstants.NRG_TRANSACTION_DEFAULT
 import org.web3j.aion.VirtualMachine
 import org.web3j.crypto.RawTransaction
 import java.math.BigInteger
@@ -8,11 +7,11 @@ import java.math.BigInteger
 class AionTransaction(
     nonce: Long? = null,
     nrgPrice: Long? = null,
-    nrg: Long = NRG_TRANSACTION_DEFAULT,
+    nrg: Long,
     to: String? = null,
     value: Long? = null,
     data: String,
-    val timestamp: Long = System.nanoTime(),
+    val timestamp: Long = System.currentTimeMillis() * 1000,
     val targetVm: VirtualMachine = VirtualMachine.FVM
 ) : RawTransaction(
     nonce?.let { BigInteger.valueOf(it) },
