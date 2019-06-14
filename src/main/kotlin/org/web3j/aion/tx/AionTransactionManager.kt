@@ -1,8 +1,8 @@
 package org.web3j.aion.tx
 
 import org.aion.rlp.RLP
+import org.web3j.aion.VirtualMachine
 import org.web3j.aion.crypto.AionTransaction
-import org.web3j.aion.crypto.AionTransactionType
 import org.web3j.aion.crypto.Ed25519KeyPair
 import org.web3j.aion.protocol.Aion
 import org.web3j.crypto.Hash
@@ -36,7 +36,8 @@ import java.util.Arrays
 class AionTransactionManager(
     private val aion: Aion,
     private val address: String,
-    private val keyPair: Ed25519KeyPair
+    private val keyPair: Ed25519KeyPair,
+    private val targetVm: VirtualMachine
 ) : TransactionManager(aion, address) {
 
     override fun sendTransaction(
@@ -49,7 +50,7 @@ class AionTransactionManager(
 
         val transaction = AionTransaction(
             data = data,
-            type = AionTransactionType.FVM,
+            targetVm = targetVm,
             nrgPrice = gasPrice?.longValueExact(),
             nrg = gasLimit.longValueExact()
         )
@@ -115,7 +116,7 @@ class AionTransactionManager(
             RLP.encodeElement(timestamp.toByteArray()),
             RLP.encodeLong(nrg),
             RLP.encodeLong(nrgPrice),
-            RLP.encodeByte(type.data)
+            RLP.encodeByte(targetVm.data)
         )
     }
 
