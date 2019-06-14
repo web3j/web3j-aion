@@ -8,7 +8,7 @@ import org.web3j.aion.VirtualMachine
 import org.web3j.aion.tx.gas.AionGasProvider
 import org.web3j.tx.ClientTransactionManager
 
-class AionFvmIntegrationTest : AionIntegrationTest(VirtualMachine.FVM) {
+class FvmIntegrationTest : AionIntegrationTest(VirtualMachine.FVM) {
 
     @Test
     internal fun testContractDeployUnsigned() {

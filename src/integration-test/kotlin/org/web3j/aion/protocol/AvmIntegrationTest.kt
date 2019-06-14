@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.web3j.aion.VirtualMachine
 import org.web3j.aion.tx.gas.AionGasProvider
 
-class AionAvmIntegrationTest : AionIntegrationTest(VirtualMachine.AVM) {
+class AvmIntegrationTest : AionIntegrationTest(VirtualMachine.AVM) {
 
     @Test
     internal fun `deploy and call contract`() {
