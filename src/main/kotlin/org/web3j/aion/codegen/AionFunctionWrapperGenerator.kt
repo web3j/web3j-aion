@@ -1,8 +1,12 @@
 package org.web3j.aion.codegen
 
+import org.web3j.aion.VirtualMachine
+import org.web3j.aion.VirtualMachine.AVM
+import org.web3j.aion.VirtualMachine.FVM
 import org.web3j.aion.abi.AbiDefinitionParser
 import org.web3j.aion.codegen.AionFunctionWrapperGenerator.CommandLineRunner
-import org.web3j.aion.tx.AionContract
+import org.web3j.aion.tx.AvmAionContract
+import org.web3j.aion.tx.FvmAionContract
 import org.web3j.codegen.Console.exitError
 import org.web3j.codegen.SolidityFunctionWrapperGenerator
 import org.web3j.protocol.core.methods.response.AbiDefinition
@@ -12,10 +16,6 @@ import picocli.CommandLine.Option
 import picocli.CommandLine.run
 import java.io.File
 import java.io.IOException
-
-private enum class VirtualMachine {
-    AVM, FVM
-}
 
 private class AionFunctionWrapperGenerator constructor(
     binFile: File,
@@ -29,12 +29,15 @@ private class AionFunctionWrapperGenerator constructor(
     destinationDir,
     basePackageName,
     true,
-    AionContract::class.java,
+    when (targetVm) {
+        AVM -> AvmAionContract::class.java
+        FVM -> FvmAionContract::class.java
+    },
     ADDRESS_BIT_LENGTH
 ) {
     @Throws(IOException::class)
     override fun loadContractDefinition(absFile: File): List<AbiDefinition> {
-        return if (targetVm == VirtualMachine.FVM) {
+        return if (targetVm == FVM) {
             super.loadContractDefinition(absFile)
         } else {
             AbiDefinitionParser.parse(absFile)
@@ -79,7 +82,7 @@ private class AionFunctionWrapperGenerator constructor(
             names = ["-vm", "--targetVm"],
             description = ["target Aion virtual machine."]
         )
-        private val targetVm = VirtualMachine.AVM
+        private val targetVm = AVM
 
         override fun run() {
             try {
