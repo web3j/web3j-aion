@@ -2,20 +2,46 @@ package org.web3j.aion.tx
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Test
 import org.web3j.aion.VirtualMachine
 import org.web3j.aion.crypto.AionTransaction
 import org.web3j.aion.crypto.Ed25519KeyPair
 import org.web3j.aion.protocol.Aion
-import org.web3j.protocol.http.HttpService
+import org.web3j.aion.protocol.mock
 
 class AionTransactionManagerTest {
 
+    private val aion = mockk<Aion>(relaxed = true)
+
+    private val keyPair = Ed25519KeyPair(PUBLIC_KEY, PRIVATE_KEY)
+
     private val manager = AionTransactionManager(
-        Aion.build(HttpService()), ACCOUNT,
-        Ed25519KeyPair(PUBLIC_KEY, PRIVATE_KEY),
-        VirtualMachine.AVM
+        aion, ACCOUNT, keyPair, VirtualMachine.AVM
     )
+
+    @Test
+    fun `sign default raw transaction`() {
+
+        every {
+            // Mock eth_getTransactionCount call since nonce is not specified
+            aion.ethGetTransactionCount(address = any(), defaultBlockParameter = any())
+        } returns mock("0x2c")
+
+        every {
+            aion.ethGasPrice() // Mock eth_gasPrice since nrgPrice is not specified
+        } returns mock("0x2540be400")
+
+        val aionTransaction = AionTransaction(
+            data = "0x210009736574537472696e6721000a48656c6c6f2074657374",
+            timestamp = 1560507493830000,
+            nrg = 5000000
+        )
+        assertThat(manager.sign(aionTransaction)).isEqualTo(
+            "0xf8952c808099210009736574537472696e6721000a48656c6c6f207465737487058b45f6d6cd70834c4b408800000002540be40001b86008fe2bf5757b8261d4937f13b5815448f2144f9c1409a3fab4c99ca86fff8a3609bedc551b7078a5a821624438d2d057682958486b7099163e449f90f9944bf14e8382e59000a0f0fc1a869284237659a1373c1ccb61b911f8b51e84f17e2601"
+        )
+    }
 
     @Test
     fun `sign raw transaction constructor AVM`() {
