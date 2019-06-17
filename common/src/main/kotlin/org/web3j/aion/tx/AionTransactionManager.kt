@@ -2,6 +2,7 @@ package org.web3j.aion.tx
 
 import org.aion.rlp.RLP
 import org.web3j.aion.VirtualMachine
+import org.web3j.aion.VirtualMachine.AVM
 import org.web3j.aion.crypto.AionTransaction
 import org.web3j.aion.crypto.Ed25519KeyPair
 import org.web3j.aion.protocol.Aion
@@ -45,14 +46,17 @@ class AionTransactionManager(
         gasLimit: BigInteger,
         to: String?,
         data: String,
-        value: BigInteger?
+        value: BigInteger?,
+        constructor: Boolean
     ): EthSendTransaction {
 
         val transaction = AionTransaction(
             data = data,
+            value = value,
             targetVm = targetVm,
-            nrgPrice = gasPrice?.longValueExact(),
-            nrg = gasLimit.longValueExact()
+            nrgPrice = gasPrice,
+            nrg = gasLimit,
+            constructor = constructor
         )
 
         val rawTx = sign(transaction)
@@ -75,7 +79,7 @@ class AionTransactionManager(
         return aion.ethCall(transaction, defaultBlockParameter).send().value
     }
 
-    fun sign(transaction: AionTransaction): String {
+    internal fun sign(transaction: AionTransaction): String {
 
         // hash and sign encoded message
         val rlpTransaction = transaction.toRplElements()
@@ -107,6 +111,18 @@ class AionTransactionManager(
         val nonce = nonce ?: this@AionTransactionManager.getNonce()
         val timestamp = BigInteger.valueOf(timestamp)
         val nrgPrice = nrgPrice ?: this@AionTransactionManager.getNrgPrice()
+        val data = Numeric.prependHexPrefix(data)
+
+        val value = if (value == BigInteger.ZERO) {
+            null
+        } else {
+            value
+        }
+
+        val type: Byte = when {
+            targetVm == AVM && constructor -> TRANSACTION_TYPE_AVM_CONSTRUCTOR
+            else -> TRANSACTION_TYPE_OTHER
+        }
 
         return arrayOf(
             RLP.encodeElement(nonce.toByteArray()),
@@ -116,11 +132,14 @@ class AionTransactionManager(
             RLP.encodeElement(timestamp.toByteArray()),
             RLP.encodeLong(nrg),
             RLP.encodeLong(nrgPrice),
-            RLP.encodeByte(targetVm.data)
+            RLP.encodeByte(type)
         )
     }
 
     companion object {
+        const val TRANSACTION_TYPE_OTHER: Byte = 0x1
+        const val TRANSACTION_TYPE_AVM_CONSTRUCTOR: Byte = 0x2
+
         private fun hexToBytes(data: String?): ByteArray {
             return data?.run {
                 val cleanData = Numeric.cleanHexPrefix(data).replace("\\s".toRegex(), "")

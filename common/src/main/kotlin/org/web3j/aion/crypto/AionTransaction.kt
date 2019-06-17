@@ -5,22 +5,17 @@ import org.web3j.crypto.RawTransaction
 import java.math.BigInteger
 
 class AionTransaction(
-    nonce: Long? = null,
-    nrgPrice: Long? = null,
-    nrg: Long,
+    nonce: BigInteger? = null,
+    nrgPrice: BigInteger? = null,
+    nrg: BigInteger,
     to: String? = null,
-    value: Long? = null,
+    value: BigInteger? = null,
     data: String,
+    val constructor: Boolean = false,
     val timestamp: Long = System.currentTimeMillis() * 1000,
     val targetVm: VirtualMachine = VirtualMachine.FVM
-) : RawTransaction(
-    nonce?.let { BigInteger.valueOf(it) },
-    nrgPrice?.let { BigInteger.valueOf(it) },
-    BigInteger.valueOf(nrg),
-    to,
-    value?.let { BigInteger.valueOf(it) },
-    data
-) {
+) : RawTransaction(nonce, nrgPrice, nrg, to, value, data) {
+
     val nrg: Long
         get() = gasLimit.longValueExact()
 
