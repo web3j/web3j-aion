@@ -1,5 +1,6 @@
 package org.web3j.aion.codegen
 
+import org.web3j.aion.AionConstants
 import org.web3j.aion.VirtualMachine
 import org.web3j.aion.VirtualMachine.AVM
 import org.web3j.aion.VirtualMachine.FVM
@@ -33,7 +34,7 @@ private class AionFunctionWrapperGenerator constructor(
         AVM -> AvmAionContract::class.java
         FVM -> FvmAionContract::class.java
     },
-    ADDRESS_BIT_LENGTH
+    AionConstants.ADDRESS_BIT_LENGTH
 ) {
     @Throws(IOException::class)
     override fun loadContractDefinition(absFile: File): List<AbiDefinition> {
@@ -94,10 +95,6 @@ private class AionFunctionWrapperGenerator constructor(
                 exitError(e)
             }
         }
-    }
-
-    companion object {
-        const val ADDRESS_BIT_LENGTH = avm.Address.LENGTH * 8
     }
 }
 
