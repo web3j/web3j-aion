@@ -27,7 +27,7 @@ class AvmIntegrationTest : AionIntegrationTest(VirtualMachine.AVM) {
     }
 
     @Test
-    internal fun `load and transact contract`() {
+    internal fun `load and execute transaction`() {
         HelloAvm.load(
             "0xa01af11dc05cc9aedcafdc80c8b94301e11540cf7fbdcff477b6bd964a208adc",
             aion, manager, AionGasProvider
