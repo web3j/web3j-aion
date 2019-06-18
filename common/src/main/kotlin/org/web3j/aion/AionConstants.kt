@@ -1,7 +1,9 @@
 package org.web3j.aion
 
+import org.web3j.utils.Numeric
+
 object AionConstants {
-    val ADDRESS_ID = "a0".toByteArray()
+    val ADDRESS_ID: ByteArray = Numeric.hexStringToByteArray("a0")
 
     const val NRG_CREATE_CONTRACT_DEFAULT = 350000L
     const val NRG_TRANSACTION_DEFAULT = 90000L

@@ -14,11 +14,9 @@ import org.web3j.aion.protocol.mock
 class AionTransactionManagerTest {
 
     private val aion = mockk<Aion>(relaxed = true)
-
-    private val keyPair = Ed25519KeyPair(PUBLIC_KEY, PRIVATE_KEY)
-
+    private val keyPair = Ed25519KeyPair(PRIVATE_KEY)
     private val manager = AionTransactionManager(
-        aion, ACCOUNT, keyPair, VirtualMachine.AVM
+        aion, keyPair, VirtualMachine.AVM
     )
 
     @Test
@@ -108,8 +106,6 @@ class AionTransactionManagerTest {
     }
 
     companion object {
-        const val ACCOUNT = "0xa0c57475b6a30901b2348c1071d7b27a471f43f8bf895d04b73db08e659efe99"
-        const val PUBLIC_KEY = "08fe2bf5757b8261d4937f13b5815448f2144f9c1409a3fab4c99ca86fff8a36"
         const val PRIVATE_KEY =
             "0x4776895c43f77676cdec51a6c92d2a1bacdf16ddcc6e7e07ab39104b42e1e52608fe2bf5757b8261d4937f13b5815448f2144f9c1409a3fab4c99ca86fff8a36"
     }

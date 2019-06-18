@@ -46,7 +46,7 @@ class Ed25519KeyPair private constructor(
     val privateKey: ByteArray by lazy { privateKeyParameters.encoded }
 
     val address: String by lazy {
-        val pkHash = Hash.blake2b256(publicKey).slice(1..32)
+        val pkHash = Hash.blake2b256(publicKey).slice(1..31)
         Numeric.toHexString(AionConstants.ADDRESS_ID + pkHash)
     }
 
