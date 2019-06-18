@@ -51,6 +51,7 @@ class AionTransactionManager(
     ): EthSendTransaction {
 
         val transaction = AionTransaction(
+            to = to,
             data = data,
             value = value,
             targetVm = targetVm,

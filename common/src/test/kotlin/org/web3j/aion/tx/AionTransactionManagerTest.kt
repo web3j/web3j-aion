@@ -62,15 +62,16 @@ class AionTransactionManagerTest {
     @Test
     fun `sign raw transaction call AVM`() {
         val aionTransaction = AionTransaction(
+            to = "0xa01af11dc05cc9aedcafdc80c8b94301e11540cf7fbdcff477b6bd964a208adc",
             data = "0x210009736574537472696e6721000a48656c6c6f2074657374",
-            timestamp = 1560519222067000,
+            timestamp = 1560788090116000,
             targetVm = VirtualMachine.AVM,
             nrgPrice = 10000000000.toBigInteger(),
-            nrg = 5000000.toBigInteger(),
-            nonce = 47.toBigInteger()
+            nrg = 2000000.toBigInteger(),
+            nonce = 80.toBigInteger()
         )
         assertThat(manager.sign(aionTransaction)).isEqualTo(
-            "0xf8952f808099210009736574537472696e6721000a48656c6c6f207465737487058b48b1e57f38834c4b408800000002540be40002b86008fe2bf5757b8261d4937f13b5815448f2144f9c1409a3fab4c99ca86fff8a36c140d240f82fc5eab55b66cb37382e525708e3f6e8d2c9c6823153f1d60053c07c8bfb0d16f33d929f97275592f9e3a41f0741f1153ecedf715ff138cf09e306"
+            "0xf8b550a0a01af11dc05cc9aedcafdc80c8b94301e11540cf7fbdcff477b6bd964a208adc8099210009736574537472696e6721000a48656c6c6f207465737487058b874bae57a0831e84808800000002540be40001b86008fe2bf5757b8261d4937f13b5815448f2144f9c1409a3fab4c99ca86fff8a36d0e612390be454382a7556b0419214f063f220b874863715f5ca121da7685bca64623d8b730ec273cc13687530a977975f729e0a8b172131c333f3d8f0905e02"
         )
     }
 
