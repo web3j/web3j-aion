@@ -34,7 +34,6 @@ abstract class AvmAionContract protected constructor(
         contractBinary, contractAddress, web3j,
         AionTransactionManager(
             web3j as Aion,
-            credentials.address,
             Ed25519KeyPair(
                 credentials.ecKeyPair.publicKey,
                 credentials.ecKeyPair.privateKey
@@ -56,7 +55,6 @@ abstract class AvmAionContract protected constructor(
         contractBinary, contractAddress, web3j,
         AionTransactionManager(
             web3j as Aion,
-            credentials.address,
             Ed25519KeyPair(
                 credentials.ecKeyPair.publicKey,
                 credentials.ecKeyPair.privateKey
@@ -102,7 +100,6 @@ abstract class FvmAionContract protected constructor(
         contractBinary, contractAddress, web3j,
         AionTransactionManager(
             web3j as Aion,
-            credentials.address,
             Ed25519KeyPair(
                 credentials.ecKeyPair.publicKey,
                 credentials.ecKeyPair.privateKey
@@ -124,7 +121,6 @@ abstract class FvmAionContract protected constructor(
         contractBinary, contractAddress, web3j,
         AionTransactionManager(
             web3j as Aion,
-            credentials.address,
             Ed25519KeyPair(
                 credentials.ecKeyPair.publicKey,
                 credentials.ecKeyPair.privateKey
