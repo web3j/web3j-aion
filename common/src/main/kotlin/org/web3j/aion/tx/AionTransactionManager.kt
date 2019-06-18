@@ -36,10 +36,20 @@ import java.util.Arrays
  */
 class AionTransactionManager(
     private val aion: Aion,
-    private val address: String,
     private val keyPair: Ed25519KeyPair,
-    private val targetVm: VirtualMachine
-) : TransactionManager(aion, address) {
+    private val targetVm: VirtualMachine,
+    attempts: Int, sleepDuration: Long
+) : TransactionManager(aion, attempts, sleepDuration, keyPair.address) {
+
+    constructor(
+        aion: Aion,
+        keyPair: Ed25519KeyPair,
+        targetVm: VirtualMachine
+    ) : this(
+        aion, keyPair, targetVm,
+        DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH,
+        DEFAULT_POLLING_FREQUENCY
+    )
 
     override fun sendTransaction(
         gasPrice: BigInteger?,
@@ -105,7 +115,7 @@ class AionTransactionManager(
     }
 
     private fun getNonce(): BigInteger {
-        return aion.ethGetTransactionCount(address, LATEST).send().transactionCount
+        return aion.ethGetTransactionCount(keyPair.address, LATEST).send().transactionCount
     }
 
     private fun AionTransaction.toRplElements(): Array<ByteArray> {
@@ -127,9 +137,9 @@ class AionTransactionManager(
 
         return arrayOf(
             RLP.encodeElement(nonce.toByteArray()),
-            RLP.encodeElement(hexToBytes(to)),
+            RLP.encodeElement(to.toByteArray()),
             RLP.encodeElement(value?.toByteArray()),
-            RLP.encodeElement(hexToBytes(data)),
+            RLP.encodeElement(data.toByteArray()),
             RLP.encodeElement(timestamp.toByteArray()),
             RLP.encodeLong(nrg),
             RLP.encodeLong(nrgPrice),
@@ -141,9 +151,9 @@ class AionTransactionManager(
         const val TRANSACTION_TYPE_OTHER: Byte = 0x1
         const val TRANSACTION_TYPE_AVM_CONSTRUCTOR: Byte = 0x2
 
-        private fun hexToBytes(data: String?): ByteArray {
-            return data?.run {
-                val cleanData = Numeric.cleanHexPrefix(data).replace("\\s".toRegex(), "")
+        private fun String?.toByteArray(): ByteArray {
+            return this?.run {
+                val cleanData = Numeric.cleanHexPrefix(this).replace("\\s".toRegex(), "")
                 val biBytes = BigInteger("10$cleanData", 16).toByteArray()
                 Arrays.copyOfRange(biBytes, 1, biBytes.size)
             } ?: ByteArray(0)
