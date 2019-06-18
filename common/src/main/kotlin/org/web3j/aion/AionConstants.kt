@@ -1,6 +1,8 @@
 package org.web3j.aion
 
 object AionConstants {
+    val ADDRESS_ID = "a0".toByteArray()
+
     const val NRG_CREATE_CONTRACT_DEFAULT = 350000L
     const val NRG_TRANSACTION_DEFAULT = 90000L
 
