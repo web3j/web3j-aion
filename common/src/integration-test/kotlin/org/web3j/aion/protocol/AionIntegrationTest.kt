@@ -26,11 +26,7 @@ abstract class AionIntegrationTest(private val targetVm: VirtualMachine) {
 
     @BeforeEach
     fun setUp() {
-        manager = AionTransactionManager(aion, ACCOUNT.getValue(NETWORK), keyPair, targetVm)
-
-        if (NETWORK != MASTERY) { // Unlock account not supported in Nodesmith
-            aion.personalUnlockAccount(ACCOUNT[NETWORK], "410n").send()
-        }
+        manager = AionTransactionManager(aion, keyPair, targetVm, 20, 3000)
     }
 
     companion object {
@@ -56,21 +52,9 @@ abstract class AionIntegrationTest(private val targetVm: VirtualMachine) {
         }
 
         @JvmStatic
-        protected val ACCOUNT = mapOf(
-            LOCALHOST to "0xa0d5c14a9a2f84a1a8b20fbc329f27e8cb2d2dc0752bb4411b9cd77814355ce6",
-            MASTERY to "0xa0c57475b6a30901b2348c1071d7b27a471f43f8bf895d04b73db08e659efe99"
-        )
-
-        @JvmStatic
         protected val PRIVATE_KEY = mapOf(
             LOCALHOST to "0x183759fc5cfd01a893ce417c2dde2f3f94026f96276043ddc98ab95a62dc3583a13df70b0ccc362e94c02e7bcd514523add9edcbb20412f00544a462f00d63e4",
             MASTERY to "0x4776895c43f77676cdec51a6c92d2a1bacdf16ddcc6e7e07ab39104b42e1e52608fe2bf5757b8261d4937f13b5815448f2144f9c1409a3fab4c99ca86fff8a36"
-        )
-
-        @JvmStatic
-        protected val PUBLIC_KEY = mapOf(
-            LOCALHOST to "",
-            MASTERY to "08fe2bf5757b8261d4937f13b5815448f2144f9c1409a3fab4c99ca86fff8a36"
         )
 
         @JvmStatic
@@ -80,7 +64,7 @@ abstract class AionIntegrationTest(private val targetVm: VirtualMachine) {
 
         @JvmStatic
         private val keyPair: Ed25519KeyPair by lazy {
-            Ed25519KeyPair(PUBLIC_KEY.getValue(NETWORK), PRIVATE_KEY.getValue(NETWORK))
+            Ed25519KeyPair(PRIVATE_KEY.getValue(NETWORK))
         }
 
         class KGenericContainer(imageName: String) : GenericContainer<KGenericContainer>(imageName)
