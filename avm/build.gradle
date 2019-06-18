@@ -15,6 +15,5 @@ dependencies {
 
     testImplementation project(path: ':web3j-aion-common', configuration: 'testOutput')
     integrationTestImplementation project(path: ':web3j-aion-common', configuration: 'integrationTestOutput')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
