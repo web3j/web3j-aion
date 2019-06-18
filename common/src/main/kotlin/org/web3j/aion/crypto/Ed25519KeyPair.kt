@@ -3,6 +3,8 @@ package org.web3j.aion.crypto
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters
 import org.bouncycastle.crypto.signers.Ed25519Signer
+import org.web3j.aion.AionConstants
+import org.web3j.crypto.Hash
 import org.web3j.utils.Numeric
 import java.math.BigInteger
 
@@ -42,6 +44,11 @@ class Ed25519KeyPair private constructor(
 
     val publicKey: ByteArray by lazy { publicKeyParameters.encoded }
     val privateKey: ByteArray by lazy { privateKeyParameters.encoded }
+
+    val address: String by lazy {
+        val pkHash = Hash.blake2b256(publicKey).slice(1..32)
+        Numeric.toHexString(AionConstants.ADDRESS_ID + pkHash)
+    }
 
     /**
      * Sign a hash with the private key of this key pair.
