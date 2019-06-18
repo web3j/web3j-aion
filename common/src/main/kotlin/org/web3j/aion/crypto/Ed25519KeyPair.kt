@@ -9,10 +9,25 @@ import java.math.BigInteger
 /**
  * Elliptic Curve ED-25519 generated key pair.
  */
-class Ed25519KeyPair(publicKey: ByteArray, privateKey: ByteArray) {
+class Ed25519KeyPair private constructor(
+    private val publicKeyParameters: Ed25519PublicKeyParameters,
+    private val privateKeyParameters: Ed25519PrivateKeyParameters
+) {
+    constructor(publicKey: ByteArray, privateKey: ByteArray) : this(
+        Ed25519PublicKeyParameters(publicKey, 0),
+        Ed25519PrivateKeyParameters(privateKey, 0)
+    )
+
+    constructor(privateKey: ByteArray) : this(
+        Ed25519PrivateKeyParameters(privateKey, 0)
+    )
 
     constructor(publicKey: BigInteger, privateKey: BigInteger) : this(
         publicKey.toByteArray(), privateKey.toByteArray()
+    )
+
+    constructor(privateKey: String) : this(
+        Numeric.hexStringToByteArray(privateKey)
     )
 
     constructor(publicKey: String, privateKey: String) : this(
@@ -20,11 +35,13 @@ class Ed25519KeyPair(publicKey: ByteArray, privateKey: ByteArray) {
         Numeric.hexStringToByteArray(privateKey)
     )
 
-    private val publicKeyParameters = Ed25519PublicKeyParameters(publicKey, 0)
-    private val privateKeyParameters = Ed25519PrivateKeyParameters(privateKey, 0)
+    private constructor(privateKeyParameters: Ed25519PrivateKeyParameters) : this(
+        privateKeyParameters.generatePublicKey(),
+        privateKeyParameters
+    )
 
     val publicKey: ByteArray by lazy { publicKeyParameters.encoded }
-//    val privateKey: ByteArray by lazy { privateKeyParameters.encoded }
+    val privateKey: ByteArray by lazy { privateKeyParameters.encoded }
 
     /**
      * Sign a hash with the private key of this key pair.
