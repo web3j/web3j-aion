@@ -3,14 +3,22 @@ package com.example.dapp;
 import avm.Address;
 import avm.Blockchain;
 import org.aion.avm.tooling.abi.Callable;
+import org.aion.avm.tooling.abi.Initializable;
 import org.aion.avm.userlib.AionMap;
 import org.aion.avm.userlib.abi.ABIDecoder;
 
 public class ERC20Token {
 
+    @Initializable
     private static final String name;
+
+    @Initializable
     private static final String symbol;
+
+    @Initializable
     private static final int decimals;
+
+    @Initializable
     private static final Address minter;
 
     /*
