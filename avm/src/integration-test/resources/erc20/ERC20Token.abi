@@ -1,6 +1,6 @@
 0.0
 com.example.dapp.ERC20Token
-Clinit: ()
+Clinit: (String, String, int, Address)
 public static String name()
 public static String symbol()
 public static int decimals()
