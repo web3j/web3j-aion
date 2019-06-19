@@ -63,7 +63,7 @@ abstract class AionIntegrationTest(private val targetVm: VirtualMachine) {
         }
 
         @JvmStatic
-        private val keyPair: Ed25519KeyPair by lazy {
+        protected val keyPair: Ed25519KeyPair by lazy {
             Ed25519KeyPair(PRIVATE_KEY.getValue(NETWORK))
         }
 
