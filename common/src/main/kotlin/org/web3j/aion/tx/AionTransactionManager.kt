@@ -37,7 +37,7 @@ import java.util.Arrays
 class AionTransactionManager(
     private val aion: Aion,
     private val keyPair: Ed25519KeyPair,
-    private val targetVm: VirtualMachine,
+    private val targetVm: VirtualMachine = AVM,
     attempts: Int,
     sleepDuration: Long
 ) : TransactionManager(aion, attempts, sleepDuration, keyPair.address) {
