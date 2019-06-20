@@ -159,4 +159,22 @@ subprojects {
             endWithNewline()
         }
     }
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+        archiveClassifier = 'sources'
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId = rootProject.group
+                artifactId = project.name
+                version = rootProject.version
+
+                from components.kotlin
+                artifact sourcesJar
+            }
+        }
+    }
 }
