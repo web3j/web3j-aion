@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
+    api "org.web3j:core:${versions.web3j}"
+
     implementation 'org.aion:rlp4j:46e0cb3'
     implementation 'org.aion:util4j:2c5aa4ad'
-
-    implementation "org.web3j:core:${versions.web3j}"
 }
