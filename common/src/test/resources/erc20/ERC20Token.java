@@ -1,5 +1,8 @@
 package erc20;
 
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
@@ -12,15 +15,11 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
 
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-
 /**
  * <p>Auto generated code.
  * <p><strong>Do not modify!</strong>
  * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
- * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the
+ * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
  * <p>Generated with web3j version 4.4.0-SNAPSHOT.
@@ -68,86 +67,86 @@ public class ERC20Token extends AvmAionContract {
 
     public RemoteCall<TransactionReceipt> name() {
         final Function function = new Function(
-                FUNC_NAME,
-                Arrays.<Type>asList(),
+                FUNC_NAME, 
+                Arrays.<Type>asList(), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteCall<TransactionReceipt> symbol() {
         final Function function = new Function(
-                FUNC_SYMBOL,
-                Arrays.<Type>asList(),
+                FUNC_SYMBOL, 
+                Arrays.<Type>asList(), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteCall<TransactionReceipt> decimals() {
         final Function function = new Function(
-                FUNC_DECIMALS,
-                Arrays.<Type>asList(),
+                FUNC_DECIMALS, 
+                Arrays.<Type>asList(), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteCall<TransactionReceipt> totalSupply() {
         final Function function = new Function(
-                FUNC_TOTALSUPPLY,
-                Arrays.<Type>asList(),
+                FUNC_TOTALSUPPLY, 
+                Arrays.<Type>asList(), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteCall<TransactionReceipt> balanceOf(String param0) {
         final Function function = new Function(
-                FUNC_BALANCEOF,
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(256, param0)),
+                FUNC_BALANCEOF, 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(256, param0)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteCall<TransactionReceipt> allowance(String param0, String param1) {
         final Function function = new Function(
-                FUNC_ALLOWANCE,
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(256, param0),
-                        new org.web3j.abi.datatypes.Address(256, param1)),
+                FUNC_ALLOWANCE, 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(256, param0), 
+                new org.web3j.abi.datatypes.Address(256, param1)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteCall<TransactionReceipt> transfer(String param0, Long param1) {
         final Function function = new Function(
-                FUNC_TRANSFER,
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(256, param0),
-                        new org.web3j.abi.datatypes.primitive.Long(param1)),
+                FUNC_TRANSFER, 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(256, param0), 
+                new org.web3j.abi.datatypes.primitive.Long(param1)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteCall<TransactionReceipt> approve(String param0, Long param1) {
         final Function function = new Function(
-                FUNC_APPROVE,
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(256, param0),
-                        new org.web3j.abi.datatypes.primitive.Long(param1)),
+                FUNC_APPROVE, 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(256, param0), 
+                new org.web3j.abi.datatypes.primitive.Long(param1)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteCall<TransactionReceipt> transferFrom(String param0, String param1, Long param2) {
         final Function function = new Function(
-                FUNC_TRANSFERFROM,
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(256, param0),
-                        new org.web3j.abi.datatypes.Address(256, param1),
-                        new org.web3j.abi.datatypes.primitive.Long(param2)),
+                FUNC_TRANSFERFROM, 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(256, param0), 
+                new org.web3j.abi.datatypes.Address(256, param1), 
+                new org.web3j.abi.datatypes.primitive.Long(param2)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteCall<TransactionReceipt> mint(String param0, Long param1) {
         final Function function = new Function(
-                FUNC_MINT,
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(256, param0),
-                        new org.web3j.abi.datatypes.primitive.Long(param1)),
+                FUNC_MINT, 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(256, param0), 
+                new org.web3j.abi.datatypes.primitive.Long(param1)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -171,35 +170,35 @@ public class ERC20Token extends AvmAionContract {
     }
 
     public static RemoteCall<ERC20Token> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider, String param0, String param1, Integer param2, String param3) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(param0),
-                new org.web3j.abi.datatypes.Utf8String(param1),
-                new org.web3j.abi.datatypes.primitive.Int(param2),
+        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(param0), 
+                new org.web3j.abi.datatypes.Utf8String(param1), 
+                new org.web3j.abi.datatypes.primitive.Int(param2), 
                 new org.web3j.abi.datatypes.Address(256, param3)));
         return deployRemoteCall(ERC20Token.class, web3j, credentials, contractGasProvider, BINARY, encodedConstructor);
     }
 
     public static RemoteCall<ERC20Token> deploy(Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider, String param0, String param1, Integer param2, String param3) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(param0),
-                new org.web3j.abi.datatypes.Utf8String(param1),
-                new org.web3j.abi.datatypes.primitive.Int(param2),
+        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(param0), 
+                new org.web3j.abi.datatypes.Utf8String(param1), 
+                new org.web3j.abi.datatypes.primitive.Int(param2), 
                 new org.web3j.abi.datatypes.Address(256, param3)));
         return deployRemoteCall(ERC20Token.class, web3j, transactionManager, contractGasProvider, BINARY, encodedConstructor);
     }
 
     @Deprecated
     public static RemoteCall<ERC20Token> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, String param0, String param1, Integer param2, String param3) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(param0),
-                new org.web3j.abi.datatypes.Utf8String(param1),
-                new org.web3j.abi.datatypes.primitive.Int(param2),
+        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(param0), 
+                new org.web3j.abi.datatypes.Utf8String(param1), 
+                new org.web3j.abi.datatypes.primitive.Int(param2), 
                 new org.web3j.abi.datatypes.Address(256, param3)));
         return deployRemoteCall(ERC20Token.class, web3j, credentials, gasPrice, gasLimit, BINARY, encodedConstructor);
     }
 
     @Deprecated
     public static RemoteCall<ERC20Token> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, String param0, String param1, Integer param2, String param3) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(param0),
-                new org.web3j.abi.datatypes.Utf8String(param1),
-                new org.web3j.abi.datatypes.primitive.Int(param2),
+        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(param0), 
+                new org.web3j.abi.datatypes.Utf8String(param1), 
+                new org.web3j.abi.datatypes.primitive.Int(param2), 
                 new org.web3j.abi.datatypes.Address(256, param3)));
         return deployRemoteCall(ERC20Token.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, encodedConstructor);
     }
