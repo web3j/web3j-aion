@@ -2,6 +2,7 @@ package org.web3j.aion.crypto
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import org.junit.Test
 import org.web3j.utils.Numeric
@@ -43,5 +44,16 @@ class Ed25519KeyPairTest {
         )
 
         assertThat(keyPair.verify(hash, signature)).isTrue()
+    }
+
+    @Test
+    fun `verify wrong transaction hash`() {
+        val hash = hexStringToByteArray("f2499f6f6ab74d250ab266b1c36167e9352904d70ae25ef26383b79eb4b7958b")
+
+        val signature = hexStringToByteArray(
+            "a91c55533ae0493dcae07cc47c412a59d8e9b2bf02d12ead1d20ebd2386996fa9a29c8753ae82013b85a8453da3688e4cd436d3f71d4dc450e1d5b6504940805"
+        )
+
+        assertThat(keyPair.verify(hash, signature)).isFalse()
     }
 }
