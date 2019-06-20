@@ -11,7 +11,6 @@ import org.web3j.aion.tx.FvmAionContract
 import org.web3j.codegen.Console.exitError
 import org.web3j.codegen.SolidityFunctionWrapperGenerator
 import org.web3j.protocol.core.methods.response.AbiDefinition
-import org.web3j.utils.Collection.tail
 import org.web3j.utils.Numeric
 import picocli.CommandLine.Command
 import picocli.CommandLine.Option
@@ -51,19 +50,19 @@ private class AionGenerator constructor(
     /**
      * Custom CLI interpreter to support target virtual machine and remove unneeded options.
      */
-    @Command(name = "aion generate", mixinStandardHelpOptions = true, version = ["1.0"], sortOptions = false)
+    @Command(name = "aion-web3j", mixinStandardHelpOptions = true, version = ["1.0"], sortOptions = false)
     internal class CommandLineRunner : Runnable {
 
         @Option(
             names = ["-a", "--abiFile"],
-            description = ["abi file with contract definition."],
+            description = ["ABI file in FVM or AVM format with a contract definition."],
             required = true
         )
         private lateinit var abiFile: File
 
         @Option(
             names = ["-b", "--binFile"],
-            description = ["bin file with contract compiled code " + "in order to generate deploy methods."],
+            description = ["BIN or JAR file with the contract compiled code in order to generate deploy methods."],
             required = false
         )
         private var binFile: File? = null
@@ -83,7 +82,7 @@ private class AionGenerator constructor(
         private lateinit var packageName: String
 
         @Option(
-            names = ["-vm", "--targetVm"],
+            names = ["-t", "--targetVm"],
             description = ["target Aion virtual machine."]
         )
         private val targetVm = AVM
@@ -129,16 +128,7 @@ class AionGeneratorMain {
 
         @JvmStatic
         fun main(vararg args: String) {
-            val finalArgs = if (args.isNotEmpty()) {
-                when (args[0]) {
-                    "generate" -> tail(args)
-                    "aion" -> tail(args)
-                    else -> args
-                }
-            } else {
-                args
-            }
-            run(CommandLineRunner(), *finalArgs)
+            run(CommandLineRunner(), *args)
         }
     }
 }
