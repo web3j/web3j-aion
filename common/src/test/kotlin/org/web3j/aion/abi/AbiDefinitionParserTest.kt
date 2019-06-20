@@ -92,10 +92,10 @@ class AbiDefinitionParserTest {
                 assertThat(get(0).name).isNull()
                 assertThat(get(0).outputs).isEmpty()
                 assertThat(get(0).inputs).containsExactly(
-                    NamedType(null, "String"),
-                    NamedType(null, "String"),
+                    NamedType(null, "string"),
+                    NamedType(null, "string"),
                     NamedType(null, "int"),
-                    NamedType(null, "Address")
+                    NamedType(null, "address")
                 )
 
                 // Function name
