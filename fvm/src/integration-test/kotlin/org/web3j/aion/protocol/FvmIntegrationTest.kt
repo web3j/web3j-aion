@@ -12,7 +12,7 @@ class FvmIntegrationTest : AionIntegrationTest(VirtualMachine.FVM) {
 
     @Test
     internal fun testContractDeployUnsigned() {
-        val manager = ClientTransactionManager(aion, ACCOUNT[Network.LOCALHOST])
+        val manager = ClientTransactionManager(aion, keyPair.address)
         Greeter.deploy(aion, manager, AionGasProvider, "Aion test").send().apply {
             assertThat(greet().send()).isEqualTo("Aion test")
         }
