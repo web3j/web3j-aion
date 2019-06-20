@@ -2,7 +2,6 @@ package org.web3j.aion.abi.avm
 
 // FIXME Remove core dependency
 import org.aion.avm.userlib.abi.ABIDecoder
-import org.aion.avm.userlib.abi.ABIException
 import org.web3j.abi.FunctionReturnDecoder
 import org.web3j.abi.TypeReference
 import org.web3j.abi.datatypes.Address
@@ -37,6 +36,7 @@ import org.web3j.abi.datatypes.primitive.Int
 import org.web3j.abi.datatypes.primitive.Long
 import org.web3j.abi.datatypes.primitive.Short
 import org.web3j.aion.AionConstants.ADDRESS_BIT_LENGTH
+import org.web3j.aion.abi.AionDecoderException
 import org.web3j.utils.Numeric
 import java.lang.reflect.ParameterizedType
 import java.math.BigInteger
@@ -97,7 +97,7 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
                     typeReference,
                     decoder
                 )
-                else -> throw ABIException("Unsupported ABI type")
+                else -> throw AionDecoderException("Unsupported ABI type")
             }
         }
     }
@@ -134,7 +134,7 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
                     56 -> Uint56(decoder.decodeOneLong())
                     else -> newNumericInstance(type.bitSize, decoder, true)
                 }
-            else -> throw ABIException("Unknown type ${javaClass.canonicalName}")
+            else -> throw AionDecoderException("Unknown type ${javaClass.canonicalName}")
         }
     }
 
@@ -152,7 +152,7 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
                 simpleName,
                 BYTES_REGEX
             )
-            else -> throw ABIException("Unknown type ${javaClass.canonicalName}")
+            else -> throw AionDecoderException("Unknown type ${javaClass.canonicalName}")
         }
 
     private fun bitSize(input: String, regex: Regex): kotlin.Int? {
@@ -214,7 +214,7 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
                 IntType::class.java -> TODO()
                 DynamicArray::class.java -> TODO("2D arrays not implemented")
                 StaticArray::class.java -> TODO("2D arrays not implemented")
-                else -> throw ABIException("Unsupported ABI type")
+                else -> throw AionDecoderException("Unsupported ABI type")
             } as DynamicArray<Type<*>>
         }
     }
@@ -236,7 +236,7 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
             is kotlin.Long -> Long(this)
             is kotlin.Double -> Double(this)
             is String -> Utf8String(this)
-            else -> throw ABIException("Unsupported ABI type")
+            else -> throw AionDecoderException("Unsupported ABI type")
         }
     }
 

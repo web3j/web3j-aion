@@ -2,6 +2,7 @@ package org.web3j.aion.abi
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import org.junit.Ignore
 import org.junit.Test
 import org.web3j.abi.FunctionReturnDecoder.decode
 import org.web3j.abi.TypeReference
@@ -32,6 +33,7 @@ import org.web3j.abi.datatypes.generated.Uint8
 /**
  * TODO Add array and 2D array tests.
  */
+@Ignore
 class AbiFunctionDecoderFvmTest {
 
     @Test
@@ -56,8 +58,7 @@ class AbiFunctionDecoderFvmTest {
                 "0x000000000000000000000000000000100000000000000000000000000000000e48657920796f7520616761696e210000",
                 function.outputParameters
             )
-        )
-            .isEqualTo(listOf(Utf8String("Hey you again!")))
+        ).isEqualTo(listOf(Utf8String("Hey you again!")))
     }
 
     @Test

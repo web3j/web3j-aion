@@ -2,7 +2,6 @@ package org.web3j.aion.abi.avm
 
 // FIXME Remove core dependency
 import org.aion.avm.core.util.ABIUtil
-import org.aion.avm.userlib.abi.ABIException
 import org.web3j.abi.FunctionEncoder
 import org.web3j.abi.datatypes.Address
 import org.web3j.abi.datatypes.Array
@@ -23,6 +22,7 @@ import org.web3j.abi.datatypes.primitive.Float
 import org.web3j.abi.datatypes.primitive.Int
 import org.web3j.abi.datatypes.primitive.Long
 import org.web3j.abi.datatypes.primitive.Short
+import org.web3j.aion.abi.AionEncoderException
 import org.web3j.utils.Numeric
 import java.math.BigInteger
 
@@ -42,7 +42,7 @@ internal object AbiFunctionEncoder : FunctionEncoder() {
     private fun <T> Type<T>.toAion(): Any {
         return when (this) {
             is Address -> avm.Address(Numeric.hexStringToByteArray(value.drop(2)))
-            is FixedPointType -> throw ABIException("Unsupported fixed point type")
+            is FixedPointType -> throw AionEncoderException("Unsupported fixed point type")
             is IntType -> (this as IntType).toAion()
             is Array<*> -> when (this.componentType) {
                 Address::class.java ->
@@ -73,7 +73,7 @@ internal object AbiFunctionEncoder : FunctionEncoder() {
                     TODO("2D arrays not implemented")
 //                      (value as List<DynamicArray<Type<Char>>>)
 //                      .map { it.toAion() as CharArray }.toTypedArray()
-                else -> throw ABIException("Unknown type $javaClass")
+                else -> throw AionEncoderException("Unknown type $javaClass")
             }
             else -> value as Any // Covers primitive types
         }
@@ -86,17 +86,17 @@ internal object AbiFunctionEncoder : FunctionEncoder() {
                 16 -> value.shortValueExact()
                 24, 32 -> value.intValueExact()
                 40, 48, 56, 64 -> value.longValueExact()
-                in 136..256 -> throw ABIException("Unsupported type: int$bitSize")
+                in 136..256 -> throw AionEncoderException("Unsupported type: int$bitSize")
                 else -> value.toByteArray() // Avoid overflow
             }
             is Uint -> when (bitSize) {
                 8 -> value.shortValueExact()
                 16, 24 -> value.intValueExact()
                 32, 40, 48, 56 -> value.longValueExact()
-                in 136..256 -> throw ABIException("Unsupported type: uint$bitSize")
+                in 136..256 -> throw AionEncoderException("Unsupported type: uint$bitSize")
                 else -> value.toByteArray() // Avoid overflow
             }
-            else -> throw ABIException("Unknown type ${javaClass.canonicalName}")
+            else -> throw AionEncoderException("Unknown type ${javaClass.canonicalName}")
         }
     }
 }
