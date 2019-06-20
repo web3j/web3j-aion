@@ -88,13 +88,14 @@ subprojects {
     }
 
     dependencies {
+        api "org.bouncycastle:bcpkix-jdk15on:${versions.bouncycastle}"
+        
         implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
         implementation 'org.jetbrains.kotlin:kotlin-reflect'
         implementation 'org.jetbrains.kotlin:kotlin-noarg'
         implementation 'org.jetbrains.kotlin:kotlin-native-utils'
 
         implementation "io.github.microutils:kotlin-logging:${versions.kLogging}"
-        implementation "org.bouncycastle:bcpkix-jdk15on:${versions.bouncycastle}"
 
         implementation("com.github.shyiko:ktlint:${versions.ktlint}") {
             exclude group: 'org.jetbrains.kotlin'
