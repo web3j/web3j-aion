@@ -50,7 +50,7 @@ private class AionGenerator constructor(
     /**
      * Custom CLI interpreter to support target virtual machine and remove unneeded options.
      */
-    @Command(name = "aion-web3j", mixinStandardHelpOptions = true, version = ["1.0"], sortOptions = false)
+    @Command(name = "web3j-aion", mixinStandardHelpOptions = true, version = ["1.0"], sortOptions = false)
     internal class CommandLineRunner : Runnable {
 
         @Option(
