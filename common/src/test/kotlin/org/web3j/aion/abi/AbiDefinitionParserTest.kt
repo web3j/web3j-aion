@@ -90,26 +90,31 @@ class AbiDefinitionParserTest {
             assertAll {
                 // Constructor
                 assertThat(get(0).name).isNull()
-                assertThat(get(0).inputs).isEmpty()
                 assertThat(get(0).outputs).isEmpty()
+                assertThat(get(0).inputs).containsExactly(
+                    NamedType(null, "String"),
+                    NamedType(null, "String"),
+                    NamedType(null, "int"),
+                    NamedType(null, "Address")
+                )
 
                 // Function name
                 assertThat(get(1).name).isEqualTo("name")
                 assertThat(get(1).inputs).isEmpty()
-                assertThat(get(1).outputs).containsOnly(NamedType(null, "string"))
+                assertThat(get(1).outputs).containsExactly(NamedType(null, "string"))
 
                 // Function balanceOf
                 assertThat(get(5).name).isEqualTo("balanceOf")
                 assertThat(get(5).inputs).containsOnly(NamedType(null, "address"))
-                assertThat(get(5).outputs).containsOnly(NamedType(null, "long"))
+                assertThat(get(5).outputs).containsExactly(NamedType(null, "long"))
 
                 // Function transfer
                 assertThat(get(7).name).isEqualTo("transfer")
-                assertThat(get(7).inputs).containsOnly(
+                assertThat(get(7).inputs).containsExactly(
                     NamedType(null, "address"),
                     NamedType(null, "long")
                 )
-                assertThat(get(7).outputs).containsOnly(NamedType(null, "boolean"))
+                assertThat(get(7).outputs).containsExactly(NamedType(null, "boolean"))
             }
         }
     }
