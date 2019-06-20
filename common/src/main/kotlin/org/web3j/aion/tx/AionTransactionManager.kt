@@ -38,7 +38,8 @@ class AionTransactionManager(
     private val aion: Aion,
     private val keyPair: Ed25519KeyPair,
     private val targetVm: VirtualMachine,
-    attempts: Int, sleepDuration: Long
+    attempts: Int,
+    sleepDuration: Long
 ) : TransactionManager(aion, attempts, sleepDuration, keyPair.address) {
 
     constructor(
