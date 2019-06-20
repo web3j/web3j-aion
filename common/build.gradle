@@ -1,6 +1,13 @@
 plugins {
+    id 'application'
+    id 'distribution'
     id 'org.web3j' apply false
 }
+
+description 'Aion command line tools for web3j integration.'
+
+mainClassName = 'org.web3j.aion.codegen.AionGeneratorMain'
+applicationName = 'aion-web3j'
 
 dependencies {
     implementation name: 'rlp4j', version: '46e0cb3'
