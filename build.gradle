@@ -52,8 +52,8 @@ subprojects {
                 snapshotsOnly()
             }
         }
-        flatDir {
-            dirs "$rootProject.projectDir/lib"
+        maven {
+            url "$rootProject.projectDir/lib"
         }
     }
 
