@@ -1,0 +1,18 @@
+plugins {
+    id 'application'
+    id 'distribution'
+    id 'org.web3j' apply false
+}
+
+description 'Aion command line tools for web3j integration.'
+
+mainClassName = 'org.web3j.aion.codegen.AionGeneratorMain'
+applicationName = 'web3j-aion'
+
+dependencies {
+    implementation project(':web3j-aion-common')
+    
+    implementation "org.web3j:core:${versions.web3j}"
+    implementation "org.web3j:codegen:${versions.web3j}"
+    implementation "info.picocli:picocli:${versions.picocli}"
+}
