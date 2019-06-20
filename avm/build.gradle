@@ -1,17 +1,14 @@
-web3j {
-    excludedContracts = ['Mortal']
-}
-
 dependencies {
     implementation project(':web3j-aion-common')
-    
+
     implementation "org.web3j:abi:${versions.web3j}"
 
     implementation name: 'org-aion-avm-api'
     implementation name: 'org-aion-avm-core'
-    implementation name: 'org-aion-avm-rt'
-    implementation name: 'org-aion-avm-tooling'
     implementation name: 'org-aion-avm-userlib'
+    
+    runtimeOnly name: 'org-aion-avm-rt'
+    runtimeOnly name: 'org-aion-avm-tooling'
 
     testImplementation project(path: ':web3j-aion-common', configuration: 'testOutput')
     integrationTestImplementation project(path: ':web3j-aion-common', configuration: 'integrationTestOutput')
