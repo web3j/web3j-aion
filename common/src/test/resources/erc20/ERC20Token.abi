@@ -1,0 +1,13 @@
+0.0
+com.example.dapp.ERC20Token
+Clinit: (String, String, int, Address)
+public static String name()
+public static String symbol()
+public static int decimals()
+public static long totalSupply()
+public static long balanceOf(Address)
+public static long allowance(Address, Address)
+public static boolean transfer(Address, long)
+public static boolean approve(Address, long)
+public static boolean transferFrom(Address, Address, long)
+public static boolean mint(Address, long)

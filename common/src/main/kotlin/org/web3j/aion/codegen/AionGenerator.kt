@@ -5,21 +5,24 @@ import org.web3j.aion.VirtualMachine
 import org.web3j.aion.VirtualMachine.AVM
 import org.web3j.aion.VirtualMachine.FVM
 import org.web3j.aion.abi.AbiDefinitionParser
-import org.web3j.aion.codegen.AionFunctionWrapperGenerator.CommandLineRunner
+import org.web3j.aion.codegen.AionGenerator.CommandLineRunner
 import org.web3j.aion.tx.AvmAionContract
 import org.web3j.aion.tx.FvmAionContract
 import org.web3j.codegen.Console.exitError
 import org.web3j.codegen.SolidityFunctionWrapperGenerator
 import org.web3j.protocol.core.methods.response.AbiDefinition
 import org.web3j.utils.Collection.tail
+import org.web3j.utils.Numeric
 import picocli.CommandLine.Command
 import picocli.CommandLine.Option
 import picocli.CommandLine.run
 import java.io.File
 import java.io.IOException
+import java.nio.ByteBuffer
+import java.nio.file.Files
 
-private class AionFunctionWrapperGenerator constructor(
-    binFile: File,
+private class AionGenerator constructor(
+    binFile: File?,
     abiFile: File,
     destinationDir: File,
     basePackageName: String,
@@ -61,9 +64,9 @@ private class AionFunctionWrapperGenerator constructor(
         @Option(
             names = ["-b", "--binFile"],
             description = ["bin file with contract compiled code " + "in order to generate deploy methods."],
-            required = true
+            required = false
         )
-        private lateinit var binFile: File
+        private var binFile: File? = null
 
         @Option(
             names = ["-o", "--outputDir"],
@@ -87,22 +90,45 @@ private class AionFunctionWrapperGenerator constructor(
 
         override fun run() {
             try {
-                AionFunctionWrapperGenerator(
-                    binFile, abiFile,
-                    destinationFileDir, packageName, targetVm
-                ).generate()
+                AionGenerator(copyJarToHexFile(), abiFile, destinationFileDir, packageName, targetVm).generate()
             } catch (e: Exception) {
                 exitError(e)
+            }
+        }
+
+        private fun copyJarToHexFile(): File? {
+            return binFile?.run {
+
+                // If specified, BIN file must be a JAR for AVM
+                if (targetVm == AVM && "jar" != extension) {
+                    exitError("AVM deployments must use --binFile with a JAR")
+                }
+
+                // Copy the JAR contents in HEX into a temp file
+                val hexFile = Files.createTempFile(abiFile.name, ".bin").toFile()
+
+                Files.readAllBytes(toPath()).let {
+                    val size = it.size + Int.SIZE_BYTES
+                    val hexString = ByteBuffer.allocate(size).apply {
+                        putInt(it.size)
+                        put(it)
+                    }.run {
+                        Numeric.toHexStringNoPrefix(array())
+                    }
+                    hexFile.writeText(hexString)
+                }
+
+                hexFile
             }
         }
     }
 }
 
-class AionFunctionWrapperMain {
+class AionGeneratorMain {
     companion object {
 
         @JvmStatic
-        fun main(args: Array<String>) {
+        fun main(vararg args: String) {
             val finalArgs = if (args.isNotEmpty()) {
                 when (args[0]) {
                     "generate" -> tail(args)
