@@ -140,18 +140,9 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
 
     private val Class<Type<*>>.bitSize: kotlin.Int?
         get() = when {
-            INT_REGEX.matches(simpleName) -> bitSize(
-                simpleName,
-                INT_REGEX
-            )
-            UINT_REGEX.matches(simpleName) -> bitSize(
-                simpleName,
-                UINT_REGEX
-            )
-            BYTES_REGEX.matches(simpleName) -> bitSize(
-                simpleName,
-                BYTES_REGEX
-            )
+            INT_REGEX.matches(simpleName) -> bitSize(simpleName, INT_REGEX)
+            UINT_REGEX.matches(simpleName) -> bitSize(simpleName, UINT_REGEX)
+            BYTES_REGEX.matches(simpleName) -> bitSize(simpleName, BYTES_REGEX)
             else -> throw AionDecoderException("Unknown type ${javaClass.canonicalName}")
         }
 
