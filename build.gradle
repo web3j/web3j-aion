@@ -17,8 +17,6 @@ buildscript {
 group = 'org.web3j.aion'
 version = '1.0.0-SNAPSHOT'
 
-//apply from: 'maven.gradle'
-
 ext {
     loadPropsFromFile = { String path ->
         def props = new Properties()
