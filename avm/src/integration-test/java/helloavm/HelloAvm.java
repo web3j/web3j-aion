@@ -20,7 +20,7 @@ import java.util.Collections;
  * <p>Auto generated code.
  * <p><strong>Do not modify!</strong>
  * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
- * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the
+ * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
  * <p>Generated with web3j version 4.4.0-SNAPSHOT.
@@ -54,7 +54,7 @@ public class HelloAvm extends AvmAionContract {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
-    public RemoteCall<TransactionReceipt> sayHello() {
+    public RemoteCall<TransactionReceipt> send_sayHello() {
         final Function function = new Function(
                 FUNC_SAYHELLO,
                 Arrays.<Type>asList(),
@@ -62,15 +62,23 @@ public class HelloAvm extends AvmAionContract {
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteCall<String> greet(String param0) {
+    public RemoteCall<String> call_greet(String param0) {
         final Function function = new Function(FUNC_GREET,
-                Arrays.<Type>asList(new Utf8String(param0)),
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(param0)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
                 }));
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
-    public RemoteCall<String> getString() {
+    public RemoteCall<TransactionReceipt> send_greet(String param0) {
+        final Function function = new Function(
+                FUNC_GREET,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(param0)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
+    public RemoteCall<String> call_getString() {
         final Function function = new Function(FUNC_GETSTRING,
                 Arrays.<Type>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {
@@ -78,10 +86,18 @@ public class HelloAvm extends AvmAionContract {
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
-    public RemoteCall<TransactionReceipt> setString(String param0) {
+    public RemoteCall<TransactionReceipt> send_getString() {
+        final Function function = new Function(
+                FUNC_GETSTRING,
+                Arrays.<Type>asList(),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
+    public RemoteCall<TransactionReceipt> send_setString(String param0) {
         final Function function = new Function(
                 FUNC_SETSTRING,
-                Arrays.<Type>asList(new Utf8String(param0)),
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(param0)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }

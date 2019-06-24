@@ -69,7 +69,7 @@ internal object AbiDefinitionParser {
             outputs = result.groupValues[1].toOutputs()
             inputs = result.groupValues[3].toInputs()
             name = result.groupValues[2]
-            isConstant = false
+            isConstant = true
             isPayable = false
         }
     }
