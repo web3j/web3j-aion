@@ -11,7 +11,7 @@ import org.web3j.aion.tx.gas.AionGasProvider
 class AvmIntegrationTest : AionIntegrationTest(VirtualMachine.AVM) {
 
     @Test
-    internal fun `deploy and call contract`() {
+    internal fun `deploy and call HelloAvm contract`() {
         HelloAvm.deploy(aion, manager, AionGasProvider).send().apply {
             assertThat(call_getString().send()).isEqualTo("Hello AVM")
 
