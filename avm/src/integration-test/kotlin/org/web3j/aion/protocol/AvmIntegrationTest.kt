@@ -14,6 +14,9 @@ class AvmIntegrationTest : AionIntegrationTest(VirtualMachine.AVM) {
     internal fun `deploy and call contract`() {
         HelloAvm.deploy(aion, manager, AionGasProvider).send().apply {
             assertThat(call_getString().send()).isEqualTo("Hello AVM")
+
+            send_setString("Hello test").send()
+            assertThat(call_getString().send()).isEqualTo("Hello test")
         }
     }
 
@@ -21,21 +24,17 @@ class AvmIntegrationTest : AionIntegrationTest(VirtualMachine.AVM) {
     internal fun `deploy and call ERC20Token contract`() {
         ERC20Token.deploy(
             aion, manager, AionGasProvider,
-            "testcoin", "TEST", 0, keyPair.address
+            "Test", "TEST", 2, keyPair.address
         ).send().apply {
-            assertThat(call_decimals().send()).isEqualTo(0)
+            assertThat(call_name().send()).isEqualTo("Test")
+            assertThat(call_symbol().send()).isEqualTo("TEST")
+            assertThat(call_decimals().send()).isEqualTo(2)
         }
-    }
 
-    @Test
-    internal fun `load and execute transaction`() {
-        HelloAvm.load(
-            "0xa01af11dc05cc9aedcafdc80c8b94301e11540cf7fbdcff477b6bd964a208adc",
-            aion, manager, AionGasProvider
-        ).apply {
-            send_setString("Hello test").sendAsync().thenAccept {
-                assertThat(call_getString().send()).isEqualTo("Hello test")
-            }.join()
-        }
+        // TODO Send a transfer to a new account on Docker test
+//        val newAccount = aion.personalNewAccount("test").send()
+//        contract.send_transfer(newAccount.accountId, 1L).send().apply {
+//            assertThat(aion.ethGetBalance(newAccount.accountId, LATEST)).isEqualTo(1L)
+//        }
     }
 }

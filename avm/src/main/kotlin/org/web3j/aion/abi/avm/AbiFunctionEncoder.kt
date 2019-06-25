@@ -25,6 +25,7 @@ import org.web3j.abi.datatypes.primitive.Short
 import org.web3j.aion.abi.AionEncoderException
 import org.web3j.utils.Numeric
 import java.math.BigInteger
+import java.nio.ByteBuffer
 
 internal object AbiFunctionEncoder : FunctionEncoder() {
 
@@ -35,7 +36,15 @@ internal object AbiFunctionEncoder : FunctionEncoder() {
 
     override fun encodeParameters(parameters: List<Type<Any>>): String {
         val params = parameters.map { it.toAion() }.toTypedArray()
-        return Numeric.toHexStringNoPrefix(ABIUtil.encodeDeploymentArguments(*params))
+        val encodedArgs = ABIUtil.encodeDeploymentArguments(*params)
+
+        val bufferLength = encodedArgs.size + kotlin.Int.SIZE_BYTES
+        return ByteBuffer.allocate(bufferLength).apply {
+            putInt(encodedArgs.size)
+            put(encodedArgs)
+        }.run {
+            Numeric.toHexStringNoPrefix(array())
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
