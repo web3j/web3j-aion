@@ -81,22 +81,12 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
                 Double::class.java.isAssignableFrom(type) -> decodeOneDouble().toWeb3j()
                 Utf8String::class.java.isAssignableFrom(type) -> decodeOneString().toWeb3j()
                 Bool::class.java.isAssignableFrom(type) -> decodeOneBoolean().toWeb3j()
-                BytesType::class.java.isAssignableFrom(type) -> decodeBytesType(
-                    type,
-                    decoder
-                )
-                IntType::class.java.isAssignableFrom(type) -> decodeIntType(
-                    type,
-                    decoder
-                )
-                DynamicArray::class.java.isAssignableFrom(type) -> decodeDynamicArray(
-                    typeReference,
-                    decoder
-                )
-                StaticArray::class.java.isAssignableFrom(type) -> decodeStaticArray(
-                    typeReference,
-                    decoder
-                )
+                BytesType::class.java.isAssignableFrom(type) -> TODO("FVM not implemented")
+                // decodeBytesType(type, decoder)
+                IntType::class.java.isAssignableFrom(type) -> decodeIntType(type, decoder)
+                DynamicArray::class.java.isAssignableFrom(type) -> decodeDynamicArray(typeReference, decoder)
+                StaticArray::class.java.isAssignableFrom(type) -> TODO("FVM not implemented")
+                // decodeStaticArray(typeReference, decoder)
                 else -> throw AionDecoderException("Unsupported ABI type")
             }
         }
@@ -161,9 +151,9 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
         return constructor.newInstance(BigInteger(decoder.decodeOneByteArray())) as IntType
     }
 
-    private fun decodeBytesType(type: Class<Type<*>>, decoder: ABIDecoder): BytesType {
-        TODO("not implemented")
-    }
+//    private fun decodeBytesType(type: Class<Type<*>>, decoder: ABIDecoder): BytesType {
+//        TODO("not implemented")
+//    }
 
     @Suppress("UNCHECKED_CAST")
     private fun decodeDynamicArray(typeReference: TypeReference<*>, decoder: ABIDecoder): DynamicArray<Type<*>> {
@@ -210,9 +200,9 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
         }
     }
 
-    private fun decodeStaticArray(typeReference: TypeReference<Type<*>>, decoder: ABIDecoder): StaticArray<Type<*>> {
-        TODO("not implemented")
-    }
+//    private fun decodeStaticArray(typeReference: TypeReference<Type<*>>, decoder: ABIDecoder): StaticArray<Type<*>> {
+//        TODO("not implemented")
+//    }
 
     @Suppress("UNCHECKED_CAST")
     private fun <T> T.toWeb3j(): Type<*> {
