@@ -2,7 +2,6 @@ package org.web3j.aion.protocol
 
 import org.junit.jupiter.api.BeforeEach
 import org.testcontainers.containers.BindMode.READ_ONLY
-import org.testcontainers.containers.BindMode.READ_WRITE
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -33,15 +32,14 @@ abstract class AionIntegrationTest(private val targetVm: VirtualMachine) {
 
         @Container
         @JvmStatic
-        private val AION = KGenericContainer("aionnetwork/aion:0.4.0.1")
+        private val AION = KGenericContainer("aionnetwork/aion:Latest")
             .withClasspathResourceMapping("aion/config", "/aion/custom/config", READ_ONLY)
-            .withClasspathResourceMapping("aion/keystore", "/aion/custom/keystore", READ_ONLY)
-            .withClasspathResourceMapping("aion/log", "/aion/custom/log", READ_WRITE)
+            .withClasspathResourceMapping("aion/log", "/aion/custom/log", READ_ONLY)
             .withCommand("/aion/aion.sh --network custom")
             .withExposedPorts(8545)
 
         @JvmStatic
-        protected val NETWORK = MASTERY
+        protected val NETWORK = LOCALHOST
 
         @JvmStatic
         private val RPC_URL: Map<Network, String> by lazy {
