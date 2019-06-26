@@ -13,7 +13,7 @@ before_script:
 #   - touch /root/.docker/config.json
 
 build:
-  image: openjdk:11.0.3-jdk
+  image: adoptopenjdk/openjdk11:jdk-11.0.3_7-alpine-slim
   stage: build
   script:
     - ./gradlew clean build integrationTest
