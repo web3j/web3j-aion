@@ -22,7 +22,7 @@ class AvmIntegrationTest : AionIntegrationTest(VirtualMachine.AVM) {
 
     @Test
     internal fun `deploy and call ERC20Token contract`() {
-        ERC20Token.deploy(
+        val contract = ERC20Token.deploy(
             aion, manager, AionGasProvider,
             "Test", "TEST", 2, keyPair.address
         ).send().apply {
@@ -31,10 +31,10 @@ class AvmIntegrationTest : AionIntegrationTest(VirtualMachine.AVM) {
             assertThat(call_decimals().send()).isEqualTo(2)
         }
 
-        // TODO Send a transfer to a new account on Docker test
-//        val newAccount = aion.personalNewAccount("test").send()
-//        contract.send_transfer(newAccount.accountId, 1L).send().apply {
-//            assertThat(aion.ethGetBalance(newAccount.accountId, LATEST)).isEqualTo(1L)
-//        }
+        // Send a transfer to a new account on Docker test
+        aion.personalNewAccount("test").send().apply {
+            contract.send_mint(accountId, 1L).send()
+            assertThat(contract.call_balanceOf(accountId).send()).isEqualTo(1L)
+        }
     }
 }
