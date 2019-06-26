@@ -3,11 +3,13 @@ package org.web3j.aion.protocol
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import org.aion.greeter.Greeter
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.web3j.aion.VirtualMachine
 import org.web3j.aion.tx.gas.AionGasProvider
 import org.web3j.tx.ClientTransactionManager
 
+@Disabled
 class FvmIntegrationTest : AionIntegrationTest(VirtualMachine.FVM) {
 
     @Test
