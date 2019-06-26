@@ -10,13 +10,12 @@ variables:
 
 before_script:
   - apk add docker
-#   - touch /root/.docker/config.json
 
 build:
   image: adoptopenjdk/openjdk11:jdk-11.0.3_7-alpine
   stage: build
   script:
-    - ./gradlew clean build integrationTest
+    - ./gradlew clean build # integrationTest
   artifacts:
     # paths:
     #   - build/libs/*.jar
