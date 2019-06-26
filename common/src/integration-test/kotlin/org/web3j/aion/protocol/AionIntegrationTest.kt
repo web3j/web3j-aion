@@ -1,7 +1,7 @@
 package org.web3j.aion.protocol
 
 import org.junit.jupiter.api.BeforeEach
-import org.testcontainers.containers.BindMode.READ_ONLY
+import org.testcontainers.containers.BindMode.READ_WRITE
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -33,8 +33,8 @@ abstract class AionIntegrationTest(private val targetVm: VirtualMachine) {
         @Container
         @JvmStatic
         private val AION = KGenericContainer("aionnetwork/aion:Latest")
-            .withClasspathResourceMapping("aion/config", "/aion/custom/config", READ_ONLY)
-            .withClasspathResourceMapping("aion/log", "/aion/custom/log", READ_ONLY)
+            .withClasspathResourceMapping("aion/config", "/aion/custom/config", READ_WRITE)
+            .withClasspathResourceMapping("aion/log", "/aion/custom/log", READ_WRITE)
             .withCommand("/aion/aion.sh --network custom")
             .withExposedPorts(8545)
 
