@@ -6,8 +6,8 @@ findProject(':common')?.name = 'web3j-aion-common'
 include 'avm'
 findProject(':avm')?.name = 'web3j-aion-avm'
 
-include 'fvm'
-findProject(':fvm')?.name = 'web3j-aion-fvm'
+// TODO include 'fvm'
+//findProject(':fvm')?.name = 'web3j-aion-fvm'
 
 include 'codegen'
 findProject(':codegen')?.name = 'web3j-aion-codegen'
