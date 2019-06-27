@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 import org.web3j.abi.FunctionEncoder.encode
+import org.web3j.abi.FunctionEncoder.encodeConstructor
 import org.web3j.abi.datatypes.Address
 import org.web3j.abi.datatypes.DynamicArray
 import org.web3j.abi.datatypes.Function
@@ -241,5 +242,18 @@ class AbiFunctionEncoderAvmTest {
         )
         assertThat(encode(Function("test", listOf(minMax), listOf())))
             .isEqualTo("0x2100047465737418000200000000000000017fefffffffffffff")
+    }
+
+    @Test
+    fun `encode deployment arguments`() {
+        val encodedConstructor = encodeConstructor(
+            listOf(
+                Utf8String("Test"),
+                Utf8String("TEST"),
+                Int(2),
+                Address(256, "0xa0d5c14a9a2f84a1a8b20fbc329f27e8cb2d2dc0752bb4411b9cd77814355ce6")
+            )
+        )
+        assertThat(encodedConstructor).isEqualTo("000000342100045465737421000454455354050000000222a0d5c14a9a2f84a1a8b20fbc329f27e8cb2d2dc0752bb4411b9cd77814355ce6")
     }
 }
