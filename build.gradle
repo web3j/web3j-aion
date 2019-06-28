@@ -15,8 +15,6 @@ buildscript {
     }
 }
 
-group = 'org.web3j'
-version = '0.1.0-SNAPSHOT'
 description = 'Integrates web3j with the Aion Network blockchain.'
 
 ext {
@@ -34,11 +32,15 @@ ext {
     ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : System.getenv('OSSRH_USERNAME')
     ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : System.getenv('OSSRH_PASSWORD')
     ossrhRepoUrl = project.hasProperty('ossrhRepoUrl') ? project.property('ossrhRepoUrl') : System.getenv('OSSRH_REPO_URL')
+    ossrhSnapshotRepoUrl = project.hasProperty('ossrhSnapshotRepoUrl') ? project.property('ossrhSnapshotRepoUrl') : System.getenv('OSSRH_SNAPSHOT_REPO_URL')
     bintrayUser = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
     bintrayKey = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
     bintrayGpgPassphrase = project.hasProperty('bintrayGpgPassphrase') ? project.property('bintrayGpgPassphrase') : System.getenv('BINTRAY_GPG_PASSPHRASE')
-    manualRelease = project.hasProperty('manualRelease') ? project.property('manualRelease').toBoolean() : false
-    isSnapshotVersion = project.version.endsWith("-SNAPSHOT")
+}
+
+allprojects {
+    group = 'org.web3j'
+    version = '0.1.0-SNAPSHOT'
 }
 
 subprojects {
@@ -67,6 +69,11 @@ subprojects {
         }
     }
 
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allSource
+        classifier = 'sources'
+    }
+
     testSets {
         integrationTest {
             dirName = 'integration-test'
@@ -82,22 +89,23 @@ subprojects {
     }
 
     configurations {
-        testOutput.extendsFrom (testCompile)
-        integrationTestOutput.extendsFrom (integrationTestCompile)
+        testOutput.extendsFrom(testCompile)
+        integrationTestOutput.extendsFrom(integrationTestCompile)
     }
 
     artifacts {
+        archives sourcesJar
         testOutput testJar
         integrationTestOutput integrationTestJar
     }
-    
+
     testlogger {
         showStandardStreams true
     }
 
     dependencies {
         api "org.bouncycastle:bcpkix-jdk15on:${versions.bouncycastle}"
-        
+
         implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
         implementation 'org.jetbrains.kotlin:kotlin-reflect'
         implementation 'org.jetbrains.kotlin:kotlin-noarg'
@@ -109,7 +117,7 @@ subprojects {
             exclude group: 'org.jetbrains.kotlin'
             exclude group: 'org.slf4j'
         }
-        
+
         testImplementation(group: 'org.web3j', name: 'core', version: versions.web3j, classifier: 'tests')
         testImplementation "org.junit.jupiter:junit-jupiter-api:${versions.junit5}"
         testImplementation "com.willowtreeapps.assertk:assertk-jvm:${versions.assertk}"
@@ -169,24 +177,14 @@ subprojects {
         }
     }
 
-    task sourcesJar(type: Jar) {
-        from sourceSets.main.allJava
-        archiveClassifier = 'sources'
-    }
-
     publishing {
         publications {
             maven(MavenPublication) {
-                groupId = rootProject.group
+                groupId = project.group
                 artifactId = project.name
-                version = rootProject.version
-
-                from components.kotlin
-
-                artifact sourcesJar {
-                    classifier 'sources'
-                }
-
+                version = project.version
+                from components.java
+                artifact sourcesJar
                 pom {
                     name = project.name
                     description = project.description
@@ -219,34 +217,22 @@ subprojects {
     uploadArchives {
         repositories {
             mavenDeployer {
-
-                // beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-                
-                onlyIf {
-                    // Only run if this is a manual release triggered by a user, or an automated release for snapshots.
-                    // We don't need to run this for automated releases.
-                    isSnapshotVersion && ossrhUsername != '' && ossrhPassword != '' && ossrhRepoUrl != ''
-                }
-
                 repository(url: ossrhRepoUrl) {
-                    authentication(
-                            userName: ossrhUsername,
-                            password: ossrhPassword
-                    )
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
                 }
-
+                snapshotRepository(url: ossrhSnapshotRepoUrl) {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
                 pom.project {
-                    name 'web3j-aion'
                     packaging 'jar'
-                    description project.description
+                    name 'web3j Aion Integration'
+                    description rootProject.description
                     url 'https://web3j.io'
-
                     scm {
                         connection 'scm:git:https://github.com/web3j/web3j-aion.git'
                         url 'https://github.com/web3j/web3j-aion.git'
                         developerConnection 'scm:git://github.com/web3j/web3j-aion.git'
                     }
-
                     licenses {
                         license {
                             name 'The Apache License, Version 2.0'
@@ -254,7 +240,6 @@ subprojects {
                             distribution 'repo'
                         }
                     }
-
                     developers {
                         developer {
                             id = 'xaviarias'
@@ -267,7 +252,7 @@ subprojects {
             }
         }
     }
-    
+
     bintray {
         user = bintrayUser
         key = bintrayKey
@@ -283,7 +268,6 @@ subprojects {
             vcsUrl = 'https://github.com/web3j/web3j-aion.git'
             websiteUrl = 'https://web3j.io'
             publicDownloadNumbers = true
-
             version {
                 gpg {
                     sign = true
@@ -296,51 +280,6 @@ subprojects {
                     close = '1'
                 }
             }
-        }
-    }
-
-    task releaseSnapshot(group: 'publishing') {
-        dependsOn 'build'
-        dependsOn 'uploadArchives'
-
-        doLast {
-            // Validates the user inputs before a release can be performed.
-            if (isSnapshotVersion) {
-                // Only need OSSRH details.
-                logger.lifecycle("About to perform {} snapshot release ...", manualRelease ? "a manual" : "an automated")
-
-                if (!ossrhUsername || !ossrhPassword || !ossrhRepoUrl) {
-                    throw new InvalidUserDataException("Required parameters missing:  'ossrhUsername', 'ossrhPassword', 'ossrhRepoUrl'")
-                }
-
-                logger.lifecycle(" - ossrhUsername={}", ossrhUsername)
-                logger.lifecycle(" - ossrhPassword={}", ossrhPassword ? "provided" : "not_provided")
-                logger.lifecycle(" - ossrhRepoUrl={}", ossrhRepoUrl)
-            } else {
-                // Release => Need OSSRH and bintray.
-                if (!ossrhUsername || !ossrhPassword || !ossrhRepoUrl) {
-                    throw new InvalidUserDataException("Required parameters missing:  'ossrhUsername', 'ossrhPassword', 'ossrhRepoUrl'")
-                }
-                if (!bintrayUser || !bintrayKey || !bintrayGpgPassphrase) {
-                    throw new InvalidUserDataException("Required parameters missing:  'bintrayUser', 'bintrayKey', 'bintrayGpgPassphrase'")
-                }
-                logger.lifecycle("About to perform {} full release ...", manualRelease ? "a manual" : "an automated")
-                logger.lifecycle(" - ossrhUsername={}", ossrhUsername)
-                logger.lifecycle(" - ossrhPassword={}", ossrhPassword ? "provided" : "not_provided")
-                logger.lifecycle(" - ossrhRepoUrl={}", ossrhRepoUrl)
-                logger.lifecycle(" - bintrayUser={}", bintrayUser)
-                logger.lifecycle(" - bintrayKey={}", bintrayKey ? "provided" : "not_provided")
-                logger.lifecycle(" - bintrayGpgPassphrase={}", bintrayGpgPassphrase ? "provided" : "not_provided")
-            }
-        }
-
-        // Snapshots go to nexus, non-snapshots go to bintray.
-        if (isSnapshotVersion) {
-            dependsOn 'uploadArchives'
-            tasks.findByName('uploadArchives').mustRunAfter 'build'
-        } else {
-            dependsOn 'bintrayUpload'
-            tasks.findByName('bintrayUpload').mustRunAfter 'build'
         }
     }
 }
