@@ -3,8 +3,8 @@ Aion contract wrapper generation
 
 This module contains a command line interface (CLI) for the generation of 
 [web3j contract wrappers](https://docs.web3j.io/smart_contracts.html#deploying-and-interacting-with-smart-contracts).
-The CLI tool takes a contract ABI and a binary file with the compiled code of a contract, and generates the Java 
-stub to deploy and call the Aion contract.
+The CLI tool takes an ABI and a binary file with the compiled code, and generates the Java 
+stub to deploy and call the contract.
 
 ## Usage
 
