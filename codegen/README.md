@@ -23,7 +23,7 @@ the ABI and JAR files can be obtained using the
 [aion4j Maven plugin](https://docs.aion.network/docs/maven-and-aion4j).
 After a project build the `.abi` and `.jar` files will be located under the `build` directory.
 
-The ABI file should be a text file containing the contract class, its constructor and other functions:
+The ABI file should be a text file containing the contract class name, its constructor and other function definitions:
 ```
 0.0
 com.example.dapp.ERC20Token
