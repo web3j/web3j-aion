@@ -14,7 +14,7 @@ stub to deploy and call the contract.
 | `-b`, `--binFile`  | BIN or JAR file with the contract compiled code in order to generate deploy methods. |  
 | `-o`, `--outputDir`| Destination base directory. |
 | `-p`, `--package`  | Base package name. |
-| `-t`, `--targetVm` | Target Aion virtual machine |
+| `-t`, `--targetVm` | Target Aion virtual machine (`AVM` by default). |
 
 ### Java contracts (AVM)
 
