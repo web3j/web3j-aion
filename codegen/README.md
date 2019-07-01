@@ -2,10 +2,21 @@ Aion contract wrapper generation
 ================================
 
 This module contains a command line interface (CLI) for the generation of 
-[web3j contract wrappers](https://docs.web3j.io/smart_contracts.html#deploying-and-interacting-with-smart-contracts)
-from the contract ABI and a binary file with the compiled code of the contract.
+[web3j contract wrappers](https://docs.web3j.io/smart_contracts.html#deploying-and-interacting-with-smart-contracts).
+The CLI tool takes a contract ABI and a binary file with the compiled code of a contract, and generates the Java 
+stub to deploy and call the Aion contract.
 
-## AVM - Java contracts
+## Usage
+
+|        Flag        | Description |
+|:-------------------|-------------|
+| `-a`, `--abiFile`  | ABI file in FVM or AVM format with a contract definition. |
+| `-b`, `--binFile`  | BIN or JAR file with the contract compiled code in order to generate deploy methods. |  
+| `-o`, `--outputDir`| Destination base directory. |
+| `-p`, `--package`  | Base package name. |
+| `-t`, `--targetVm` | Target Aion virtual machine |
+
+### Java contracts (AVM)
 
 For [Aion Java contracts](https://docs.aion.network/docs/contract-fundamentals), 
 the ABI and JAR files can be obtained using the 
@@ -22,64 +33,43 @@ public static String symbol()
 ...
 ```
 
-The JAR should be a normal JAR file.
+### Solidity contracts (FVM)
 
-## FVM - Solidity contracts
+For Solidity Aion contracts, you'll need to use either the `solc` version 4.15 
+(Aion provides [different tools](https://docs.aion.network/docs/fast-vm-1) to run the correct version of the command)
+or the [Titan Suite](https://learn.aion.network/docs/titan-suite).
 
-TBD
+To simplify the Solidity code compilation you can configure your project with the last version of the
+[web3j Solidity Gradle plugin](https://github.com/web3j/solidity-gradle-plugin) with the following settings:
 
-## Usage
+```groovy
+solidity {
+    executable = "docker run --rm -v $projectDir:/src satran004/aion-fastvm:0.3.2 solc"
+    version = '0.4.15'
+}
+```
 
-| Flag               | Description |
-|:-------------------|-------------|
-| `-a`, `--abiFile`  | ABI file in FVM or AVM format with a contract definition. |  
-| `-b`, `--binFile`  | BIN or JAR file with the contract compiled code in order to generate deploy methods. |  
-| `-o`, `--outputDir`| Destination base directory. |    
-| `-p`, `--package`  | Base package name. |  
-| `-t`, `--targetVm` | Target Aion virtual machine |   
+The Gradle task `compileSolidity` will run the Solidity compilation with the correct Aion version.
 
-## Running the CLI 
+## Building the CLI
 
-The code generator can be used in two ways: with a binary distribution that will run an executable file,
-or directly calling the CLI class `org.web3j.aion.codegen.AionGeneratorMain`.
+The code generator can be used with a binary distribution that will run an executable file,
+or directly calling the generator main class.
 
 ### Build a binary distribution
 
-1. In a terminal run the command:
-    
-    ```bash
-    ./graldew distZip
-    ```
+Run the Gradle task `distZip` to obtain a binary distribution of the web3j-Aion CLI:
 
-2. Extract the downloaded Zip or Tar file created in `codegen/build/distributions`:
+```bash
+./graldew distZip
+```
 
-    ```bash
-    unzip web3j-aion.zip
-    ``` 
+After successful run the ZIP and TAR files will be available on `codegen/build/distributions`.  
 
- 3. Move into the created folder and run the command:
+### Using the main class
 
-    ```bash
-    bin/aion-web3j \
-        --abiFile path/to/contract.abi \
-        --binFile path/to/contract.jar \
-        --outputDir path/to/generated/source \
-        --package com.example.dapp \
-        --targetVm AVM
-    ```
-    This will output the following:
-
-    ```
-    Generating org.web3j.aion.samples.generated.HelloAvm 
-    ...
-    File written to /path/to/web3j-aion-samples/src/main/java
-    
-    ```
-    The generated file will be located in the project structure under `src/main/java`.
-
-### Automate the code generation
-
-To run the code generation within your project 
+To run the code generation within your project using the `org.web3j.aion.codegen.AionGeneratorMain`,
+the easiest way is to create a Gradle task of type `JavaExec` and configure the generated code source sets: 
 
 ```groovy
 dependencies {
