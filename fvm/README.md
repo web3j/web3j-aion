@@ -1,9 +1,11 @@
-Integration with the Aion VM
-============================
+Integration with the Aion Fast VM
+=================================
 
 This module contains the Service Provider Interface (SPI) implementation of the web3j 
-[encoder](src/main/kotlin/org/web3j/aion/abi/avm/AbiFunctionEncoder.kt) and 
-[decoder](src/main/kotlin/org/web3j/aion/abi/avm/AbiFunctionDecoder.kt) providers.
+[encoder](src/main/kotlin/org/web3j/aion/abi/fvm/AbiFunctionEncoder.kt) and 
+[decoder](src/main/kotlin/org/web3j/aion/abi/fvm/AbiFunctionDecoder.kt) providers.
+
+The FVM implementation is *under development*, so cannot be used for now.
 
 ## Building and testing
 
