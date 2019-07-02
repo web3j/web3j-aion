@@ -20,6 +20,9 @@ To build and run the tests use the command:
 ./gradlew build
 ```
 
+
+:whale:
+
 ## Running the integration tests
 
 Before running the integration tests, check that your Docker version is at least 1.6.0 and you have more than
