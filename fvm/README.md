@@ -17,7 +17,7 @@ To build and run the tests use the command:
 
 ## Running the integration tests
 
-Before running the [integration tests](src/integration-test/kotlin/org/web3j/aion/protocol/AvmIntegrationTest.kt), 
+Before running the [integration tests](src/integration-test/kotlin/org/web3j/aion/protocol/FvmIntegrationTest.kt), 
 check that your Docker version is at least 1.6.0 and you have more than 2GB of free disk space. 
 
 To run the integration tests use the command:
