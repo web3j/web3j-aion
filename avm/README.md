@@ -1,17 +1,10 @@
-web3j Aion integration
-======================
+Integration with the Aion VM
+============================
 
-This project integrates [web3j](https://web3j.io/) with the [Aion network](https://aion.network/).
-It allows generating Aion contract wrappers from Java or Solidity (not supported yet) and
-calling them  
+This module contains the Service Provider Interface (SPI) implementation of the web3j 
+[encoder](src/main/kotlin/org/web3j/aion/abi/avm/AbiFunctionEncoder.kt) and 
+[decoder](src/main/kotlin/org/web3j/aion/abi/avm/AbiFunctionDecoder.kt) providers.
 
-It is composed by the following modules:
-
- * [AVM](avm): Contains the encoder and decoder for interoperability with the Aion Virtual Machine.
- * [FVM](fvm): Aims to provide support for Aion Fast VM (FVM) contracts (coming soon).
- * [Code generation](codegen): Provides a CLI for contract wrapper generation from the ABI and binaries.
- * [Common](common): Contains common functionality like transaction signing and JSON-RPC implementation.
-  
 ## Building and testing
 
 To build and run the tests use the command:
@@ -22,8 +15,8 @@ To build and run the tests use the command:
 
 ## Running the integration tests
 
-Before running the integration tests, check that your Docker version is at least 1.6.0 and you have more than
-2GB of free disk space. 
+Before running the [integration tests](src/integration-test/kotlin/org/web3j/aion/protocol/AvmIntegrationTest.kt), 
+check that your Docker version is at least 1.6.0 and you have more than 2GB of free disk space. 
 
 To run the integration tests use the command:
 
