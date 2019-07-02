@@ -15,13 +15,9 @@ It is composed by the following modules:
 ## Building and testing
 
 To build and run the tests use the command:
-
 ```bash
 ./gradlew build
 ```
-
-
-:whale:
 
 ## Running the integration tests
 
