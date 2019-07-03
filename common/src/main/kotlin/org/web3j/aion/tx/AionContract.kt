@@ -13,6 +13,9 @@ import org.web3j.tx.gas.ContractGasProvider
 import org.web3j.tx.gas.StaticGasProvider
 import java.math.BigInteger
 
+/**
+ * Base class for AVM Aion contract wrappers.
+ */
 abstract class AvmAionContract protected constructor(
     contractBinary: String,
     contractAddress: String?,
@@ -79,6 +82,9 @@ abstract class AvmAionContract protected constructor(
     )
 }
 
+/**
+ * Base class for FVM Aion contract wrappers.
+ */
 abstract class FvmAionContract protected constructor(
     contractBinary: String,
     contractAddress: String?,
@@ -145,6 +151,9 @@ abstract class FvmAionContract protected constructor(
     )
 }
 
+/**
+ * Base class for Aion contract wrappers.
+ */
 sealed class AionContract constructor(
     contractBinary: String,
     contractAddress: String?,
