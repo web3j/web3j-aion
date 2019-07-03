@@ -19,7 +19,7 @@ class. It implements the standard Ethereum JSON-RPC endpoints (`eth_call`, `ethG
 [Aion-specific features](https://github.com/aionnetwork/aion/wiki/JSON-RPC-API-Docs), 
 as well as the administration endpoints (`personal_NewAccount`, ...). 
 
-To instantiate and start using it, create a service pointing to a node (http://localhost:8485 by default):
+To instantiate and start using it, create a service pointing to a node (http://localhost:8545 by default):
 
 ```kotlin
 val service = HttpService()
