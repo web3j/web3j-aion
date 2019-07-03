@@ -50,6 +50,5 @@ This will start an Aion node in a Docker container and run the integration tests
 2019-07-02 15:08:14 [Test worker] INFO  [aionnetwork/aion:Latest] - Container aionnetwork/aion:Latest started
 ```
 
-## Hands on usage
 
 
