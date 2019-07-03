@@ -55,7 +55,7 @@ manager.sendTransaction(
     to = "0x...",
     data = "0x...",
     constructor = true,
-    gasLimit = AionConstants.NRG_CREATE_CONTRACT_DEFAULT
+    nrgLimit = AionConstants.NRG_CREATE_CONTRACT_DEFAULT
 )
 ```
 
