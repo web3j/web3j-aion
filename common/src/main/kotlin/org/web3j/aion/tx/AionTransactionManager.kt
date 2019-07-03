@@ -1,6 +1,7 @@
 package org.web3j.aion.tx
 
 import org.aion.rlp.RLP
+import org.web3j.aion.AionConstants
 import org.web3j.aion.VirtualMachine
 import org.web3j.aion.VirtualMachine.AVM
 import org.web3j.aion.crypto.AionTransaction
@@ -51,6 +52,24 @@ class AionTransactionManager(
         DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH,
         DEFAULT_POLLING_FREQUENCY
     )
+
+    fun sendTransaction(
+        gasPrice: Long? = null,
+        gasLimit: Long = AionConstants.NRG_TRANSACTION_DEFAULT,
+        to: String,
+        data: String,
+        value: Long? = null,
+        constructor: Boolean = false
+    ): EthSendTransaction {
+        return sendTransaction(
+            gasPrice?.toBigInteger(),
+            gasLimit.toBigInteger(),
+            to,
+            data,
+            value?.toBigInteger(),
+            constructor
+        )
+    }
 
     override fun sendTransaction(
         gasPrice: BigInteger?,
