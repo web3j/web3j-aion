@@ -16,7 +16,7 @@ To generate Aion contract wrappers, run the command `web3j-aion` using the follo
 | `-a`, `--abiFile`  |     ✔    | ABI file in FVM or AVM format with a contract definition. |
 | `-b`, `--binFile`  |          | BIN or JAR file with the contract compiled code in order to generate deploy methods. |  
 | `-o`, `--outputDir`|     ✔    | Destination base directory. |
-| `-p`, `--package`  |     ✔    | Base package name (). |
+| `-p`, `--package`  |     ✔    | Base package name. |
 | `-t`, `--targetVm` |          | Target Aion virtual machine (`AVM` by default). |
 
 ### Java contracts (AVM)
