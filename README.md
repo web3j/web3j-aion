@@ -16,8 +16,8 @@ It is composed by the following modules:
 
 To learn how to use the CLI to generate contract wrappers, refer to the [code generation](codegen) module.
 
-You can also checkout the [`web3j-aion-samples`](https://gitlab.com/web3j/web3j-aion-samples) 
-repository for a complete setup of a Gradle project.
+You can also checkout the [sample repository](https://gitlab.com/web3j/web3j-aion-samples) to start with a configured 
+Gradle project.
 
 ## Building and testing
 
