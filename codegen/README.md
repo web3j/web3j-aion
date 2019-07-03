@@ -70,8 +70,8 @@ After successful run the ZIP and TAR files will be available on `codegen/build/d
 
 ### Using the Docker image
 
-The latest Docker image `web3labs/web3j-aion` contains a pre-built distribution and can be used with the following 
-command: 
+The [`web3labs/web3j-aion`](https://hub.docker.com/r/web3labs/web3j-aion) Docker image contains a pre-built distribution
+and can be used with the following command: 
 
 ```bash
 docker run web3labs/web3j-aion:latest web3j-aion --abiFile ...
