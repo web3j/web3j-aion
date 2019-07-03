@@ -54,16 +54,16 @@ class AionTransactionManager(
     )
 
     fun sendTransaction(
-        gasPrice: Long? = null,
-        gasLimit: Long = AionConstants.NRG_TRANSACTION_DEFAULT,
+        nrgPrice: Long? = null,
+        nrgLimit: Long = AionConstants.NRG_TRANSACTION_DEFAULT,
         to: String,
         data: String,
         value: Long? = null,
         constructor: Boolean = false
     ): EthSendTransaction {
         return sendTransaction(
-            gasPrice?.toBigInteger(),
-            gasLimit.toBigInteger(),
+            nrgPrice?.toBigInteger(),
+            nrgLimit.toBigInteger(),
             to,
             data,
             value?.toBigInteger(),
