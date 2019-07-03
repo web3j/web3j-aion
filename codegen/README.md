@@ -120,3 +120,5 @@ compileTestJava {
     dependsOn 'generateContractWrappers'
 }
 ```
+
+Checkout the [sample repository](https://gitlab.com/web3j/web3j-aion-samples) for a fully configured Gradle project.
