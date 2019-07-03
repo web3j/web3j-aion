@@ -14,6 +14,53 @@ It is composed by the following modules:
   
 ## Quick start
 
+The API starting point is the [`org.web3j.aion.protocol.Aion`](common/src/main/kotlin/org/web3j/aion/protocol/Aion.kt) 
+class. It implements the standard Ethereum JSON-RPC endpoints (`eth_call`, `ethGetBalance`, ...) with some 
+[Aion-specific features](https://github.com/aionnetwork/aion/wiki/JSON-RPC-API-Docs), 
+as well as the administration endpoints (`personal_NewAccount`, ...). 
+
+To instantiate and start using it, create a service pointing to a node (http://localhost:8485 by default):
+
+```kotlin
+val service = HttpService()
+```
+
+then create an Aion instance and you start calling the API endpoints:
+```kotlin
+val aion = Aion.build(service)
+aion.ethGetBalance("0x...", DefaultBlockParameterName.LATEST)
+```
+
+### Sending signed transactions
+
+Transactions can be signed locally and sent with the 
+[`AionTransactionManager`](common/src/main/kotlin/org/web3j/aion/tx/AionTransactionManager.kt) class.
+
+```kotlin
+val manager = AionTransactionManager(
+    aion, Ed25519KeyPair("your private key")
+)
+
+// Default NRG and value
+manager.sendTransaction(
+    to = "0x...",
+    data = "0x..."
+)
+```
+
+To deploy a contract override the default values:
+
+```kotlin
+manager.sendTransaction(
+    to = "0x...",
+    data = "0x...",
+    constructor = true,
+    gasLimit = AionConstants.NRG_CREATE_CONTRACT_DEFAULT
+)
+```
+
+### Generating contract wrappers
+
 To learn how to use the CLI to generate contract wrappers, refer to the [code generation](codegen) module.
 
 You can also checkout the [sample repository](https://gitlab.com/web3j/web3j-aion-samples) to start with a configured 
