@@ -63,8 +63,8 @@ internal class JsonRpc2_0Aion : JsonRpc2_0Admin, Aion {
     init {
         Security.addProvider(BouncyCastleProvider())
 
-        val mapper = ObjectMapperFactory.getObjectMapper()
-        mapper.addMixIn(Request::class.java, AionRequestMixIn::class.java)
+        ObjectMapperFactory.getObjectMapper()
+            .addMixIn(Request::class.java, AionRequestMixIn::class.java)
     }
 
     constructor(web3jService: Web3jService) : super(web3jService)
