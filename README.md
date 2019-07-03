@@ -12,6 +12,13 @@ It is composed by the following modules:
  * [Code generation](codegen): Provides a CLI for contract wrapper generation from the ABI and binaries.
  * [Common](common): Contains common functionality like transaction signing and JSON-RPC implementation.
   
+## Quick start
+
+To learn how to use the CLI to generate contract wrappers, refer to the [code generation](codegen) module.
+
+You can also checkout the [`web3j-aion-samples`]() 
+repository for a complete setup of a Gradle project.
+
 ## Building and testing
 
 To build and run the tests use the command:
@@ -42,3 +49,7 @@ This will start an Aion node in a Docker container and run the integration tests
 2019-07-02 15:08:07 [Test worker] INFO  [aionnetwork/aion:Latest] - Container aionnetwork/aion:Latest is starting: 199b643113b66e3f7c7a5c3cad8c486b6e2d8585f61fff844b696652d04ddc01
 2019-07-02 15:08:14 [Test worker] INFO  [aionnetwork/aion:Latest] - Container aionnetwork/aion:Latest started
 ```
+
+## Hands on usage
+
+
