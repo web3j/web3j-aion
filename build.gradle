@@ -65,6 +65,10 @@ subprojects {
             }
         }
         maven {
+            // web3j imported dependencies
+            url 'https://dl.bintray.com/ethereum/maven/'
+        }
+        maven {
             url "$rootProject.projectDir/lib"
         }
     }
