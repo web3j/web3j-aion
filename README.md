@@ -73,7 +73,7 @@ To build and run the tests use the command:
 ./gradlew build
 ```
 
-## Running the integration tests
+### Running the integration tests
 
 Before running the integration tests, check that your Docker version is at least 1.6.0 and you have more than
 2GB of free disk space. 
@@ -97,5 +97,8 @@ This will start an Aion node in a Docker container and run the integration tests
 2019-07-02 15:08:14 [Test worker] INFO  [aionnetwork/aion:Latest] - Container aionnetwork/aion:Latest started
 ```
 
+## Work in progress
 
+The current implementation does not support the Aion FVM, but and updated version it will be released soon.
 
+Also, 2-dimensional arrays are not currently supported but we are working in a web3j release to address that.
