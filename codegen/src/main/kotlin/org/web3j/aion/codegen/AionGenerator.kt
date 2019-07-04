@@ -24,12 +24,14 @@ private class AionGenerator constructor(
     binFile: File?,
     abiFile: File,
     destinationDir: File,
+    contractName: String,
     basePackageName: String,
     private val targetVm: VirtualMachine
 ) : SolidityFunctionWrapperGenerator(
     binFile,
     abiFile,
     destinationDir,
+    contractName,
     basePackageName,
     true,
     true,
@@ -90,9 +92,22 @@ private class AionGenerator constructor(
 
         override fun run() {
             try {
-                AionGenerator(copyJarToHexFile(), abiFile, destinationFileDir, packageName, targetVm).generate()
+                AionGenerator(
+                    copyJarToHexFile(), abiFile, destinationFileDir,
+                    readContractName(abiFile), packageName, targetVm
+                ).generate()
             } catch (e: Exception) {
                 exitError(e)
+            }
+        }
+
+        private fun readContractName(absFile: File): String {
+            return if (targetVm == FVM) {
+                // In FVM, contract name corresponds to ABI file
+                absFile.name.split("\\.(?=[^.]*$)".toRegex()).first()
+            } else {
+                // IN AVM, contract name is itself in the ABI
+                Files.readAllLines(absFile.toPath())[1].split("\\.".toRegex()).last()
             }
         }
 

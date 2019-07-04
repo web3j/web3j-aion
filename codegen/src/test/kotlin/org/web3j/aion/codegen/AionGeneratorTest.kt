@@ -23,8 +23,8 @@ class AionGeneratorTest {
 
         AionGeneratorMain.main(
             "--outputDir", tmpFolder.root.absolutePath,
-            "--abiFile", abiFile.file,
-            "--binFile", binFile.file,
+            "--abiFile", abiFile?.file ?: "",
+            "--binFile", binFile?.file ?: "",
             "--package", "erc20",
             "--targetVm", "AVM"
         )
@@ -34,7 +34,7 @@ class AionGeneratorTest {
 
         assertThat(actualCode.toFile()).exists()
         assertThat(Files.readString(actualCode)).isEqualTo(
-            Files.readString(Paths.get(expectedCode.file))
+            Files.readString(Paths.get(expectedCode?.file ?: ""))
         )
     }
 }
