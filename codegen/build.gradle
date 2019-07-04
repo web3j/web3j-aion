@@ -1,7 +1,6 @@
 plugins {
     id 'application'
     id 'distribution'
-    id 'org.web3j' apply false
 }
 
 description 'Aion command line tools for web3j integration.'
