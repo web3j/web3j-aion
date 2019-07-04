@@ -1,5 +1,3 @@
-import static org.gradle.api.JavaVersion.*
-
 buildscript {
     repositories {
         mavenCentral()
@@ -135,10 +133,10 @@ subprojects {
         integrationTestImplementation "org.testcontainers:junit-jupiter:${versions.testcontainers}"
     }
 
-    sourceCompatibility = VERSION_1_8
-    compileKotlin.kotlinOptions.jvmTarget = VERSION_1_8
-    compileTestKotlin.kotlinOptions.jvmTarget = VERSION_1_8
-    compileIntegrationTestKotlin.kotlinOptions.jvmTarget = VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    compileKotlin.kotlinOptions.jvmTarget = sourceCompatibility
+    compileTestKotlin.kotlinOptions.jvmTarget = sourceCompatibility
+    compileIntegrationTestKotlin.kotlinOptions.jvmTarget = sourceCompatibility
 
     spotless {
         kotlin {
