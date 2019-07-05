@@ -1,11 +1,11 @@
-# DinD service is required for Testcontainers
-services:
-  - docker:dind
-
-variables:
-  # Instruct Testcontainers to use the daemon of DinD.
-  DOCKER_HOST: "tcp://docker:2375"
-  # Improve performance with overlayfs.
+## DinD service is required for Testcontainers
+#services:
+#  - docker:dind
+#
+#variables:
+#  # Instruct Testcontainers to use the daemon of DinD.
+#  DOCKER_HOST: "tcp://docker:2375"
+#  # Improve performance with overlayfs.
 #  DOCKER_DRIVER: overlay2
 
 before_script:
