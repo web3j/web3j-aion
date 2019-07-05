@@ -12,7 +12,7 @@ internal object AbiDefinitionParser {
      *
      *    public static boolean transferFrom(Address, Address, long)
      */
-    private val FUNCTION_REGEX = "^public\\s+static\\s+(\\w+)\\s+(\\w+)\\s*\\(\\s*(.+)*\\s*\\)\$".toRegex()
+    private val FUNCTION_REGEX = "^public\\s+static\\s+([\\w\\[\\]]+)\\s+(\\w+)\\s*\\(\\s*(.+)*\\s*\\)\$".toRegex()
 
     /**
      * Parses an ABI string in Aion VM format into a list of [AbiDefinition]s.
