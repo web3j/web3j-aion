@@ -6,7 +6,7 @@ variables:
   # Instruct Testcontainers to use the daemon of DinD.
   DOCKER_HOST: "tcp://docker:2375"
   # Improve performance with overlayfs.
-  DOCKER_DRIVER: overlay2
+#  DOCKER_DRIVER: overlay2
 
 before_script:
   - apk add docker
@@ -15,7 +15,7 @@ build:
   image: adoptopenjdk/openjdk11:jdk-11.0.3_7-alpine
   stage: build
   script:
-    - ./gradlew clean build # integrationTest
+    - ./gradlew clean build integrationTest
   artifacts:
     reports:
       junit:
