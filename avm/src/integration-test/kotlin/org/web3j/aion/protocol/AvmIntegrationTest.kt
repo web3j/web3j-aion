@@ -31,10 +31,10 @@ class AvmIntegrationTest : AionIntegrationTest(VirtualMachine.AVM) {
             assertThat(call_decimals().send()).isEqualTo(2)
         }
 
-        // Send a transfer to a new account on Docker test
-        aion.personalNewAccount("test").send().apply {
-            contract.send_mint(accountId, 1L).send()
-            assertThat(contract.call_balanceOf(accountId).send()).isEqualTo(1L)
-        }
+        // TODO Send a transfer to a new account on Docker test
+//        aion.personalNewAccount("test").send().apply {
+//            contract.send_mint(accountId, 1L).send()
+//            assertThat(contract.call_balanceOf(accountId).send()).isEqualTo(1L)
+//        }
     }
 }
