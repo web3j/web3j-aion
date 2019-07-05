@@ -63,6 +63,40 @@ class AbiDefinitionParserTest {
     }
 
     @Test
+    fun `parse return array function`() {
+        AbiDefinitionParser.parse(
+            """
+            0.0
+            org.aion.TestContract
+            public static byte[] test()
+        """.trimIndent()
+        ).first().apply {
+            assertThat(name).isEqualTo("test")
+            assertThat(inputs).isEmpty()
+            assertThat(outputs).containsExactly(
+                NamedType(null, "byte[]")
+            )
+        }
+    }
+
+    @Test
+    fun `parse array parameter function`() {
+        AbiDefinitionParser.parse(
+            """
+            0.0
+            org.aion.TestContract
+            public static void test(byte[])
+        """.trimIndent()
+        ).first().apply {
+            assertThat(name).isEqualTo("test")
+            assertThat(outputs).isEmpty()
+            assertThat(inputs).containsExactly(
+                NamedType(null, "byte[]")
+            )
+        }
+    }
+
+    @Test
     fun `parse non-void function`() {
         AbiDefinitionParser.parse(
             """
@@ -84,7 +118,7 @@ class AbiDefinitionParserTest {
 
     @Test
     fun `parse ERC20Token ABI file`() {
-        val abiFile = File(javaClass.classLoader.getResource("erc20/ERC20Token.abi").file)
+        val abiFile = File(javaClass.classLoader.getResource("erc20/ERC20Token.abi")?.file ?: "")
 
         AbiDefinitionParser.parse(abiFile).apply {
             assertAll {
