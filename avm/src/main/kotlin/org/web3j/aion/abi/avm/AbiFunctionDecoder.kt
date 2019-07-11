@@ -222,9 +222,7 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun <T : Type<*>> getParameterizedType(
-        typeReference: TypeReference<*>
-    ): Class<T> {
+    private fun <T : Type<*>> getParameterizedType(typeReference: TypeReference<*>): Class<T> {
         val typeArguments = (typeReference.type as ParameterizedType).actualTypeArguments
         val parameterizedTypeName = typeArguments[0].typeName
         return Class.forName(parameterizedTypeName) as Class<T>
