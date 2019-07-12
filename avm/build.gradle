@@ -2,11 +2,10 @@ dependencies {
     api project(':web3j-aion-common')
 
     implementation "org.aion:avm-api:${versions.aion}"
-    implementation "org.aion:avm-core:${versions.aion}"
     implementation "org.aion:avm-userlib:${versions.aion}"
+    implementation "org.aion:avm-tooling:${versions.aion}"
     
-    runtimeOnly "org.aion:avm-rt:${versions.aion}"
-    runtimeOnly "org.aion:avm-tooling:${versions.aion}"
+//    runtimeOnly "org.aion:avm-rt:${versions.aion}"
 
     testImplementation project(path: ':web3j-aion-common', configuration: 'testOutput')
     integrationTestImplementation project(path: ':web3j-aion-common', configuration: 'integrationTestOutput')

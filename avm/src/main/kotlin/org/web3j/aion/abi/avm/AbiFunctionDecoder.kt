@@ -1,6 +1,5 @@
 package org.web3j.aion.abi.avm
 
-// FIXME Remove core dependency
 import org.aion.avm.userlib.abi.ABIDecoder
 import org.web3j.abi.FunctionReturnDecoder
 import org.web3j.abi.TypeReference
@@ -207,7 +206,7 @@ internal object AbiFunctionDecoder : FunctionReturnDecoder() {
     @Suppress("UNCHECKED_CAST")
     private fun <T> T.toWeb3j(): Type<*> {
         return when (this) {
-            is avm.Address -> Address(ADDRESS_BIT_LENGTH, Numeric.toHexString(unwrap()))
+            is avm.Address -> Address(ADDRESS_BIT_LENGTH, Numeric.toHexString(toByteArray()))
             is Boolean -> Bool(this)
             is kotlin.Char -> Char(this)
             is kotlin.Byte -> Byte(this)

@@ -1,7 +1,6 @@
 package org.web3j.aion.abi.avm
 
-// FIXME Remove core dependency
-import org.aion.avm.core.util.ABIUtil
+import org.aion.avm.tooling.ABIUtil
 import org.web3j.abi.FunctionEncoder
 import org.web3j.abi.datatypes.Address
 import org.web3j.abi.datatypes.Array
