@@ -2,6 +2,7 @@ package org.web3j.aion.abi
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 import org.web3j.abi.FunctionEncoder.encode
@@ -40,6 +41,7 @@ import java.math.BigInteger
 /**
  * TODO Add array and 2D array tests.
  */
+@Ignore
 class AbiFunctionEncoderFvmTest {
 
     @Test
