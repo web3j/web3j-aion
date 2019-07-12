@@ -6,10 +6,10 @@ sealed class AbiException(message: String, cause: Throwable? = null) : Exception
 
 class UnsupportedTypeException(value: String) : AbiException("Unsupported type $value") {
     constructor(value: Type<*>) : this(value.typeAsString)
-    constructor(type: Class<Type<*>>) : this(type.canonicalName)
+    constructor(type: Class<*>) : this(type.canonicalName)
 }
 
 class UnknownTypeException(value: String) : AbiException("Unknown type $value") {
     constructor(value: Type<*>) : this(value.typeAsString)
-    constructor(type: Class<Type<*>>) : this(type.canonicalName)
+    constructor(type: Class<*>) : this(type.canonicalName)
 }
