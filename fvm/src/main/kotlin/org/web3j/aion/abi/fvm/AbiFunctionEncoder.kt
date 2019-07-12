@@ -10,7 +10,6 @@ import org.web3j.abi.datatypes.Int
 import org.web3j.abi.datatypes.IntType
 import org.web3j.abi.datatypes.Type
 import org.web3j.abi.datatypes.Uint
-import org.web3j.aion.abi.AionEncoderException
 import org.web3j.aion.abi.UnknownTypeException
 import org.web3j.aion.abi.UnsupportedTypeException
 
@@ -34,7 +33,7 @@ internal object AbiFunctionEncoder : DefaultFunctionEncoder() {
     @Suppress("UNCHECKED_CAST")
     private fun <T> Type<T>.toAion(): Type<*> {
         return when (this) {
-            is FixedPointType -> throw AionEncoderException("Unsupported fixed point type")
+            is FixedPointType -> throw UnsupportedTypeException(this)
             is IntType -> (this as IntType).toAion()
             is Array<*> -> (this as Array<Type<*>>).toAion()
             else -> this
@@ -43,15 +42,13 @@ internal object AbiFunctionEncoder : DefaultFunctionEncoder() {
 
     @Suppress("UNCHECKED_CAST")
     private fun Array<Type<*>>.toAion(): Array<Type<*>> {
-        return when (this.componentType) {
+        return when (componentType) {
             IntType::class.java -> {
                 val values = (value as List<IntType>).map { it.toAion() }
-                DynamicArray<IntType>(this.componentType as Class<IntType>, values) as Array<Type<*>>
+                DynamicArray(componentType as Class<IntType>, values) as Array<Type<*>>
             }
 //                DynamicArray::class.java, StaticArray::class.java ->
 //                TODO("2D arrays not implemented")
-//                      (value as List<DynamicArray<Type<Char>>>)
-//                      .map { it.toAion() as CharArray }.toTypedArray()
             else -> this
         }
     }

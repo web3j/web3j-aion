@@ -2,7 +2,6 @@ package org.web3j.aion.abi
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 import org.web3j.abi.FunctionEncoder.encode
@@ -41,7 +40,6 @@ import java.math.BigInteger
 /**
  * TODO Add array and 2D array tests.
  */
-@Ignore
 class AbiFunctionEncoderFvmTest {
 
     @Test
@@ -52,39 +50,39 @@ class AbiFunctionEncoderFvmTest {
     @Test
     fun `encode constructor`() {
         assertThat(encodeConstructor(listOf(Utf8String("Aion test"))))
-            .isEqualTo("000000000000000000000000000000100000000000000000000000000000000941696f6e20746573740000000000000000000000000000000000000000000000")
+            .isEqualTo("0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000941696f6e20746573740000000000000000000000000000000000000000000000")
     }
 
     @Test
     fun `encode empty parameters`() {
         assertThat(encode(Function("test", listOf(), listOf())))
-            .isEqualTo("0x21000474657374")
+            .isEqualTo("0xf8a8fd6d")
     }
 
     @Test
     fun `encode string`() {
         assertThat(encode(Function("test", listOf(Utf8String("")), listOf())))
-            .isEqualTo("0x21000474657374210000")
+            .isEqualTo("0xf9fbd55400000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000")
 
         assertThat(encode(Function("test", listOf(Utf8String("Hello AVM")), listOf())))
-            .isEqualTo("0x2100047465737421000948656c6c6f2041564d")
+            .isEqualTo("0xf9fbd5540000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000948656c6c6f2041564d0000000000000000000000000000000000000000000000")
     }
 
     @Test
     fun `encode bool`() {
         assertThat(encode(Function("test", listOf(Bool(true)), listOf())))
-            .isEqualTo("0x210004746573740201")
+            .isEqualTo("0x36091dff0000000000000000000000000000000000000000000000000000000000000001")
     }
 
     @Test
-    fun `encode int 136 to int256 throws ABIException`() {
-        assertThrows<AionEncoderException> {
+    fun `encode int 136 to int256 throws UnsupportedTypeException`() {
+        assertThrows<UnsupportedTypeException> {
             encode(Function("test", listOf(Int(BigInteger.ZERO)), listOf()))
         }
-        assertThrows<AionEncoderException> {
+        assertThrows<UnsupportedTypeException> {
             encode(Function("test", listOf(Int136(BigInteger.ZERO)), listOf()))
         }
-        assertThrows<AionEncoderException> {
+        assertThrows<UnsupportedTypeException> {
             encode(Function("test", listOf(Int256(BigInteger.ZERO)), listOf()))
         }
     }
@@ -92,87 +90,87 @@ class AbiFunctionEncoderFvmTest {
     @Test
     fun `encode int8`() {
         assertThat(encode(Function("test", listOf(Int8(Byte.MIN_VALUE.toLong())), listOf())))
-            .isEqualTo("0x210004746573740180")
+            .isEqualTo("0x2b58697effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff80")
 
         assertThat(encode(Function("test", listOf(Int8(Byte.MAX_VALUE.toLong())), listOf())))
-            .isEqualTo("0x21000474657374017f")
+            .isEqualTo("0x2b58697e000000000000000000000000000000000000000000000000000000000000007f")
     }
 
     @Test
     fun `encode int16`() {
         assertThat(encode(Function("test", listOf(Int16(kotlin.Short.MIN_VALUE.toLong())), listOf())))
-            .isEqualTo("0x21000474657374048000")
+            .isEqualTo("0x87d12c1bffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8000")
 
         assertThat(encode(Function("test", listOf(Int16(kotlin.Short.MAX_VALUE.toLong())), listOf())))
-            .isEqualTo("0x21000474657374047fff")
+            .isEqualTo("0x87d12c1b0000000000000000000000000000000000000000000000000000000000007fff")
     }
 
     @Test
     fun `encode int24 to int32`() {
         assertThat(encode(Function("test", listOf(Int24(MIN_24_VALUE)), listOf())))
-            .isEqualTo("0x2100047465737405ff800000")
+            .isEqualTo("0x63eae2cdffffffffffffffffffffffffffffffffffffffffffffffffffffffffff800000")
 
         assertThat(encode(Function("test", listOf(Int24(MAX_24_VALUE)), listOf())))
-            .isEqualTo("0x2100047465737405007fffff")
+            .isEqualTo("0x63eae2cd00000000000000000000000000000000000000000000000000000000007fffff")
 
         assertThat(encode(Function("test", listOf(Int32(kotlin.Int.MIN_VALUE.toLong())), listOf())))
-            .isEqualTo("0x210004746573740580000000")
+            .isEqualTo("0x7747cc75ffffffffffffffffffffffffffffffffffffffffffffffffffffffff80000000")
 
         assertThat(encode(Function("test", listOf(Int32(kotlin.Int.MAX_VALUE.toLong())), listOf())))
-            .isEqualTo("0x21000474657374057fffffff")
+            .isEqualTo("0x7747cc75000000000000000000000000000000000000000000000000000000007fffffff")
     }
 
     @Test
     fun `encode int40 to int64`() {
         assertThat(encode(Function("test", listOf(Int40(MIN_40_VALUE)), listOf())))
-            .isEqualTo("0x2100047465737406ffffff8000000000")
+            .isEqualTo("0x3929934cffffffffffffffffffffffffffffffffffffffffffffffffffffff8000000000")
 
         assertThat(encode(Function("test", listOf(Int40(MAX_40_VALUE)), listOf())))
-            .isEqualTo("0x21000474657374060000007fffffffff")
+            .isEqualTo("0x3929934c0000000000000000000000000000000000000000000000000000007fffffffff")
 
         assertThat(encode(Function("test", listOf(Int48(MIN_48_VALUE)), listOf())))
-            .isEqualTo("0x2100047465737406ffff800000000000")
+            .isEqualTo("0xd664ab99ffffffffffffffffffffffffffffffffffffffffffffffffffff800000000000")
 
         assertThat(encode(Function("test", listOf(Int48(MAX_48_VALUE)), listOf())))
-            .isEqualTo("0x210004746573740600007fffffffffff")
+            .isEqualTo("0xd664ab9900000000000000000000000000000000000000000000000000007fffffffffff")
 
         assertThat(encode(Function("test", listOf(Int56(MIN_56_VALUE)), listOf())))
-            .isEqualTo("0x2100047465737406ff80000000000000")
+            .isEqualTo("0xf163f0b2ffffffffffffffffffffffffffffffffffffffffffffffffff80000000000000")
 
         assertThat(encode(Function("test", listOf(Int56(MAX_56_VALUE)), listOf())))
-            .isEqualTo("0x2100047465737406007fffffffffffff")
+            .isEqualTo("0xf163f0b2000000000000000000000000000000000000000000000000007fffffffffffff")
 
         assertThat(encode(Function("test", listOf(Int64(Long.MIN_VALUE)), listOf())))
-            .isEqualTo("0x21000474657374068000000000000000")
+            .isEqualTo("0xb3a5eb29ffffffffffffffffffffffffffffffffffffffffffffffff8000000000000000")
 
         assertThat(encode(Function("test", listOf(Int64(Long.MAX_VALUE)), listOf())))
-            .isEqualTo("0x21000474657374067fffffffffffffff")
+            .isEqualTo("0xb3a5eb290000000000000000000000000000000000000000000000007fffffffffffffff")
     }
 
     @Test
     fun `encode int72 to int128`() {
         assertThat(encode(Function("test", listOf(Int72(MIN_72_VALUE)), listOf())))
-            .isEqualTo("0x21000474657374110009800000000000000001")
+            .isEqualTo("0x3795df92ffffffffffffffffffffffffffffffffffffffffffffff800000000000000001")
 
         assertThat(encode(Function("test", listOf(Int72(MAX_72_VALUE)), listOf())))
-            .isEqualTo("0x2100047465737411000a00800000000000000000")
+            .isEqualTo("0x3795df920000000000000000000000000000000000000000000000800000000000000000")
 
         assertThat(encode(Function("test", listOf(Int128(MIN_128_VALUE)), listOf())))
-            .isEqualTo("0x2100047465737411001080000000000000000000000000000000")
+            .isEqualTo("0xa10c1284ffffffffffffffffffffffffffffffff80000000000000000000000000000000")
 
         assertThat(encode(Function("test", listOf(Int128(MAX_128_VALUE)), listOf())))
-            .isEqualTo("0x210004746573741100107fffffffffffffffffffffffffffffff")
+            .isEqualTo("0xa10c1284000000000000000000000000000000007fffffffffffffffffffffffffffffff")
     }
 
     @Test
-    fun `encode uint136 to uint256 throws ABIException`() {
-        assertThrows<AionEncoderException> {
+    fun `encode uint136 to uint256 throws UnsupportedTypeException`() {
+        assertThrows<UnsupportedTypeException> {
             encode(Function("test", listOf(Uint(BigInteger.ZERO)), listOf()))
         }
-        assertThrows<AionEncoderException> {
+        assertThrows<UnsupportedTypeException> {
             encode(Function("test", listOf(Uint136(BigInteger.ZERO)), listOf()))
         }
-        assertThrows<AionEncoderException> {
+        assertThrows<UnsupportedTypeException> {
             encode(Function("test", listOf(Uint256(BigInteger.ZERO)), listOf()))
         }
     }
@@ -180,77 +178,77 @@ class AbiFunctionEncoderFvmTest {
     @Test
     fun `encode uint8`() {
         assertThat(encode(Function("test", listOf(Uint8(0)), listOf())))
-            .isEqualTo("0x21000474657374040000")
+            .isEqualTo("0xf1820bdc0000000000000000000000000000000000000000000000000000000000000000")
 
         assertThat(encode(Function("test", listOf(Uint8(UMAX_8_VALUE)), listOf())))
-            .isEqualTo("0x210004746573740400ff")
+            .isEqualTo("0xf1820bdc00000000000000000000000000000000000000000000000000000000000000ff")
     }
 
     @Test
     fun `encode uint16 to uint24`() {
         assertThat(encode(Function("test", listOf(Uint16(0)), listOf())))
-            .isEqualTo("0x210004746573740500000000")
+            .isEqualTo("0x1891002e0000000000000000000000000000000000000000000000000000000000000000")
 
         assertThat(encode(Function("test", listOf(Uint16(UMAX_16_VALUE)), listOf())))
-            .isEqualTo("0x21000474657374050000ffff")
+            .isEqualTo("0x1891002e000000000000000000000000000000000000000000000000000000000000ffff")
 
         assertThat(encode(Function("test", listOf(Uint24(0)), listOf())))
-            .isEqualTo("0x210004746573740500000000")
+            .isEqualTo("0xbf7092c40000000000000000000000000000000000000000000000000000000000000000")
 
         assertThat(encode(Function("test", listOf(Uint24(UMAX_24_VALUE)), listOf())))
-            .isEqualTo("0x210004746573740500ffffff")
+            .isEqualTo("0xbf7092c40000000000000000000000000000000000000000000000000000000000ffffff")
     }
 
     @Test
     fun `encode uint32 to uint56`() {
         assertThat(encode(Function("test", listOf(Uint32(0)), listOf())))
-            .isEqualTo("0x21000474657374060000000000000000")
+            .isEqualTo("0xe3cff6340000000000000000000000000000000000000000000000000000000000000000")
 
         assertThat(encode(Function("test", listOf(Uint32(UMAX_32_VALUE)), listOf())))
-            .isEqualTo("0x210004746573740600000000ffffffff")
+            .isEqualTo("0xe3cff63400000000000000000000000000000000000000000000000000000000ffffffff")
 
         assertThat(encode(Function("test", listOf(Uint40(0)), listOf())))
-            .isEqualTo("0x21000474657374060000000000000000")
+            .isEqualTo("0xaa766a3e0000000000000000000000000000000000000000000000000000000000000000")
 
         assertThat(encode(Function("test", listOf(Uint40(UMAX_40_VALUE)), listOf())))
-            .isEqualTo("0x2100047465737406000000ffffffffff")
+            .isEqualTo("0xaa766a3e000000000000000000000000000000000000000000000000000000ffffffffff")
 
         assertThat(encode(Function("test", listOf(Uint48(0)), listOf())))
-            .isEqualTo("0x21000474657374060000000000000000")
+            .isEqualTo("0xc129e61f0000000000000000000000000000000000000000000000000000000000000000")
 
         assertThat(encode(Function("test", listOf(Uint48(UMAX_48_VALUE)), listOf())))
-            .isEqualTo("0x21000474657374060000ffffffffffff")
+            .isEqualTo("0xc129e61f0000000000000000000000000000000000000000000000000000ffffffffffff")
 
         assertThat(encode(Function("test", listOf(Uint56(0)), listOf())))
-            .isEqualTo("0x21000474657374060000000000000000")
+            .isEqualTo("0xa3d80f0f0000000000000000000000000000000000000000000000000000000000000000")
 
         assertThat(encode(Function("test", listOf(Uint56(UMAX_56_VALUE)), listOf())))
-            .isEqualTo("0x210004746573740600ffffffffffffff")
+            .isEqualTo("0xa3d80f0f00000000000000000000000000000000000000000000000000ffffffffffffff")
     }
 
     @Test
     fun `encode uint64 to uint128`() {
         assertThat(encode(Function("test", listOf(Uint64(0)), listOf())))
-            .isEqualTo("0x2100047465737411000100")
+            .isEqualTo("0xb0e0b9ed0000000000000000000000000000000000000000000000000000000000000000")
 
         assertThat(encode(Function("test", listOf(Uint64(UMAX_64_VALUE)), listOf())))
-            .isEqualTo("0x2100047465737411000900ffffffffffffffff")
+            .isEqualTo("0xb0e0b9ed000000000000000000000000000000000000000000000000ffffffffffffffff")
 
         assertThat(encode(Function("test", listOf(Uint128(0)), listOf())))
-            .isEqualTo("0x2100047465737411000100")
+            .isEqualTo("0xce57f1e20000000000000000000000000000000000000000000000000000000000000000")
 
         assertThat(encode(Function("test", listOf(Uint128(UMAX_128_VALUE)), listOf())))
-            .isEqualTo("0x2100047465737411001100ffffffffffffffffffffffffffffffff")
+            .isEqualTo("0xce57f1e200000000000000000000000000000000ffffffffffffffffffffffffffffffff")
     }
 
     @Test
     internal fun `encode bool array`() {
         val empty = DynamicArray(Bool::class.java)
         assertThat(encode(Function("test", listOf(empty), listOf())))
-            .isEqualTo("0x21000474657374120000")
+            .isEqualTo("0xac5d4f6200000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000")
 
         val trueFalse = DynamicArray(Bool::class.java, listOf(Bool(true), Bool(false)))
         assertThat(encode(Function("test", listOf(trueFalse), listOf())))
-            .isEqualTo("0x210004746573741200020100")
+            .isEqualTo("0xac5d4f620000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000")
     }
 }
