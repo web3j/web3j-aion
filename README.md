@@ -2,13 +2,13 @@ web3j Aion integration
 ======================
 
 This project integrates [web3j](https://web3j.io/) with the [Aion network](https://aion.network/).
-It allows generating Aion contract wrappers from Java or Solidity (not supported yet) and
-calling them  from your Java code.
+It enables the deployment and invocation of [Aion smart contracts](https://docs.aion.network/docs/contract-fundamentals)
+from your Java code using [web3j contract wrappers](https://docs.web3j.io/smart_contracts.html#deploying-and-interacting-with-smart-contracts).
 
 It is composed by the following modules:
 
- * [AVM](avm): Contains the encoder and decoder for interoperability with the Aion Virtual Machine.
- * [FVM](fvm): Aims to provide support for Aion Fast VM (FVM) contracts (coming soon).
+ * [AVM](avm): Contains the encoder and decoder for interoperability with the
+   [Aion Virtual Machine](https://github.com/aionnetwork/AVM).
  * [Code generation](codegen): Provides a CLI for contract wrapper generation from the ABI and binaries.
  * [Common](common): Contains common functionality like transaction signing and JSON-RPC implementation.
   
@@ -111,6 +111,4 @@ This will start an Aion node in a Docker container and run the integration tests
 
 ## Work in progress
 
-The current implementation does not support the Aion FVM, but and updated version it will be released soon.
-
-Also, 2-dimensional arrays are not currently supported but we are working in a web3j release to address that.
+2-dimensional arrays are not currently supported but we are working in a web3j release to address that.

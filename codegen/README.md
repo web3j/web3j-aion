@@ -13,7 +13,7 @@ To generate Aion contract wrappers, run the command `web3j-aion` using the follo
 
 |        Flag        | Required | Description |
 |:-------------------|:--------:|-------------|
-| `-a`, `--abiFile`  |     ✔    | ABI file in FVM or AVM format with a contract definition. |
+| `-a`, `--abiFile`  |     ✔    | ABI file in AVM format with a contract definition. |
 | `-b`, `--binFile`  |          | BIN or JAR file with the contract compiled code in order to generate deploy methods. |  
 | `-o`, `--outputDir`|     ✔    | Destination base directory. |
 | `-p`, `--package`  |     ✔    | Base package name. |
@@ -21,9 +21,8 @@ To generate Aion contract wrappers, run the command `web3j-aion` using the follo
 
 ### Java contracts (AVM)
 
-For [Aion Java contracts](https://docs.aion.network/docs/contract-fundamentals), 
-the ABI and JAR files can be obtained using the 
-[aion4j Maven plugin](https://docs.aion.network/docs/maven-and-aion4j).
+The ABI and JAR for [Aion Java contracts](https://docs.aion.network/docs/contract-fundamentals), 
+files can be obtained using the [aion4j Maven plugin](https://docs.aion.network/docs/maven-and-aion4j).
 After a project build the `.abi` and `.jar` files will be located under the `build` directory.
 
 The ABI file should be a text file containing the contract class name, its constructor and other function definitions:
@@ -35,24 +34,6 @@ public static String name()
 public static String symbol()
 ...
 ```
-
-### Solidity contracts (FVM)
-
-For Solidity Aion contracts, you'll need to use either the `solc` version 4.15 
-(Aion provides [different tools](https://docs.aion.network/docs/fast-vm-1) to run the correct version of the command)
-or the [Titan Suite](https://learn.aion.network/docs/titan-suite).
-
-To simplify the Solidity code compilation you can configure your project with the last version of the
-[web3j Solidity Gradle plugin](https://github.com/web3j/solidity-gradle-plugin) with the following settings:
-
-```groovy
-solidity {
-    executable = "docker run --rm -v $projectDir:/src satran004/aion-fastvm:0.3.2 solc"
-    version = '0.4.15'
-}
-```
-
-The Gradle task `compileSolidity` will run the Solidity compilation with the correct Aion version.
 
 ## Building the CLI
 
