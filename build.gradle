@@ -37,11 +37,6 @@ ext {
     bintrayGpgPassphrase = project.hasProperty('bintrayGpgPassphrase') ? project.property('bintrayGpgPassphrase') : System.getenv('BINTRAY_GPG_PASSPHRASE')
 }
 
-allprojects {
-    group = 'org.web3j'
-    version = '0.1.0-SNAPSHOT'
-}
-
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
