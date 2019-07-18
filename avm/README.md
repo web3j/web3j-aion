@@ -5,6 +5,10 @@ This module contains the Service Provider Interface (SPI) implementation of the 
 [encoder](src/main/kotlin/org/web3j/aion/abi/avm/AbiFunctionEncoder.kt) and 
 [decoder](src/main/kotlin/org/web3j/aion/abi/avm/AbiFunctionDecoder.kt) providers.
 
+The library `web3j-aion-avm`, produced by this module, **must** be present in your 
+classpath when running an Aion Java contract wrapper. Otherwise, the encoding and decoding 
+won't work properly.
+
 ## Building and testing
 
 To build and run the tests use the command:
