@@ -32,7 +32,7 @@ abstract class AionIntegrationTest(private val targetVm: VirtualMachine) {
 
         @Container
         @JvmStatic
-        private val AION = KGenericContainer("aionnetwork/aion:Latest")
+        private val AION = KGenericContainer("aionnetwork/aion:latest")
             .withClasspathResourceMapping("aion/config", "/aion/custom/config", READ_WRITE)
             .withClasspathResourceMapping("aion/log", "/aion/custom/log", READ_WRITE)
             .withCommand("/aion/aion.sh --network custom")
