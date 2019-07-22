@@ -39,7 +39,7 @@ private class AionGenerator constructor(
         AVM -> AvmAionContract::class.java
         FVM -> FvmAionContract::class.java
     },
-    AionConstants.ADDRESS_BIT_LENGTH
+    AionConstants.ADDRESS_BYTE_LENGTH
 ) {
     @Throws(IOException::class)
     override fun loadContractDefinition(absFile: File): List<AbiDefinition> {
