@@ -39,7 +39,7 @@ abstract class AionIntegrationTest(private val targetVm: VirtualMachine) {
             .withExposedPorts(8545)
 
         @JvmStatic
-        protected val NETWORK = MASTERY
+        protected val NETWORK = LOCALHOST
 
         @JvmStatic
         private val RPC_URL: Map<Network, String> by lazy {
