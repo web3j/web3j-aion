@@ -12,7 +12,7 @@ before_script:
   - apk add docker
 
 build:
-  image: adoptopenjdk/openjdk11:jdk-11.0.3_7-alpine
+  image: gradle:5.4.1
   stage: build
   script:
     - ./gradlew clean build integrationTest
