@@ -55,7 +55,7 @@ The [`web3labs/web3j-aion`](https://hub.docker.com/r/web3labs/web3j-aion) Docker
 and can be used with the following command: 
 
 ```bash
-docker run web3labs/web3j-aion:latest --abiFile ...
+docker run web3labs/web3j-aion --abiFile ...
 ```
 
 ### Using the main class
