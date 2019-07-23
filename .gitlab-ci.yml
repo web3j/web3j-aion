@@ -9,10 +9,10 @@ variables:
   DOCKER_DRIVER: overlay2
 
 build:
-  image: gradle:5.4.1
+  image: web3labs/gradle
   stage: build
   script:
-    - ./gradlew clean build integrationTest
+    - gradle clean build integrationTest
   artifacts:
     reports:
       junit:
