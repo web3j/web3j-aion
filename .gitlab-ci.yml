@@ -12,7 +12,7 @@ build:
   image: web3labs/gradle
   stage: build
   script:
-    - gradle clean build integrationTest
+    - ./gradlew clean build integrationTest
   artifacts:
     reports:
       junit:
