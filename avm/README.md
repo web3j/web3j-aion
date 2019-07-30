@@ -53,7 +53,7 @@ Aion AVM contract wrappers. Running the command:
 ./gradlew shadowJar
 ```
 
-will produce a ~10MB JAR file named `web3j-aion-avm-<version>-all.jar`, which will be located in the `build/libs` 
+will produce a ~10MB JAR file named `web3j-aion-avm-<version>-all.jar` located in the `build/libs` 
 directory of this module. You can use it by simply adding it to your classpath:
 
 ```bash
