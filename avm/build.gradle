@@ -1,12 +1,43 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
+    id 'java'
+}
+
+githubRelease {
+    String githubToken = (project.hasProperty('githubToken') ?
+            project.property('githubToken') : System.getenv('GITHUB_TOKEN'))
+
+    owner 'web3j'
+    overwrite true
+    draft version.endsWith('SNAPSHOT')
+    prerelease version.endsWith('SNAPSHOT')
+    releaseAssets "$buildDir/libs/$name-$version-all.jar"
+    token githubToken == null ? '' : githubToken
+}
+
+tasks.getByName('githubRelease') {
+    dependsOn 'shadowJar'
+}
+
 dependencies {
     api project(':web3j-aion-common')
 
     implementation "org.aion:avm-api:${versions.aion}"
     implementation "org.aion:avm-userlib:${versions.aion}"
     implementation "org.aion:avm-tooling:${versions.aion}"
-    
-//    runtimeOnly "org.aion:avm-rt:${versions.aion}"
 
     testImplementation project(path: ':web3j-aion-common', configuration: 'testOutput')
     integrationTestImplementation project(path: ':web3j-aion-common', configuration: 'integrationTestOutput')
+}
+
+shadowJar {
+    minimize()
+    dependencies {
+        exclude(dependency {
+            it.moduleGroup.startsWith('com.github.shyiko')
+        })
+        exclude(dependency {
+            it.moduleGroup.startsWith('com.github.shyiko')
+        })
+    }
 }
