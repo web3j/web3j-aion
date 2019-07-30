@@ -34,12 +34,12 @@ This will start an Aion node in a Docker container and run the integration tests
         ℹ︎ Checking the system...
         ✔ Docker version should be at least 1.6.0
         ✔ Docker environment should have more than 2GB free disk space
-2019-07-02 15:08:05 [Test worker] DEBUG [aionnetwork/aion:Latest] - Starting container: aionnetwork/aion:Latest
-2019-07-02 15:08:05 [Test worker] DEBUG [aionnetwork/aion:Latest] - Trying to start container: aionnetwork/aion:Latest
-2019-07-02 15:08:05 [Test worker] DEBUG [aionnetwork/aion:Latest] - Trying to start container: aionnetwork/aion:Latest (attempt 1/1)
-2019-07-02 15:08:05 [Test worker] DEBUG [aionnetwork/aion:Latest] - Starting container: aionnetwork/aion:Latest
-2019-07-02 15:08:05 [Test worker] INFO  [aionnetwork/aion:Latest] - Creating container for image: aionnetwork/aion:Latest
-2019-07-02 15:08:07 [Test worker] INFO  [aionnetwork/aion:Latest] - Starting container with ID: 199b643113b66e3f7c7a5c3cad8c486b6e2d8585f61fff844b696652d04ddc01
-2019-07-02 15:08:07 [Test worker] INFO  [aionnetwork/aion:Latest] - Container aionnetwork/aion:Latest is starting: 199b643113b66e3f7c7a5c3cad8c486b6e2d8585f61fff844b696652d04ddc01
-2019-07-02 15:08:14 [Test worker] INFO  [aionnetwork/aion:Latest] - Container aionnetwork/aion:Latest started
+2019-07-02 15:08:05 [Test worker] DEBUG [aionnetwork/aion:latest] - Starting container: aionnetwork/aion:Latest
+2019-07-02 15:08:05 [Test worker] DEBUG [aionnetwork/aion:latest] - Trying to start container: aionnetwork/aion:Latest
+2019-07-02 15:08:05 [Test worker] DEBUG [aionnetwork/aion:latest] - Trying to start container: aionnetwork/aion:Latest (attempt 1/1)
+2019-07-02 15:08:05 [Test worker] DEBUG [aionnetwork/aion:latest] - Starting container: aionnetwork/aion:Latest
+2019-07-02 15:08:05 [Test worker] INFO  [aionnetwork/aion:latest] - Creating container for image: aionnetwork/aion:Latest
+2019-07-02 15:08:07 [Test worker] INFO  [aionnetwork/aion:latest] - Starting container with ID: 199b643113b66e3f7c7a5c3cad8c486b6e2d8585f61fff844b696652d04ddc01
+2019-07-02 15:08:07 [Test worker] INFO  [aionnetwork/aion:latest] - Container aionnetwork/aion:Latest is starting: 199b643113b66e3f7c7a5c3cad8c486b6e2d8585f61fff844b696652d04ddc01
+2019-07-02 15:08:14 [Test worker] INFO  [aionnetwork/aion:latest] - Container aionnetwork/aion:Latest started
 ```
