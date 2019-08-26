@@ -7,10 +7,10 @@ import org.web3j.abi.spi.FunctionEncoderProvider
 import org.web3j.aion.abi.avm.AbiFunctionDecoder
 import org.web3j.aion.abi.avm.AbiFunctionEncoder
 
-class AbiFunctionEncoderProvider : FunctionEncoderProvider {
+class AvmFunctionEncoderProvider : FunctionEncoderProvider {
     override fun get(): FunctionEncoder = AbiFunctionEncoder
 }
 
-class AbiFunctionDecoderProvider : FunctionReturnDecoderProvider {
+class AvmFunctionReturnDecoderProvider : FunctionReturnDecoderProvider {
     override fun get(): FunctionReturnDecoder = AbiFunctionDecoder
 }
