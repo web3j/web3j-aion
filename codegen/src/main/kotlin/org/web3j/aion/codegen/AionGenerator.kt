@@ -121,7 +121,7 @@ private class AionGenerator constructor(
                 }
 
                 // Copy the JAR contents in HEX into a temp file
-                val hexFile = Files.createTempFile(abiFile.name, ".bin").toFile()
+                val hexFile = Files.createTempFile("${abiFile.nameWithoutExtension}-", ".bin").toFile()
 
                 Files.readAllBytes(toPath()).let {
                     val size = it.size + Int.SIZE_BYTES
