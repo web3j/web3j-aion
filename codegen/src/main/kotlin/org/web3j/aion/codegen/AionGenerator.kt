@@ -35,6 +35,7 @@ private class AionGenerator constructor(
     basePackageName,
     true,
     true,
+    true,
     when (targetVm) {
         AVM -> AvmAionContract::class.java
         FVM -> FvmAionContract::class.java
