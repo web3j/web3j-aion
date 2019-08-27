@@ -200,9 +200,9 @@ subprojects {
                     description rootProject.description
                     url 'https://web3j.io'
                     scm {
-                        connection 'scm:git:https://github.com/web3j/web3j-aion.git'
-                        url 'https://github.com/web3j/web3j-aion.git'
-                        developerConnection 'scm:git://github.com/web3j/web3j-aion.git'
+                        connection 'scm:git:https://github.com/web3j/aion.git'
+                        url 'https://github.com/web3j/aion.git'
+                        developerConnection 'scm:git://github.com/web3j/aion.git'
                     }
                     licenses {
                         license {
@@ -235,8 +235,8 @@ subprojects {
             desc = project.description
             userOrg = 'web3j'
             licenses = ['Apache-2.0']
-            issueTrackerUrl = 'https://github.com/web3j/web3j-aion/issues'
-            vcsUrl = 'https://github.com/web3j/web3j-aion.git'
+            issueTrackerUrl = 'https://github.com/web3j/aion/issues'
+            vcsUrl = 'https://github.com/web3j/aion.git'
             websiteUrl = 'https://web3j.io'
             publicDownloadNumbers = true
             version {
