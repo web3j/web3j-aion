@@ -67,7 +67,7 @@ For instance, having the shaded JAR in your classpath is equivalent to a Gradle 
 
 ```groovy
 dependencies {
-    implementation "org.web3j:core:4.4.0"
+    implementation "org.web3j:core:4.5.0"
     implementation "org.web3j:web3j-aion-avm:0.1.0"
 
     implementation "org.aion:avm-api:1.4"
