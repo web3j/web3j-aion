@@ -99,6 +99,10 @@ subprojects {
         integrationTestOutput integrationTestJar
     }
 
+    signing {
+        sign configurations.archives
+    }
+
     testlogger {
         showStandardStreams true
     }
