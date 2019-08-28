@@ -3,6 +3,8 @@ plugins {
     id 'java'
 }
 
+description = 'web3j integration with the Aion Virtual Machine (AVM)'
+
 githubRelease {
     String githubToken = (project.hasProperty('githubToken') ?
             project.property('githubToken') : System.getenv('GITHUB_TOKEN'))

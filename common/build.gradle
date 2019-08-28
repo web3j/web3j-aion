@@ -1,3 +1,5 @@
+description = 'Common classes for web3j integration with the Aion Network'
+
 dependencies {
     api "org.web3j:core:${versions.web3j}"
     api "org.web3j:abi:${versions.web3j}"

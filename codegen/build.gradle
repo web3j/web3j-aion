@@ -3,6 +3,8 @@ plugins {
     id 'distribution'
 }
 
+description = 'web3j contract wrapper code generation for the Aion Network'
+
 githubRelease {
     String githubToken = (project.hasProperty('githubToken') ?
             project.property('githubToken') : System.getenv('GITHUB_TOKEN'))
