@@ -159,7 +159,7 @@ subprojects {
                 artifact javadocJar
                 pom {
                     name = project.name
-                    description = project.description
+                    description = 'Integrates web3j with the Aion Network blockchain.'
                     url = "https://github.com/web3j/aion"
                     licenses {
                         license {
@@ -197,8 +197,8 @@ subprojects {
                 }
                 pom.project {
                     packaging 'jar'
-                    name 'web3j Aion Integration'
-                    description project.description
+                    name project.name
+                    description 'Integrates web3j with the Aion Network blockchain.'
                     url 'https://web3j.io'
                     scm {
                         connection 'scm:git:https://github.com/web3j/aion.git'
