@@ -1,4 +1,4 @@
-description = 'web3j integration with the Aion Fast Virtual Machine (FVM)'
+description 'web3j integration with the Aion Fast Virtual Machine (FVM)'
 
 dependencies {
     api project(':web3j-aion-common')

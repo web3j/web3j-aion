@@ -3,7 +3,7 @@ plugins {
     id 'java'
 }
 
-description = 'web3j integration with the Aion Virtual Machine (AVM)'
+description 'web3j integration with the Aion Virtual Machine (AVM)'
 
 githubRelease {
     String githubToken = (project.hasProperty('githubToken') ?

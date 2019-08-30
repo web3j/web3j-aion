@@ -15,7 +15,7 @@ buildscript {
     }
 }
 
-description = 'Integrates web3j with the Aion Network blockchain.'
+description 'Integrates web3j with the Aion Network blockchain.'
 
 ext {
     loadPropsFromFile = { String path ->
