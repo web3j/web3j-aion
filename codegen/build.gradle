@@ -21,8 +21,6 @@ tasks.getByName('githubRelease') {
     dependsOn 'distZip'
 }
 
-description 'Aion command line tools for web3j integration.'
-
 mainClassName = 'org.web3j.aion.codegen.AionGeneratorMain'
 applicationName = 'web3j-aion'
 
