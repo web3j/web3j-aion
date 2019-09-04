@@ -1,6 +1,9 @@
 web3j Aion integration
 ======================
 
+![web3j](docs/img/web3j.png)
+![Aion](docs/img/aion.png)
+
 This project integrates [web3j](https://web3j.io/) with the [Aion network](https://aion.network/).
 It enables the deployment and invocation of [Aion smart contracts](https://docs.aion.network/docs/contract-fundamentals)
 from your Java code using [web3j contract wrappers](https://docs.web3j.io/smart_contracts.html#deploying-and-interacting-with-smart-contracts).
