@@ -46,6 +46,7 @@ subprojects {
     apply plugin: 'org.unbroken-dome.test-sets'
     apply plugin: 'org.web3j'
     apply plugin: 'com.github.breadmoirai.github-release'
+    apply plugin: 'de.undercouch.download'
 
     apply {
         [
