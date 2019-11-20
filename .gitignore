@@ -32,3 +32,6 @@ package-lock.json
 
 # Aion
 fork.properties
+
+web3j.asc
+.idea
