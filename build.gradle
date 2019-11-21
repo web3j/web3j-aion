@@ -128,7 +128,7 @@ subprojects {
     }
 
     dependencies {
-        compile "org.bouncycastle:bcpkix-jdk15on:${versions.bouncycastle}"
+        api "org.bouncycastle:bcpkix-jdk15on:${versions.bouncycastle}"
 
         implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
         implementation 'org.jetbrains.kotlin:kotlin-reflect'
