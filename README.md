@@ -1,7 +1,7 @@
 ![web3j](docs/img/web3j.png)
 ![Aion](docs/img/aion.png)
 
-web3j Aion integration
+web3j Aion integration [![Build Status](https://travis-ci.org/web3j/aion.svg?branch=master)](https://travis-ci.org/web3j/aion)
 ======================
 
 This project integrates [web3j](https://web3j.io/) with the [Aion network](https://aion.network/).
