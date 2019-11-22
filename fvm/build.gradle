@@ -1,8 +1,8 @@
 description 'web3j integration with the Aion Fast Virtual Machine (FVM)'
 
 dependencies {
-    api project(':web3j-aion-common')
+    api project(':common')
 
-    testImplementation project(path: ':web3j-aion-common', configuration: 'testOutput')
-    integrationTestImplementation project(path: ':web3j-aion-common', configuration: 'integrationTestOutput')
+    testImplementation project(path: ':common', configuration: 'testOutput')
+    integrationTestImplementation project(path: ':common', configuration: 'integrationTestOutput')
 }

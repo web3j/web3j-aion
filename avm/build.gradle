@@ -6,14 +6,14 @@ plugins {
 description 'web3j integration with the Aion Virtual Machine (AVM)'
 
 dependencies {
-    api project(':web3j-aion-common')
+    api project(':common')
 
     implementation "org.aion:avm-api:${versions.aion}"
     implementation "org.aion:avm-userlib:${versions.aion}"
     implementation "org.aion:avm-tooling:${versions.aion}"
 
-    testImplementation project(path: ':web3j-aion-common', configuration: 'testOutput')
-    integrationTestImplementation project(path: ':web3j-aion-common', configuration: 'integrationTestOutput')
+    testImplementation project(path: ':common', configuration: 'testOutput')
+    integrationTestImplementation project(path: ':common', configuration: 'integrationTestOutput')
 }
 
 shadowJar {

@@ -9,7 +9,7 @@ mainClassName = 'org.web3j.aion.codegen.AionGeneratorMain'
 applicationName = 'web3j-aion'
 
 dependencies {
-    api project(':web3j-aion-common')
+    api project(':common')
 
     implementation "org.web3j:core:${version}"
     implementation "org.web3j:codegen:${version}"
