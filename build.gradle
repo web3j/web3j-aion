@@ -31,6 +31,8 @@ repositories {
     }
 }
 
+ext.scmSlug = "web3j-aion"
+
 description 'Integrates web3j with the Aion Network blockchain.'
 
 ext {
