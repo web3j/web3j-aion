@@ -19,7 +19,7 @@ import assertk.assertions.containsOnly
 import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.web3j.protocol.core.methods.response.AbiDefinition.NamedType
 import java.io.File
 

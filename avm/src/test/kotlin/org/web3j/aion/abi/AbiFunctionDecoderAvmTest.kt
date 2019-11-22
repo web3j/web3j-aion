@@ -14,7 +14,7 @@ package org.web3j.aion.abi
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.web3j.abi.FunctionReturnDecoder.decode
 import org.web3j.abi.TypeReference
 import org.web3j.abi.datatypes.Address

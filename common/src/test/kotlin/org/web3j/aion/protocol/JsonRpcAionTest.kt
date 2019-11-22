@@ -17,7 +17,8 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
-import org.junit.Test
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.web3j.protocol.RequestTester
 import org.web3j.protocol.core.DefaultBlockParameterName.LATEST
 import org.web3j.protocol.core.DefaultBlockParameterName.PENDING
@@ -150,33 +151,33 @@ class JsonRpcAionTest : RequestTester() {
         assertThat(aion.dbGetHex("", "").send()).isError()
     }
 
-    @Test(expected = AionProtocolException::class)
+    @Test
     fun testGetBalance() {
-        aion.ethGetBalance(ADDRESS, PENDING).send()
+        assertThrows<AionProtocolException> { aion.ethGetBalance(ADDRESS, PENDING).send() }
     }
 
-    @Test(expected = AionProtocolException::class)
+    @Test
     fun testGetCode() {
-        aion.ethGetCode(ADDRESS, PENDING).send()
+        assertThrows<AionProtocolException> { aion.ethGetCode(ADDRESS, PENDING).send() }
     }
 
-    @Test(expected = AionProtocolException::class)
+    @Test
     fun testGetTransactionCount() {
-        aion.ethGetTransactionCount(ADDRESS, PENDING).send()
+        assertThrows<AionProtocolException> { aion.ethGetTransactionCount(ADDRESS, PENDING).send() }
     }
 
-    @Test(expected = AionProtocolException::class)
+    @Test
     fun testGetStorageAt() {
-        aion.ethGetStorageAt(ADDRESS, ONE, PENDING).send()
+        assertThrows<AionProtocolException> { aion.ethGetStorageAt(ADDRESS, ONE, PENDING).send() }
     }
 
-    @Test(expected = AionProtocolException::class)
+    @Test
     fun testCall() {
         val transaction = Transaction(
             ADDRESS, ZERO, ONE, ONE,
             ADDRESS, TEN, ""
         )
-        aion.ethCall(transaction, PENDING).send()
+        assertThrows<AionProtocolException> { aion.ethCall(transaction, PENDING).send() }
     }
 
     private fun <T : Response<*>> Assert<T>.isError() = given { response ->

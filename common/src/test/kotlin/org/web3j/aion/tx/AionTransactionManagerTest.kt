@@ -16,7 +16,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.web3j.aion.VirtualMachine
 import org.web3j.aion.crypto.AionTransaction
 import org.web3j.aion.crypto.Ed25519KeyPair

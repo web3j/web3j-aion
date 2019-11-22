@@ -116,7 +116,6 @@ subprojects {
         testImplementation(group: 'org.web3j', name: 'core', version: version, classifier: 'tests')
         testImplementation "org.junit.jupiter:junit-jupiter-api:${versions.junit5}"
         testImplementation "com.willowtreeapps.assertk:assertk-jvm:${versions.assertk}"
-        testImplementation "junit:junit:${versions.junit4}"
         testImplementation("io.mockk:mockk:${versions.mockk}") {
             exclude group: 'org.jetbrains.kotlin'
         }

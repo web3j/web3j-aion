@@ -14,7 +14,7 @@ package org.web3j.aion.abi
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.web3j.abi.FunctionEncoder.encode
 import org.web3j.abi.FunctionEncoder.encodeConstructor
@@ -165,7 +165,7 @@ class AbiFunctionEncoderAvmTest {
             .isEqualTo("0x21000474657374130003006100620063")
     }
 
-    @Test(expected = NotImplementedError::class)
+    @Test
     internal fun `encode 2D char array`() {
         val param = DynamicArray(
             DynamicArray::class.java,
@@ -174,8 +174,10 @@ class AbiFunctionEncoderAvmTest {
                 DynamicArray(Char::class.java, listOf(Char('d'), Char('e'), Char('f')))
             )
         )
-        assertThat(encode(Function("test", listOf(param), listOf())))
-            .isEqualTo("0x2100047465737431130002130003006100620063130003006400650066")
+        assertThrows<NotImplementedError> {
+            assertThat(encode(Function("test", listOf(param), listOf())))
+                    .isEqualTo("0x2100047465737431130002130003006100620063130003006400650066")
+        }
     }
 
     @Test
