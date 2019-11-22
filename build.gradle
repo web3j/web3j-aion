@@ -136,3 +136,7 @@ subprojects {
     compileTestKotlin.kotlinOptions.jvmTarget = sourceCompatibility
     compileIntegrationTestKotlin.kotlinOptions.jvmTarget = sourceCompatibility
 }
+
+bintrayUpload {
+    enabled = false
+}
