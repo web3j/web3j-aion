@@ -13,8 +13,8 @@
 package org.web3j.aion.codegen
 
 import assertk.assertThat
+import assertk.assertions.endsWith
 import assertk.assertions.exists
-import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Files
@@ -41,7 +41,7 @@ class AionGeneratorTest {
         val actualCode = Paths.get(tmpFolder.toString(), "erc20", "ERC20Token.java")
 
         assertThat(actualCode.toFile()).exists()
-        assertThat(Files.readString(actualCode)).isEqualTo(
+        assertThat(Files.readString(actualCode)).endsWith(
                 Files.readString(Paths.get(expectedCode?.file ?: ""))
         )
     }
