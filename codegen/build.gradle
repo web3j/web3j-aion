@@ -5,29 +5,13 @@ plugins {
 
 description 'web3j contract wrapper code generation for the Aion Network'
 
-githubRelease {
-    String githubToken = (project.hasProperty('githubToken') ?
-            project.property('githubToken') : System.getenv('GITHUB_TOKEN'))
-
-    owner 'web3j'
-    overwrite true
-    draft version.endsWith('SNAPSHOT')
-    prerelease version.endsWith('SNAPSHOT')
-    releaseAssets "$buildDir/distributions/$name-${version}.zip"
-    token githubToken == null ? '' : githubToken
-}
-
-tasks.getByName('githubRelease') {
-    dependsOn 'distZip'
-}
-
 mainClassName = 'org.web3j.aion.codegen.AionGeneratorMain'
 applicationName = 'web3j-aion'
 
 dependencies {
     api project(':web3j-aion-common')
 
-    implementation "org.web3j:core:${versions.web3j}"
-    implementation "org.web3j:codegen:${versions.web3j}"
+    implementation "org.web3j:core:${version}"
+    implementation "org.web3j:codegen:${version}"
     implementation "info.picocli:picocli:${versions.picocli}"
 }

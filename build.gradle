@@ -1,8 +1,16 @@
+buildscript {
+    repositories {
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+    dependencies {
+        classpath "org.web3j:web3j-gradle-plugin:$version"
+    }
+}
+
 plugins {
     id 'java'
     id 'idea'
     id 'jacoco'
-    id 'org.web3j' version '4.5.0'
     id 'com.adarshr.test-logger' version '2.0.0'
     id "com.diffplug.gradle.spotless" version "3.25.0"
     id 'io.codearte.nexus-staging' version '0.21.1'
@@ -10,11 +18,14 @@ plugins {
     id 'org.unbroken-dome.test-sets' version '2.1.1'
     id 'org.jetbrains.kotlin.jvm' version '1.3.60'
     id "de.undercouch.download" version "4.0.0"
-    id "com.github.breadmoirai.github-release" version "2.2.9"
+    id "com.jfrog.bintray" version "1.8.4"
 }
 
+apply plugin: 'org.web3j'
+
+apply from: "$rootDir/gradle/repositories/build.gradle"
+
 repositories {
-    mavenCentral()
     maven {
         url "$rootProject.projectDir/lib"
     }
@@ -36,20 +47,21 @@ ext {
     versions = loadPropsFromFile("$rootDir/versions.properties")
 }
 
-nexusStaging {
-    username System.getenv('OSSRH_USERNAME')
-    password System.getenv('OSSRH_PASSWORD')
-}
-
 subprojects {
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'org.unbroken-dome.test-sets'
     apply plugin: 'org.web3j'
-    apply plugin: 'com.github.breadmoirai.github-release'
     apply plugin: 'de.undercouch.download'
+
+    repositories {
+        maven {
+            url "$rootProject.projectDir/lib"
+        }
+    }
 
     apply {
         [
+                'bintray',
                 'jacoco',
                 'java',
                 'javadoc',
@@ -66,32 +78,6 @@ subprojects {
             }
             from("$rootDir/gradle/$buildScript/build.gradle")
         }
-    }
-
-    publishing {
-        publications {
-            maven(MavenPublication) {
-                pom {
-                    scm {
-                        url = "https://github.com/web3j/web3j-unit"
-                        connection = "scm:https://github.com/web3j/web3j-unit.git"
-                        developerConnection = "scm:git://github.com/web3j/web3j-unit.git"
-                    }
-                }
-            }
-        }
-    }
-
-    repositories {
-        mavenCentral()
-        maven {
-            url "$rootProject.projectDir/lib"
-        }
-    }
-
-    task javadocJar(type: Jar) {
-        classifier = 'javadoc'
-        from javadoc
     }
 
     testSets {
@@ -113,16 +99,6 @@ subprojects {
         integrationTestOutput.extendsFrom(integrationTestCompile)
     }
 
-    artifacts {
-        archives sourcesJar, javadocJar
-        testOutput testJar
-        integrationTestOutput integrationTestJar
-    }
-
-    signing {
-        sign configurations.archives
-    }
-
     testlogger {
         showStandardStreams true
     }
@@ -137,12 +113,7 @@ subprojects {
 
         implementation "io.github.microutils:kotlin-logging:${versions.kLogging}"
 
-        implementation("com.github.shyiko:ktlint:${versions.ktlint}") {
-            exclude group: 'org.jetbrains.kotlin'
-            exclude group: 'org.slf4j'
-        }
-
-        testImplementation(group: 'org.web3j', name: 'core', version: versions.web3j, classifier: 'tests')
+        testImplementation(group: 'org.web3j', name: 'core', version: version, classifier: 'tests')
         testImplementation "org.junit.jupiter:junit-jupiter-api:${versions.junit5}"
         testImplementation "com.willowtreeapps.assertk:assertk-jvm:${versions.assertk}"
         testImplementation "junit:junit:${versions.junit4}"

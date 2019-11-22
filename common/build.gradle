@@ -1,8 +1,8 @@
 description 'Common classes for web3j integration with the Aion Network'
 
 dependencies {
-    api "org.web3j:core:${versions.web3j}"
-    api "org.web3j:abi:${versions.web3j}"
+    api "org.web3j:core:${version}"
+    api "org.web3j:abi:${version}"
 
     implementation 'org.aion:rlp4j:46e0cb3'
     implementation 'org.aion:util4j:2c5aa4ad'

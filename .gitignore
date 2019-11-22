@@ -36,3 +36,11 @@ fork.properties
 web3j.asc
 .idea
 /.gradle/
+
+bin
+.classpath
+.project
+.settings
+build
+
+stale_outputs_checked

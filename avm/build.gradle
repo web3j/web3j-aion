@@ -5,22 +5,6 @@ plugins {
 
 description 'web3j integration with the Aion Virtual Machine (AVM)'
 
-githubRelease {
-    String githubToken = (project.hasProperty('githubToken') ?
-            project.property('githubToken') : System.getenv('GITHUB_TOKEN'))
-
-    owner 'web3j'
-    overwrite true
-    draft version.endsWith('SNAPSHOT')
-    prerelease version.endsWith('SNAPSHOT')
-    releaseAssets "$buildDir/libs/$name-$version-all.jar"
-    token githubToken == null ? '' : githubToken
-}
-
-tasks.getByName('githubRelease') {
-    dependsOn 'shadowJar'
-}
-
 dependencies {
     api project(':web3j-aion-common')
 
@@ -34,12 +18,4 @@ dependencies {
 
 shadowJar {
     minimize()
-    dependencies {
-        exclude(dependency {
-            it.moduleGroup.startsWith('com.github.shyiko')
-        })
-        exclude(dependency {
-            it.moduleGroup.startsWith('com.github.shyiko')
-        })
-    }
 }
