@@ -1,27 +1,16 @@
-buildscript {
-    repositories {
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-    }
-    dependencies {
-        classpath "org.web3j:web3j-gradle-plugin:$version"
-    }
-}
-
 plugins {
     id 'java'
     id 'idea'
     id 'jacoco'
     id 'com.adarshr.test-logger' version '2.0.0'
-    id "com.diffplug.gradle.spotless" version "3.25.0"
+    id "com.diffplug.gradle.spotless" version '3.25.0'
     id 'io.codearte.nexus-staging' version '0.21.1'
-    id "de.marcphilipp.nexus-publish" version "0.4.0"
+    id "de.marcphilipp.nexus-publish" version '0.4.0'
     id 'org.unbroken-dome.test-sets' version '2.1.1'
     id 'org.jetbrains.kotlin.jvm' version '1.3.60'
-    id "de.undercouch.download" version "4.0.0"
-    id "com.jfrog.bintray" version "1.8.4"
+    id "de.undercouch.download" version '4.0.0'
+    id "com.jfrog.bintray" version '1.8.4'
 }
-
-apply plugin: 'org.web3j'
 
 apply from: "$rootDir/gradle/repositories/build.gradle"
 
@@ -31,7 +20,7 @@ repositories {
     }
 }
 
-ext.scmSlug = "web3j-aion"
+ext.scmSlug = 'web3j-aion'
 
 description 'Integrates web3j with the Aion Network blockchain.'
 
@@ -52,7 +41,6 @@ ext {
 subprojects {
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'org.unbroken-dome.test-sets'
-    apply plugin: 'org.web3j'
     apply plugin: 'de.undercouch.download'
 
     repositories {
