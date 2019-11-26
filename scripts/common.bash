@@ -28,7 +28,7 @@ ensure_product() {
         PRODUCT="${TRAVIS_REPO_SLUG//release\/}"
     fi
 
-    if [[ "$VERSION" = "" ]]; then
+    if [[ "$PRODUCT" = "" ]]; then
         echo "ERROR: Missing PRODUCT specify it using an env variable"
         exit 1
     fi
