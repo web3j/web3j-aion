@@ -20,8 +20,6 @@ repositories {
     }
 }
 
-ext.scmSlug = 'web3j-aion'
-
 description 'Integrates web3j with the Aion Network blockchain.'
 
 ext {
@@ -67,6 +65,14 @@ subprojects {
                 onlyIfModified true
             }
             from("$rootDir/gradle/$buildScript/build.gradle")
+        }
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                artifactId = "${rootProject.name}-$project.name"
+            }
         }
     }
 
